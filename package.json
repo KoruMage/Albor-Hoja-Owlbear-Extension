@@ -1,0 +1,26 @@
+{
+  "name": "albor-hoja-owlbear",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Extension de Owlbear Rodeo para fichas y tiradas de Albor 0.4",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && cp -r static_root/. dist/ && wrangler pages deploy dist --project-name=albor-hoja-owlbear"
+  },
+  "dependencies": {
+    "@owlbear-rodeo/sdk": "^3.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "wrangler": "^4.86.0"
+  }
+}

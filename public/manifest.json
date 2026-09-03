@@ -1,0 +1,14 @@
+{
+  "name": "Albor - Hoja de Personaje",
+  "version": "0.1.0",
+  "manifest_version": 1,
+  "author": "Koru",
+  "description": "Fichas de personaje y tirador de dados para Albor 0.4, con asignacion de jugadores y Dice+.",
+  "action": {
+    "title": "Albor",
+    "icon": "/icon.svg",
+    "popover": "/",
+    "height": 700,
+    "width": 900
+  }
+}
