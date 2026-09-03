@@ -1,7 +1,8 @@
 import { useMemo, useRef, useState } from "react";
 import { AlborCharacter, normalizeCharacter } from "../types";
 import { parseSheetFromLocation } from "../web/sheetLink";
-import { readJsonFile } from "../utils/download";
+import { downloadBytes, readJsonFile, slug } from "../utils/download";
+import { fillAlborPdf } from "../utils/fillPdf";
 import { CharacterSheet } from "./CharacterSheet";
 
 export function WebSheetPage() {
@@ -22,11 +23,30 @@ export function WebSheetPage() {
     <div className="standalone standalone--web">
       <header className="header">
         <div>
+          <p className="wordmark">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</p>
           <h1>{title}</h1>
           <p className="muted">Vista web de solo lectura</p>
         </div>
         <button type="button" onClick={() => fileRef.current?.click()}>
           Abrir JSON
+        </button>
+        <button
+          type="button"
+          disabled={!character}
+          onClick={() => {
+            if (!character) return;
+            void fillAlborPdf(character)
+              .then((bytes) =>
+                downloadBytes(`${slug(character.nombre)}.pdf`, bytes, "application/pdf"),
+              )
+              .catch((err: unknown) => {
+                window.alert(
+                  err instanceof Error ? err.message : "No se pudo exportar el PDF.",
+                );
+              });
+          }}
+        >
+          Exportar PDF
         </button>
         <input
           ref={fileRef}

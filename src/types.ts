@@ -38,6 +38,15 @@ export interface Talento {
   descripcion: string;
 }
 
+export const PAGE2_COUNTS = {
+  lazos: 3,
+  etiquetas: 4,
+  equipo: 11,
+  dominio: 6,
+  maestrias: 6,
+  armas: 5,
+} as const;
+
 export interface AlborCharacter {
   id: string;
   ownerId: string | null;
@@ -60,6 +69,12 @@ export interface AlborCharacter {
   dp: number;
   talentos: Talento[];
   notas: string;
+  lazos: Talento[];
+  etiquetas: string[];
+  equipo: string[];
+  dominio: string[];
+  maestrias: Talento[];
+  armas: Talento[];
 }
 
 export interface DiceRollBroadcast {
@@ -159,6 +174,32 @@ export function normalizeTalento(raw: Partial<Talento> | undefined): Talento {
   };
 }
 
+function emptyTalentos(count: number): Talento[] {
+  return Array.from({ length: count }, () => ({
+    id: newId(),
+    nombre: "",
+    descripcion: "",
+  }));
+}
+
+function emptyLines(count: number): string[] {
+  return Array.from({ length: count }, () => "");
+}
+
+function padTalentos(raw: unknown, count: number): Talento[] {
+  const list = Array.isArray(raw) ? raw.map((t) => normalizeTalento(t as Partial<Talento>)) : [];
+  const padded = [...list];
+  while (padded.length < count) padded.push({ id: newId(), nombre: "", descripcion: "" });
+  return padded.slice(0, Math.max(count, list.length));
+}
+
+function padLines(raw: unknown, count: number): string[] {
+  const list = Array.isArray(raw) ? raw.map((s) => asString(s)) : [];
+  const padded = [...list];
+  while (padded.length < count) padded.push("");
+  return padded.slice(0, Math.max(count, list.length));
+}
+
 export function makeCharacter(): AlborCharacter {
   const stats: Stats = {
     vig: { valor: 2, dado: 4 },
@@ -190,6 +231,12 @@ export function makeCharacter(): AlborCharacter {
     dp: 0,
     talentos: [],
     notas: "",
+    lazos: emptyTalentos(PAGE2_COUNTS.lazos),
+    etiquetas: emptyLines(PAGE2_COUNTS.etiquetas),
+    equipo: emptyLines(PAGE2_COUNTS.equipo),
+    dominio: emptyLines(PAGE2_COUNTS.dominio),
+    maestrias: emptyTalentos(PAGE2_COUNTS.maestrias),
+    armas: emptyTalentos(PAGE2_COUNTS.armas),
   };
 }
 
@@ -239,6 +286,12 @@ export function normalizeCharacter(raw: Partial<AlborCharacter> | undefined): Al
     dp: asNumber(raw?.dp, 0),
     talentos: Array.isArray(raw?.talentos) ? raw.talentos.map((t) => normalizeTalento(t)) : [],
     notas: asString(raw?.notas),
+    lazos: padTalentos(raw?.lazos, PAGE2_COUNTS.lazos),
+    etiquetas: padLines(raw?.etiquetas, PAGE2_COUNTS.etiquetas),
+    equipo: padLines(raw?.equipo, PAGE2_COUNTS.equipo),
+    dominio: padLines(raw?.dominio, PAGE2_COUNTS.dominio),
+    maestrias: padTalentos(raw?.maestrias, PAGE2_COUNTS.maestrias),
+    armas: padTalentos(raw?.armas, PAGE2_COUNTS.armas),
   };
 }
 

@@ -16,7 +16,8 @@ import {
   normalizeCharacter,
 } from "./types";
 import { isSheetView, openSheetInBrowser, copySheetUrl, suggestLocalCharacter } from "./web/sheetLink";
-import { downloadJson, readJsonFile } from "./utils/download";
+import { downloadBytes, downloadJson, readJsonFile, slug } from "./utils/download";
+import { fillAlborPdf } from "./utils/fillPdf";
 
 export default function App() {
   if (isSheetView()) {
@@ -103,6 +104,7 @@ function PartyManager({ web }: { web: boolean }) {
     <div className={`app ${web ? "app--web" : ""}`}>
       <header className="header">
         <div>
+          <p className="wordmark">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</p>
           <h1>Albor</h1>
           <p className="muted">
             {web ? "Vista web (este navegador)" : isGM ? "Vista del Director (GM)" : "Vista de jugador"}
@@ -136,7 +138,25 @@ function PartyManager({ web }: { web: boolean }) {
             disabled={!selected}
             onClick={() => selected && downloadJson(`${slug(selected.nombre)}.json`, selected)}
           >
-            Exportar PJ
+            Exportar JSON
+          </button>
+          <button
+            type="button"
+            disabled={!selected}
+            onClick={() => {
+              if (!selected) return;
+              void fillAlborPdf(selected)
+                .then((bytes) =>
+                  downloadBytes(`${slug(selected.nombre)}.pdf`, bytes, "application/pdf"),
+                )
+                .catch((err: unknown) => {
+                  window.alert(
+                    err instanceof Error ? err.message : "No se pudo exportar el PDF.",
+                  );
+                });
+            }}
+          >
+            Exportar PDF
           </button>
           <button type="button" onClick={() => importRef.current?.click()}>
             Importar JSON
@@ -308,9 +328,3 @@ function PartyManager({ web }: { web: boolean }) {
   );
 }
 
-function slug(name: string): string {
-  return (name || "personaje")
-    .toLowerCase()
-    .replace(/[^a-z0-9áéíóúñ]+/gi, "-")
-    .replace(/^-|-$/g, "");
-}
