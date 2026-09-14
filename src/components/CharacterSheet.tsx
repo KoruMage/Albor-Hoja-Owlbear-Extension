@@ -23,8 +23,9 @@ export function CharacterSheet({
   isGM,
   players,
   dicePlusEnabled,
+  dirty,
   onChange,
-  onAssign,
+  onSave,
   onRolled,
 }: {
   character: AlborCharacter;
@@ -32,8 +33,9 @@ export function CharacterSheet({
   isGM?: boolean;
   players?: Player[];
   dicePlusEnabled: boolean;
+  dirty?: boolean;
   onChange?: (next: AlborCharacter) => void;
-  onAssign?: (ownerId: string | null) => void;
+  onSave?: () => void;
   onRolled?: (payload: DiceRollSummary & { characterName: string }) => void;
 }) {
   const patch = (partial: Partial<AlborCharacter>) => {
@@ -97,6 +99,23 @@ export function CharacterSheet({
     patch({ [key]: next });
   };
 
+  const saveBar = (sticky: boolean) =>
+    !readOnly && onSave && (
+      <div className={sticky ? "sheet-save sheet-save--sticky" : "sheet-save"}>
+        <button
+          type="button"
+          className="btn-primary"
+          disabled={!dirty}
+          onClick={onSave}
+        >
+          Guardar
+        </button>
+        <span className={dirty ? "warn" : "muted"}>
+          {dirty ? "Hay cambios sin guardar." : "Los cambios se guardan al pulsar Guardar."}
+        </span>
+      </div>
+    );
+
   return (
     <>
       {!readOnly && onRolled && (
@@ -106,6 +125,7 @@ export function CharacterSheet({
           onRolled={onRolled}
         />
       )}
+      {saveBar(true)}
       <div className="sheet">
       <p className="wordmark">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</p>
 
@@ -170,12 +190,13 @@ export function CharacterSheet({
             onChange={(e) => patch({ tamano: e.target.value })}
           />
         </label>
-        {isGM && onAssign && (
+        {isGM && players && (
           <label>
             Asignado a
             <select
               value={character.ownerId ?? ""}
-              onChange={(e) => onAssign(e.target.value || null)}
+              disabled={readOnly}
+              onChange={(e) => patch({ ownerId: e.target.value || null })}
             >
               <option value="">Sin asignar</option>
               {(players ?? []).map((p) => (
@@ -507,6 +528,7 @@ export function CharacterSheet({
         </div>
       </footer>
     </div>
+      {saveBar(false)}
     </>
   );
 }

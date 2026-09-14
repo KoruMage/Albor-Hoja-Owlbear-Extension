@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import OBR from "@owlbear-rodeo/sdk";
 import { useRole } from "./obr/useRole";
 import { useParty } from "./obr/useParty";
@@ -56,29 +56,58 @@ function PartyManager({ web }: { web: boolean }) {
     setSelectedId(visible[0]?.id ?? null);
   }, [visible, selectedId]);
 
+  const selected = visible.find((c) => c.id === selectedId) ?? null;
+  const [draft, setDraft] = useState<AlborCharacter | null>(null);
+  const [dirty, setDirty] = useState(false);
+
+  useEffect(() => {
+    if (!selected) {
+      setDraft(null);
+      setDirty(false);
+      return;
+    }
+    setDraft(selected);
+    setDirty(false);
+  }, [selected?.id]);
+
+  const sheet = draft && selected && draft.id === selected.id ? draft : selected;
+
+  const confirmDiscard = useCallback(() => {
+    if (!dirty) return true;
+    return window.confirm("Hay cambios sin guardar. ¿Descartarlos?");
+  }, [dirty]);
+
   if (!roster.ready || role === null) {
     return <div className="loading">Cargando la mesa...</div>;
   }
 
-  const selected = visible.find((c) => c.id === selectedId) ?? null;
+  const handleSave = () => {
+    if (!sheet) return;
+    roster.updateCharacter(sheet.id, sheet);
+    setDirty(false);
+  };
 
   const handleCreate = () => {
+    if (!confirmDiscard()) return;
     const c = makeCharacter();
     if (!isGM) c.ownerId = playerId;
     roster.addCharacter(c);
+    setDraft(c);
     setSelectedId(c.id);
     setTab("sheet");
   };
 
   const handleDuplicate = () => {
+    if (!confirmDiscard()) return;
     if (!selected) return;
     const copy: AlborCharacter = {
-      ...selected,
+      ...(sheet ?? selected),
       id: makeCharacter().id,
-      nombre: `${selected.nombre} (copia)`,
+      nombre: `${(sheet ?? selected).nombre} (copia)`,
       ownerId: isGM ? selected.ownerId : playerId,
     };
     roster.addCharacter(copy);
+    setDraft(copy);
     setSelectedId(copy.id);
   };
 
@@ -89,6 +118,8 @@ function PartyManager({ web }: { web: boolean }) {
       playerName: playerName ?? "",
       summary: payload.summary,
       total: payload.total,
+      faces: payload.faces,
+      dieSize: payload.dieSize,
       critical: payload.critical,
       fumble: payload.fumble,
       viaDicePlus: payload.viaDicePlus,
@@ -126,6 +157,7 @@ function PartyManager({ web }: { web: boolean }) {
               disabled={!selected}
               onClick={() => {
                 if (!selected) return;
+                if (dirty && !confirmDiscard()) return;
                 if (!window.confirm(`¿Borrar a ${selected.nombre}?`)) return;
                 roster.removeCharacter(selected.id);
               }}
@@ -136,7 +168,7 @@ function PartyManager({ web }: { web: boolean }) {
           <button
             type="button"
             disabled={!selected}
-            onClick={() => selected && downloadJson(`${slug(selected.nombre)}.json`, selected)}
+            onClick={() => sheet && downloadJson(`${slug(sheet.nombre)}.json`, sheet)}
           >
             Exportar JSON
           </button>
@@ -144,10 +176,10 @@ function PartyManager({ web }: { web: boolean }) {
             type="button"
             disabled={!selected}
             onClick={() => {
-              if (!selected) return;
-              void fillAlborPdf(selected)
+              if (!sheet) return;
+              void fillAlborPdf(sheet)
                 .then((bytes) =>
-                  downloadBytes(`${slug(selected.nombre)}.pdf`, bytes, "application/pdf"),
+                  downloadBytes(`${slug(sheet.nombre)}.pdf`, bytes, "application/pdf"),
                 )
                 .catch((err: unknown) => {
                   window.alert(
@@ -173,15 +205,18 @@ function PartyManager({ web }: { web: boolean }) {
               try {
                 const data = await readJsonFile<Partial<AlborCharacter> | Partial<AlborState>>(file);
                 if (data && "characters" in data && Array.isArray(data.characters)) {
+                  if (!confirmDiscard()) return;
                   if (isGM || web) {
                     roster.replaceState(data as AlborState);
                   }
                   return;
                 }
+                if (!confirmDiscard()) return;
                 const c = normalizeCharacter(data as Partial<AlborCharacter>);
                 c.id = makeCharacter().id;
                 if (!isGM) c.ownerId = playerId;
                 roster.addCharacter(c);
+                setDraft(c);
                 setSelectedId(c.id);
               } catch {
                 window.alert("No se pudo importar ese archivo.");
@@ -192,11 +227,11 @@ function PartyManager({ web }: { web: boolean }) {
             <>
               <button
                 type="button"
-                onClick={() => void openSheetInBrowser(selected)}
+                onClick={() => void openSheetInBrowser(sheet ?? selected)}
               >
                 Ver en web
               </button>
-              <button type="button" onClick={() => void copySheetUrl(selected)}>
+              <button type="button" onClick={() => void copySheetUrl(sheet ?? selected)}>
                 Copiar enlace
               </button>
             </>
@@ -229,9 +264,13 @@ function PartyManager({ web }: { web: boolean }) {
               key={c.id}
               type="button"
               className={c.id === selectedId ? "is-active" : ""}
-              onClick={() => setSelectedId(c.id)}
+              onClick={() => {
+                if (c.id === selectedId) return;
+                if (!confirmDiscard()) return;
+                setSelectedId(c.id);
+              }}
             >
-              {c.nombre || "Sin nombre"}
+              {c.id === selectedId && sheet ? sheet.nombre || "Sin nombre" : c.nombre || "Sin nombre"}
             </button>
           ))}
         </div>
@@ -269,12 +308,16 @@ function PartyManager({ web }: { web: boolean }) {
             </p>
           )}
           <CharacterSheet
-            character={selected}
+            character={sheet ?? selected}
             isGM={isGM && !web}
             players={players}
             dicePlusEnabled={dicePlusEnabled && !web}
-            onChange={(next) => roster.updateCharacter(next.id, next)}
-            onAssign={(ownerId) => roster.assignOwner(selected.id, ownerId)}
+            dirty={dirty}
+            onChange={(next) => {
+              setDraft(next);
+              setDirty(true);
+            }}
+            onSave={handleSave}
             onRolled={handleDiceRoll}
           />
         </>

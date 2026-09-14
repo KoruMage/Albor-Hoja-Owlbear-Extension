@@ -10,6 +10,7 @@ import {
   isCritical,
   nextDie,
   outcomeLabel,
+  formatFaceList,
 } from "../types";
 import {
   buildAlborNotation,
@@ -22,6 +23,8 @@ import {
 export interface DiceRollSummary {
   summary: string;
   total: number;
+  faces: number[];
+  dieSize: DieSize;
   critical: boolean;
   fumble: boolean;
   viaDicePlus: boolean;
@@ -105,8 +108,10 @@ export function DiceRoller({
     setLast({ faces, total, dieSize, target, outcome, critical, viaDicePlus });
     onRolled({
       characterName: character.nombre || "Sin nombre",
-      summary: `${label} ${count}d${dieSize} = ${total} vs ${band}(${target})${critical ? " CRÍTICO" : ""} → ${outcomeLabel(outcome)}`,
+      summary: `${label} ${count}d${dieSize} [${formatFaceList(faces)}] = ${total} vs ${band}(${target})${critical ? " CRÍTICO" : ""} → ${outcomeLabel(outcome)}`,
       total,
+      faces,
+      dieSize,
       critical,
       fumble: outcome === "fracaso",
       viaDicePlus,
@@ -170,13 +175,26 @@ export function DiceRoller({
       {error && <p className="warn">Dice+ falló, se usó tirada local. {error}</p>}
       {last && (
         <div className={`result result--${last.outcome}`}>
-          <div className="result__faces">
+          <div className="result__faces" aria-label="Resultado de cada dado">
             {last.faces.map((face, i) => (
-              <span key={`${face}-${i}`}>d{last.dieSize}: {face}</span>
+              <span key={`${face}-${i}`} className="die-face">
+                <em>dado {i + 1}</em>
+                <strong>{face}</strong>
+                <small>d{last.dieSize}</small>
+              </span>
             ))}
           </div>
           <p>
-            Total <strong>{last.total}</strong> vs {last.target} →{" "}
+            {last.faces.length > 0 ? (
+              <>
+                {formatFaceList(last.faces)} = <strong>{last.total}</strong>
+              </>
+            ) : (
+              <>
+                Total <strong>{last.total}</strong>
+              </>
+            )}{" "}
+            vs {last.target} →{" "}
             <strong>{outcomeLabel(last.outcome)}</strong>
             {last.critical ? " · Crítico" : ""}
             {last.viaDicePlus ? " · Dice+" : ""}

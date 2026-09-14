@@ -215,8 +215,10 @@ export function buildAlborNotation(input: {
 export function parseAlborDice(result: DicePlusRollResult): number[] {
   const faces: number[] = [];
   for (const group of result.result.groups ?? []) {
-    const kept = (group.dice ?? []).filter((die) => die.kept);
-    for (const die of kept) faces.push(die.value);
+    for (const die of group.dice ?? []) {
+      if (die.kept === false) continue;
+      if (typeof die.value === "number") faces.push(die.value);
+    }
   }
   return faces;
 }

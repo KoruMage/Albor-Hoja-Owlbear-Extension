@@ -92,6 +92,8 @@ export interface DiceRollLogEntry {
   playerName: string;
   summary: string;
   total: number;
+  faces?: number[];
+  dieSize?: DieSize;
   critical: boolean;
   fumble: boolean;
   viaDicePlus: boolean;
@@ -311,6 +313,10 @@ export function makeDiceRollLogEntry(
     id: newId(),
     timestamp: Date.now(),
   };
+}
+
+export function formatFaceList(faces: number[]): string {
+  return faces.join(" + ");
 }
 
 export function interpretOutcome(total: number, target: number): Outcome {

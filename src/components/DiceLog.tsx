@@ -1,4 +1,4 @@
-import type { DiceRollLogEntry } from "../types";
+import { formatFaceList, type DiceRollLogEntry } from "../types";
 
 export function DiceLog({
   entries,
@@ -28,6 +28,19 @@ export function DiceLog({
               {e.playerName ? ` (${e.playerName})` : ""}
             </span>
             <span>{e.summary}</span>
+            {e.faces && e.faces.length > 0 && (
+              <span className="result__faces log__faces">
+                {e.faces.map((face, i) => (
+                  <span key={`${e.id}-${i}`} className="die-face die-face--sm">
+                    <em>{e.dieSize ? `d${e.dieSize}` : `dado ${i + 1}`}</em>
+                    <strong>{face}</strong>
+                  </span>
+                ))}
+                <span className="muted">
+                  {formatFaceList(e.faces)} = {e.total}
+                </span>
+              </span>
+            )}
             <span className="muted">
               {new Date(e.timestamp).toLocaleTimeString()}
               {e.viaDicePlus ? " · Dice+" : ""}

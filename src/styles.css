@@ -111,6 +111,23 @@ body {
   margin-bottom: 10px;
 }
 
+.sheet-save {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  background: var(--paper);
+  border: 2px solid var(--gold);
+}
+
+.sheet-save--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+}
+
 button,
 select,
 input,
@@ -481,14 +498,48 @@ label textarea {
 .result__faces {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 6px;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
 }
 
-.result__faces span {
-  background: var(--fill);
-  padding: 2px 6px;
-  border: 1px solid var(--gold-light);
+.die-face {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 3rem;
+  padding: 6px 10px;
+  background: var(--paper-2);
+  border: 2px solid var(--gold);
+}
+
+.die-face em,
+.die-face small {
+  font-style: normal;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.die-face strong {
+  font-family: Cinzel, serif;
+  font-size: 1.55rem;
+  line-height: 1.1;
+}
+
+.die-face--sm {
+  min-width: 2.2rem;
+  padding: 4px 6px;
+}
+
+.die-face--sm strong {
+  font-size: 1.15rem;
+}
+
+.log__faces {
+  width: 100%;
 }
 
 .log {
