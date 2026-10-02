@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALBOR - Hoja de Personaje</title>
+<!-- Google Fonts: Cinzel & Cormorant Garamond -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#efe3c4",
+            "primary": "#b88e44",
+            "surface-container-highest": "#eae1d8",
+            "on-primary-container": "#3f2a00",
+            "background": "#f7f1e4",
+            "on-error-container": "#93000a",
+            "accent-sun": "#e08a2c",
+            "on-surface": "#1f1b15",
+            "on-primary-fixed-variant": "#5f4100",
+            "on-primary-fixed": "#271900",
+            "on-surface-variant": "#4f4538",
+            "on-tertiary-fixed-variant": "#234874",
+            "primary-light": "#e4d2a0",
+            "on-secondary": "#ffffff",
+            "on-error": "#ffffff",
+            "success": "#3d7a52",
+            "on-secondary-container": "#785817",
+            "outline": "#c4a15a",
+            "inverse-on-surface": "#f9efe6",
+            "surface-tint": "#7b5811",
+            "tertiary-container": "#7597c8",
+            "tertiary-fixed": "#d4e3ff",
+            "secondary-fixed-dim": "#ebc075",
+            "tertiary-fixed-dim": "#a6c8fc",
+            "on-secondary-fixed": "#271900",
+            "surface-variant": "#eae1d8",
+            "on-secondary-fixed-variant": "#5e4200",
+            "outline-variant": "#d2c4b3",
+            "on-tertiary-fixed": "#001c39",
+            "surface-container-high": "#f0e7dd",
+            "surface-inverse": "#2a2724",
+            "surface-dim": "#e2d9cf",
+            "tertiary": "#3d608d",
+            "error-container": "#ffdad6",
+            "secondary": "#795918",
+            "on-tertiary": "#ffffff",
+            "primary-fixed-dim": "#eebf70",
+            "on-primary": "#ffffff",
+            "surface-bright": "#fff8f3",
+            "surface": "#fffdf8",
+            "primary-fixed": "#ffdeab",
+            "inverse-primary": "#eebf70",
+            "on-tertiary-container": "#002e59",
+            "error": "#9a3b2a",
+            "secondary-fixed": "#ffdea8",
+            "inverse-surface": "#34302a",
+            "primary-container": "#b88e44",
+            "on-surface-inverse": "#f7f1e4",
+            "primary-dark": "#8c6a28",
+            "surface-container-lowest": "#ffffff",
+            "secondary-container": "#fdd184",
+            "surface-container-low": "#fcf2e9",
+            "on-background": "#1f1b15"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "10px",
+            "space-xs": "4px",
+            "space-lg": "14px",
+            "space-xl": "16px",
+            "space-sm": "6px",
+            "margin": "16px",
+            "gutter": "10px"
+          },
+          "fontFamily": {
+            "section-title": ["Cinzel"],
+            "input": ["Cormorant Garamond"],
+            "die-number": ["Cinzel"],
+            "body": ["Cormorant Garamond"],
+            "button": ["Cinzel"],
+            "display": ["Cinzel"],
+            "label": ["Cinzel"]
+          },
+          "fontSize": {
+            "section-title": ["13px", { "letterSpacing": "0.14em", "fontWeight": "700" }],
+            "input": ["15px", { "fontWeight": "600" }],
+            "die-number": ["22px", { "fontWeight": "700" }],
+            "body": ["14px", { "fontWeight": "500" }],
+            "button": ["10px", { "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "display": ["20px", { "letterSpacing": "0.12em", "fontWeight": "700" }],
+            "label": ["11px", { "letterSpacing": "0.04em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    
+    /* Parchment ambient radial lighting */
+    .parchment-canvas {
+      background-color: #f7f1e4;
+      background-image: 
+        radial-gradient(circle at 4% 6%, rgba(212, 176, 90, 0.14) 0%, transparent 40%),
+        radial-gradient(circle at 96% 94%, rgba(184, 142, 68, 0.12) 0%, transparent 45%);
+    }
+
+    /* Baseline for character sheet fields */
+    .metallic-baseline {
+      background: linear-gradient(90deg, #e8d5a3 0%, #b88e44 35%, #7a5a22 70%, #d4b46a 100%);
+      height: 2px;
+    }
+
+    /* Print ornamental crop marks (10x10px) */
+    .crop-mark-tl {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 10px;
+      height: 10px;
+      border-top: 1.5px solid #b88e44;
+      border-left: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    .crop-mark-br {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 1.5px solid #b88e44;
+      border-right: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+
+    /* Custom scrollbar matching tactile paper */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #efe3c4;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c4a15a;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8c6a28;
+    }
+
+    /* Trapezoid banner cut for dice rank */
+    .trapezoid-banner {
+      clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+    }
+  </style>
+</head>
+<body class="bg-background flex items-center justify-center min-h-screen p-4 select-none">
+<!-- Popover Container 900x700 with internal vertical scroll -->
+<div class="w-[900px] h-[700px] bg-surface border border-outline shadow-2xl flex flex-col overflow-hidden relative text-on-surface rounded-none">
+<!-- 1. ENCABEZADO DE LA APP -->
+<header class="bg-background pt-2 px-space-xl pb-space-sm shrink-0 relative">
+<!-- Watermark Top Centered -->
+<div class="text-center font-display text-[10px] tracking-[0.32em] text-primary lowercase mb-1 opacity-90 select-none">
+        ~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~
+      </div>
+<!-- Main Header Row -->
+<div class="flex items-center justify-between"><!-- Logo & Title -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-7 flex items-center justify-center shrink-0">
+<img alt="Sol Naciente Albor" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UgJlE_0JNeKGx4tNPQcavIE6_Leyp_gZEgrz6RMR8sIjvhqrOKZ3WiV3efpn8bbvE_h2d_2h8zZlvKvaMzomf_ud6rh8IrB50tmP63uJc9bOvsLnEgarhRgkoBUhsnPD9mWDNmB8ZDlxclpLEnsu-vnQmjYHR1WA_S0D0NrfXXMPAcQSRqkaGh-TyIL7q4wR7_8yxtRlbl8N3ZRyRrwF4xEJqsKrWrokKTO6MIdC9xPE3INl0FBSG-Vwg"/>
+</div>
+<div>
+<h1 class="font-display text-display text-[#2c2418] uppercase tracking-widest leading-none font-bold">ALBOR</h1>
+<p class="font-body text-[13px] text-on-surface-variant font-medium tracking-wide">Vista del Director (GM) · Koru</p>
+</div>
+</div>
+<!-- Trailing Header Items: Room Code, Salir & Nuevo -->
+<div class="flex items-center gap-3">
+<div class="px-2.5 py-1 bg-surface-container border border-outline/60 flex items-center gap-1.5">
+<span class="font-label text-[9px] text-on-surface-variant uppercase tracking-wider">SALA:</span>
+<span class="font-display text-[12px] font-bold text-primary-dark tracking-widest">K7M4QP</span>
+</div>
+<button class="px-3 py-1 border border-primary text-primary-dark font-button text-button uppercase hover:bg-surface-container transition-colors duration-150 active:scale-95 rounded-none">
+    SALIR
+  </button>
+<button class="px-3 py-1 bg-surface-inverse text-[#f7f1e4] border border-primary font-button text-button uppercase hover:bg-inverse-surface transition-colors duration-150 active:scale-95 rounded-none font-bold">
+    NUEVO
+  </button>
+</div></div>
+<!-- Golden Baseline 2px separating header -->
+<div class="metallic-baseline mt-2 w-full"></div>
+</header>
+<!-- 2. PESTAÑAS DE NAVEGACIÓN -->
+<nav class="px-space-xl py-1.5 flex items-center gap-2 bg-background shrink-0 border-b border-outline-variant/60"><button class="bg-surface-inverse text-primary-light border border-primary font-button text-button px-4 py-1.5 font-bold shadow-sm transition-all duration-150 rounded-none">MESA</button><button class="border border-outline/70 bg-transparent text-on-surface-variant hover:bg-surface-container hover:text-on-surface px-4 py-1.5 font-button text-button transition-colors duration-150 rounded-none">FICHA</button><button class="border border-outline/70 bg-transparent text-on-surface-variant hover:bg-surface-container hover:text-on-surface px-4 py-1.5 font-button text-button transition-colors duration-150 rounded-none">TIRADOR GM</button><button class="border border-outline/70 bg-transparent text-on-surface-variant hover:bg-surface-container hover:text-on-surface px-4 py-1.5 font-button text-button transition-colors duration-150 rounded-none">TIRADAS</button><button class="border border-outline/70 bg-transparent text-on-surface-variant hover:bg-surface-container hover:text-on-surface px-4 py-1.5 font-button text-button transition-colors duration-150 rounded-none">OPCIONES</button></nav>
+<!-- 3. SELECTOR DE PERSONAJES Y VÍNCULO LOCAL -->
+<!-- 4. BARRA DE GUARDADO STICKY -->
+<!-- SCROLLABLE CANVAS INTERIOR -->
+<div class="flex-1 overflow-y-auto px-space-xl py-space-md space-y-4"><!-- Encabezado de la vista Mesa -->
+<div class="mb-3">
+<div class="flex items-center justify-between border-b border-primary pb-1">
+<h2 class="font-section-title text-section-title text-primary-dark uppercase tracking-widest">
+      - MESA -
+    </h2>
+<span class="font-label text-[10px] text-on-surface-variant uppercase tracking-wider">
+      4 Personajes en partida
+    </span>
+</div>
+<p class="font-body italic text-[14px] text-on-surface-variant mt-1.5">
+    Todavía no hay jugadores en la sala.
+  </p>
+</div>
+<!-- Grilla de 2 columnas con 4 tarjetas de personajes -->
+<div class="grid grid-cols-2 gap-4 pb-2">
+<!-- Tarjeta 1: Iara Solís -->
+<div class="bg-surface border border-primary p-1 shadow-xs rounded-none relative">
+<div class="border border-outline/60 p-3 bg-surface h-full flex flex-col justify-between relative">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<div>
+<div class="flex items-start justify-between gap-2 mb-1">
+<div>
+<h3 class="font-display text-[17px] font-bold text-on-surface uppercase tracking-wide leading-tight">
+              Iara Solís
+            </h3>
+<p class="font-body italic text-[13px] text-on-surface-variant leading-snug">
+              Cartógrafa que persigue el primer amanecer
+            </p>
+</div>
+<span class="font-label text-[9px] font-bold uppercase tracking-wider text-primary-dark bg-surface-container px-2 py-0.5 border border-outline/50 shrink-0">
+            Koru · director
+          </span>
+</div>
+<div class="text-[11px] font-label text-primary-dark font-medium uppercase tracking-wider mb-2">
+          Nivel 2 · Exploradora
+        </div>
+<div class="metallic-baseline mb-2.5"></div>
+<!-- Atributos dados base -->
+<div class="grid grid-cols-4 gap-1 text-center bg-background border border-outline/60 p-1.5 mb-2">
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">VIG</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">2d6</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">AGI</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">3d8</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">APT</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">3d6</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">VOL</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">2d4</span>
+</div>
+</div>
+<!-- Recursos Vitales -->
+<div class="grid grid-cols-4 gap-1 text-center font-label text-[9px] border-t border-b border-outline/40 py-1.5 mb-3">
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">DET</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">8/8</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Chispa</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">10/10</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Suerte</span>
+<span class="font-die-number text-[12px] font-bold text-accent-sun">7/10</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Heridas</span>
+<span class="font-die-number text-[12px] font-bold text-error">0/1</span>
+</div>
+</div>
+</div>
+<div class="flex justify-end pt-1">
+<button class="px-3 py-1 bg-surface-inverse hover:bg-inverse-surface text-primary-light border border-primary font-button text-[10px] uppercase tracking-wider rounded-none transition-colors active:scale-95">
+          EDITAR
+        </button>
+</div>
+</div>
+</div>
+<!-- Tarjeta 2: Bruno del Monte -->
+<div class="bg-surface border border-outline p-1 shadow-xs rounded-none relative">
+<div class="border border-outline/50 p-3 bg-surface h-full flex flex-col justify-between relative">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<div>
+<div class="flex items-start justify-between gap-2 mb-1">
+<div>
+<h3 class="font-display text-[17px] font-bold text-on-surface uppercase tracking-wide leading-tight">
+              Bruno del Monte
+            </h3>
+<p class="font-body italic text-[13px] text-on-surface-variant leading-snug">
+              Forjador de reliquias de cobre solar
+            </p>
+</div>
+<span class="font-label text-[9px] font-bold uppercase tracking-wider text-success bg-[#f2f8f4] px-2 py-0.5 border border-success/40 shrink-0">
+            Nahuel · conectado
+          </span>
+</div>
+<div class="text-[11px] font-label text-primary-dark font-medium uppercase tracking-wider mb-2">
+          Nivel 2 · Artesano
+        </div>
+<div class="metallic-baseline mb-2.5"></div>
+<!-- Atributos dados base -->
+<div class="grid grid-cols-4 gap-1 text-center bg-background border border-outline/60 p-1.5 mb-2">
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">VIG</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">3d8</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">AGI</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">2d6</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">APT</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">3d8</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">VOL</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">2d6</span>
+</div>
+</div>
+<!-- Recursos Vitales -->
+<div class="grid grid-cols-4 gap-1 text-center font-label text-[9px] border-t border-b border-outline/40 py-1.5 mb-3">
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">DET</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">10/10</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Chispa</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">8/8</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Suerte</span>
+<span class="font-die-number text-[12px] font-bold text-accent-sun">5/10</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Heridas</span>
+<span class="font-die-number text-[12px] font-bold text-error">0/1</span>
+</div>
+</div>
+</div>
+<div class="flex justify-end pt-1">
+<button class="px-3 py-1 border border-primary text-primary-dark font-button text-[10px] uppercase tracking-wider hover:bg-surface-container rounded-none transition-colors active:scale-95">
+          VER
+        </button>
+</div>
+</div>
+</div>
+<!-- Tarjeta 3: Tala -->
+<div class="bg-surface border border-outline p-1 shadow-xs rounded-none relative">
+<div class="border border-outline/50 p-3 bg-surface h-full flex flex-col justify-between relative">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<div>
+<div class="flex items-start justify-between gap-2 mb-1">
+<div>
+<h3 class="font-display text-[17px] font-bold text-on-surface uppercase tracking-wide leading-tight">
+              Tala
+            </h3>
+<p class="font-body italic text-[13px] text-on-surface-variant leading-snug">
+              Centinela de los valles del crepúsculo
+            </p>
+</div>
+<span class="font-label text-[9px] font-bold uppercase tracking-wider text-success bg-[#f2f8f4] px-2 py-0.5 border border-success/40 shrink-0">
+            Sofi · conectado
+          </span>
+</div>
+<div class="text-[11px] font-label text-primary-dark font-medium uppercase tracking-wider mb-2">
+          Nivel 1 · Rastreadora
+        </div>
+<div class="metallic-baseline mb-2.5"></div>
+<!-- Atributos dados base -->
+<div class="grid grid-cols-4 gap-1 text-center bg-background border border-outline/60 p-1.5 mb-2">
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">VIG</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">2d6</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">AGI</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">3d8</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">APT</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">2d6</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">VOL</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">2d6</span>
+</div>
+</div>
+<!-- Recursos Vitales -->
+<div class="grid grid-cols-4 gap-1 text-center font-label text-[9px] border-t border-b border-outline/40 py-1.5 mb-3">
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">DET</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">8/8</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Chispa</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">6/6</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Suerte</span>
+<span class="font-die-number text-[12px] font-bold text-accent-sun">9/10</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Heridas</span>
+<span class="font-die-number text-[12px] font-bold text-error">0/1</span>
+</div>
+</div>
+</div>
+<div class="flex justify-end pt-1">
+<button class="px-3 py-1 border border-primary text-primary-dark font-button text-[10px] uppercase tracking-wider hover:bg-surface-container rounded-none transition-colors active:scale-95">
+          VER
+        </button>
+</div>
+</div>
+</div>
+<!-- Tarjeta 4: Lobo de ceniza -->
+<div class="bg-surface border border-outline p-1 shadow-xs rounded-none relative">
+<div class="border border-outline/50 p-3 bg-surface h-full flex flex-col justify-between relative">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<div>
+<div class="flex items-start justify-between gap-2 mb-1">
+<div>
+<h3 class="font-display text-[17px] font-bold text-on-surface uppercase tracking-wide leading-tight">
+              Lobo de ceniza
+            </h3>
+<p class="font-body italic text-[13px] text-on-surface-variant leading-snug">
+              Compañero bestial adiestrado en la niebla
+            </p>
+</div>
+<span class="font-label text-[9px] font-bold uppercase tracking-wider text-primary-dark bg-surface-container px-2 py-0.5 border border-outline/50 shrink-0">
+            Koru · director
+          </span>
+</div>
+<div class="text-[11px] font-label text-primary-dark font-medium uppercase tracking-wider mb-2">
+          Nivel 1 · Bestia aliada
+        </div>
+<div class="metallic-baseline mb-2.5"></div>
+<!-- Atributos dados base -->
+<div class="grid grid-cols-4 gap-1 text-center bg-background border border-outline/60 p-1.5 mb-2">
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">VIG</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">3d8</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">AGI</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">2d6</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">APT</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">1d4</span>
+</div>
+<div>
+<span class="block font-label text-[8px] text-on-surface-variant uppercase leading-none">VOL</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">2d4</span>
+</div>
+</div>
+<!-- Recursos Vitales -->
+<div class="grid grid-cols-4 gap-1 text-center font-label text-[9px] border-t border-b border-outline/40 py-1.5 mb-3">
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">DET</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">6/6</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Chispa</span>
+<span class="font-die-number text-[12px] font-bold text-on-surface">4/4</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Suerte</span>
+<span class="font-die-number text-[12px] font-bold text-accent-sun">4/10</span>
+</div>
+<div>
+<span class="block text-on-surface-variant text-[8px] uppercase">Heridas</span>
+<span class="font-die-number text-[12px] font-bold text-error">0/1</span>
+</div>
+</div>
+</div>
+<div class="flex justify-end pt-1">
+<button class="px-3 py-1 bg-surface-inverse hover:bg-inverse-surface text-primary-light border border-primary font-button text-[10px] uppercase tracking-wider rounded-none transition-colors active:scale-95">
+          EDITAR
+        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pie de página de la mesa -->
+<footer class="text-center font-label text-[10px] text-on-surface-variant/70 tracking-widest uppercase py-2 border-t border-outline/40 mt-2">
+  Albor v0.4 · Mesa de Campaña · Vista del Director
+</footer></div>
+</div>
+</body></html>

@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Albor - Hoja de Personaje Nocturna (Iara Solís)</title>
+<!-- Google Fonts: Cinzel & Cormorant Garamond -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container": "#efe3c4",
+            "primary": "#b88e44",
+            "surface-container-highest": "#eae1d8",
+            "on-primary-container": "#3f2a00",
+            "background": "#f7f1e4",
+            "on-error-container": "#93000a",
+            "accent-sun": "#e08a2c",
+            "on-surface": "#1f1b15",
+            "on-primary-fixed-variant": "#5f4100",
+            "on-primary-fixed": "#271900",
+            "on-surface-variant": "#4f4538",
+            "on-tertiary-fixed-variant": "#234874",
+            "primary-light": "#e4d2a0",
+            "on-secondary": "#ffffff",
+            "on-error": "#ffffff",
+            "success": "#3d7a52",
+            "on-secondary-container": "#785817",
+            "outline": "#c4a15a",
+            "inverse-on-surface": "#f9efe6",
+            "surface-tint": "#7b5811",
+            "tertiary-container": "#7597c8",
+            "tertiary-fixed": "#d4e3ff",
+            "secondary-fixed-dim": "#ebc075",
+            "tertiary-fixed-dim": "#a6c8fc",
+            "on-secondary-fixed": "#271900",
+            "surface-variant": "#eae1d8",
+            "on-secondary-fixed-variant": "#5e4200",
+            "outline-variant": "#d2c4b3",
+            "on-tertiary-fixed": "#001c39",
+            "surface-container-high": "#f0e7dd",
+            "surface-inverse": "#2a2724",
+            "surface-dim": "#e2d9cf",
+            "tertiary": "#3d608d",
+            "error-container": "#ffdad6",
+            "secondary": "#795918",
+            "on-tertiary": "#ffffff",
+            "primary-fixed-dim": "#eebf70",
+            "on-primary": "#ffffff",
+            "surface-bright": "#fff8f3",
+            "surface": "#fffdf8",
+            "primary-fixed": "#ffdeab",
+            "inverse-primary": "#eebf70",
+            "on-tertiary-container": "#002e59",
+            "error": "#9a3b2a",
+            "secondary-fixed": "#ffdea8",
+            "inverse-surface": "#34302a",
+            "primary-container": "#b88e44",
+            "on-surface-inverse": "#f7f1e4",
+            "primary-dark": "#8c6a28",
+            "surface-container-lowest": "#ffffff",
+            "secondary-container": "#fdd184",
+            "surface-container-low": "#fcf2e9",
+            "on-background": "#1f1b15"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "10px",
+            "space-xs": "4px",
+            "space-lg": "14px",
+            "space-xl": "16px",
+            "space-sm": "6px",
+            "margin": "16px",
+            "gutter": "10px"
+          },
+          "fontFamily": {
+            "section-title": ["Cinzel"],
+            "input": ["Cormorant Garamond"],
+            "die-number": ["Cinzel"],
+            "body": ["Cormorant Garamond"],
+            "button": ["Cinzel"],
+            "display": ["Cinzel"],
+            "label": ["Cinzel"]
+          },
+          "fontSize": {
+            "section-title": ["13px", { "letterSpacing": "0.14em", "fontWeight": "700" }],
+            "input": ["15px", { "fontWeight": "600" }],
+            "die-number": ["22px", { "fontWeight": "700" }],
+            "body": ["14px", { "fontWeight": "500" }],
+            "button": ["10px", { "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "display": ["20px", { "letterSpacing": "0.12em", "fontWeight": "700" }],
+            "label": ["11px", { "letterSpacing": "0.04em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    
+    /* Parchment ambient radial lighting */
+    .parchment-canvas {
+      background-color: #f7f1e4;
+      background-image: 
+        radial-gradient(circle at 4% 6%, rgba(212, 176, 90, 0.14) 0%, transparent 40%),
+        radial-gradient(circle at 96% 94%, rgba(184, 142, 68, 0.12) 0%, transparent 45%);
+    }
+
+    /* Baseline for character sheet fields */
+    .metallic-baseline {
+      background: linear-gradient(90deg, #e8d5a3 0%, #b88e44 35%, #7a5a22 70%, #d4b46a 100%);
+      height: 2px;
+    }
+
+    /* Print ornamental crop marks (10x10px) */
+    .crop-mark-tl {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 10px;
+      height: 10px;
+      border-top: 1.5px solid #b88e44;
+      border-left: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    .crop-mark-br {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 1.5px solid #b88e44;
+      border-right: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+
+    /* Custom scrollbar matching tactile paper */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #efe3c4;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c4a15a;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8c6a28;
+    }
+
+    /* Trapezoid banner cut for dice rank */
+    .trapezoid-banner {
+      clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+    }
+  </style>
+</head>
+<body class="bg-[#16130f] flex items-center justify-center min-h-screen p-4 select-none text-[#f3ead7]">
+<!-- Popover Container 900x700 with internal vertical scroll -->
+<div class="w-[900px] h-[700px] bg-[#241f19] border border-[#d4b46a] shadow-2xl flex flex-col overflow-hidden relative text-[#f3ead7]">
+<!-- Filete interior sutil de marco impreso -->
+<div class="absolute inset-[3px] border border-[#d4b46a]/30 pointer-events-none z-40"></div>
+<!-- 1. ENCABEZADO DE LA APP -->
+<header class="bg-[#1c1813] pt-2 px-4 pb-2 shrink-0 relative border-b border-[#d4b46a]/40 z-30">
+<!-- Watermark Top Centered -->
+<div class="text-center font-display text-[10px] tracking-[0.32em] text-[#d4b46a] lowercase mb-1 select-none">
+      ~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~
+    </div>
+<!-- Main Header Row -->
+<div class="flex items-center justify-between">
+<!-- Logo & Title -->
+<div class="flex items-center gap-3">
+<div class="w-10 h-7 flex items-center justify-center shrink-0">
+<img alt="Sol Naciente Albor" class="h-6 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UgJlE_0JNeKGx4tNPQcavIE6_Leyp_gZEgrz6RMR8sIjvhqrOKZ3WiV3efpn8bbvE_h2d_2h8zZlvKvaMzomf_ud6rh8IrB50tmP63uJc9bOvsLnEgarhRgkoBUhsnPD9mWDNmB8ZDlxclpLEnsu-vnQmjYHR1WA_S0D0NrfXXMPAcQSRqkaGh-TyIL7q4wR7_8yxtRlbl8N3ZRyRrwF4xEJqsKrWrokKTO6MIdC9xPE3INl0FBSG-Vwg"/>
+</div>
+<div>
+<h1 class="font-display text-[20px] text-[#f3ead7] uppercase tracking-widest leading-none font-bold">ALBOR</h1>
+<p class="font-body text-[13px] text-[#c4a56a] font-medium tracking-wide">Vista de jugador · Nahuel</p>
+</div>
+</div>
+<!-- Trailing Action Buttons -->
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 border border-[#d4b46a] text-[#e8d5a3] font-button text-[10px] uppercase bg-transparent hover:bg-[#2e2720] transition-colors duration-150">
+          Nuevo
+        </button>
+<button class="px-3 py-1 border border-[#d4b46a] text-[#e8d5a3] font-button text-[10px] uppercase bg-transparent hover:bg-[#2e2720] transition-colors duration-150">
+          Duplicar
+        </button>
+<div class="relative group">
+<button class="px-2.5 py-1 border border-[#d4b46a] text-[#e8d5a3] font-button text-[10px] uppercase bg-transparent hover:bg-[#2e2720] flex items-center gap-1 transition-colors duration-150">
+<span class="material-symbols-outlined text-[14px]">folder</span>
+<span>Archivo</span>
+<span class="text-[9px]">▾</span>
+</button>
+</div>
+<div class="relative group">
+<button class="px-2.5 py-1 border border-[#d4b46a] text-[#e8d5a3] font-button text-[10px] uppercase bg-transparent hover:bg-[#2e2720] flex items-center gap-1 transition-colors duration-150">
+<span class="material-symbols-outlined text-[14px]">share</span>
+<span>Compartir</span>
+<span class="text-[9px]">▾</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Golden Baseline separating header -->
+<div class="mt-2 w-full h-[2px] bg-gradient-to-r from-[#d4b46a] via-[#e8d5a3] to-[#8c6a28]"></div>
+</header>
+<!-- 2. PESTAÑAS DE NAVEGACIÓN -->
+<nav class="px-4 py-1.5 flex items-center gap-2 bg-[#1c1813] shrink-0 border-b border-[#d4b46a]/30 z-30">
+<button class="bg-[#d4b46a] text-[#16130f] border border-[#d4b46a] font-button text-[10px] px-4 py-1.5 font-bold shadow-sm transition-all duration-150 uppercase tracking-wider">
+      Ficha
+    </button>
+<button class="border border-[#d4b46a]/60 bg-transparent text-[#c4a56a] hover:bg-[#2a241d] hover:text-[#f3ead7] px-4 py-1.5 font-button text-[10px] transition-colors duration-150 uppercase tracking-wider">
+      Tiradas
+    </button>
+<button class="border border-[#d4b46a]/60 bg-transparent text-[#c4a56a] hover:bg-[#2a241d] hover:text-[#f3ead7] px-4 py-1.5 font-button text-[10px] transition-colors duration-150 uppercase tracking-wider">
+      Opciones
+    </button>
+</nav>
+<!-- 3. SELECTOR DE PERSONAJES Y VÍNCULO LOCAL -->
+<div class="px-4 py-2 flex items-center justify-between gap-4 bg-[#1a1612] border-b border-[#d4b46a]/30 shrink-0 text-xs z-30">
+<!-- Character Chips -->
+<div class="flex items-center gap-1.5">
+<button class="bg-[#2e261d] text-[#e8d5a3] px-3 py-1 font-label text-[11px] font-bold tracking-wider border border-[#d4b46a] flex items-center gap-1">
+<span>Iara Solís</span>
+</button>
+<button class="bg-transparent hover:bg-[#241f19] text-[#c4a56a] hover:text-[#f3ead7] px-3 py-1 font-label text-[11px] border border-[#d4b46a]/40 transition-colors">
+        Valen Arrechea
+      </button>
+<button class="bg-transparent hover:bg-[#241f19] text-[#c4a56a] hover:text-[#f3ead7] px-3 py-1 font-label text-[11px] border border-[#d4b46a]/40 transition-colors">
+        Ciro de las Brumas
+      </button>
+<button class="w-6 h-6 flex items-center justify-center border border-[#d4b46a] text-[#d4b46a] hover:bg-[#2e261d] font-label font-bold text-xs" title="Creá un nuevo personaje">
+        +
+      </button>
+</div>
+<!-- Sync Selector -->
+<div class="flex items-center gap-2 font-body text-[13px] text-[#c4a56a]">
+<span class="italic font-medium">Sincronizar con ficha local:</span>
+<div class="relative">
+<select class="bg-[#241f19] border border-[#d4b46a]/60 text-[#f3ead7] text-[12px] font-input py-0.5 pl-2 pr-6 appearance-none focus:outline-none focus:border-[#d4b46a] cursor-pointer">
+<option>Elegir… (Iara_v2.json)</option>
+<option>Guardar copia local (.json)</option>
+<option>Importar archivo existente</option>
+</select>
+<span class="absolute right-1.5 top-1/2 -translate-y-1/2 pointer-events-none text-[9px] text-[#d4b46a]">▼</span>
+</div>
+</div>
+</div>
+<!-- 4. BARRA DE GUARDADO STICKY -->
+<div class="sticky top-0 z-30 px-4 py-1.5 bg-[#1e1914] border-b border-[#d4b46a]/40 flex items-center justify-between shrink-0 shadow-sm">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2 h-2 bg-[#e08a2c] animate-pulse"></span>
+<span class="font-body text-[14px] text-[#e89f55] font-semibold tracking-wide">
+        ● Hay cambios sin guardar.
+      </span>
+</div>
+<button class="bg-[#d4b46a] hover:bg-[#e4c47b] text-[#16130f] font-button text-[10px] px-5 py-1.5 border border-[#d4b46a] transition-all duration-150 uppercase tracking-widest font-bold">
+      GUARDAR
+    </button>
+</div>
+<!-- SCROLLABLE CANVAS INTERIOR -->
+<div class="flex-1 overflow-y-auto px-4 py-3 space-y-4">
+<!-- 5. PANEL TIRADOR (Colapsable / Compacto) -->
+<section class="bg-[#1e1914] border border-[#d4b46a] relative p-3 shadow-xs">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<!-- Section Title -->
+<div class="flex items-center justify-between border-b border-[#d4b46a]/40 pb-1 mb-2.5">
+<h2 class="font-section-title text-[13px] text-[#d4b46a] uppercase tracking-[0.14em] font-bold">
+          - TIRADOR -
+        </h2>
+<span class="font-label text-[10px] text-[#c4a56a] tracking-widest uppercase cursor-pointer hover:text-[#d4b46a]">
+          [ Colapsar ]
+        </span>
+</div>
+<div class="grid grid-cols-12 gap-3 items-start">
+<!-- Columna Izquierda: Configuración de dados y atributos -->
+<div class="col-span-7 space-y-2.5">
+<!-- Stat Chips to Roll -->
+<div class="flex items-center gap-1.5">
+<button class="border border-[#d4b46a]/50 px-2.5 py-1 font-label text-[11px] text-[#c4a56a] hover:bg-[#28221b]">
+              VIG <span class="font-bold font-die-number text-[12px] text-[#f3ead7]">2d6</span>
+</button>
+<button class="border border-[#d4b46a] bg-[#d4b46a] text-[#16130f] font-bold px-2.5 py-1 font-label text-[11px]">
+              AGI <span class="font-die-number text-[12px]">3d8</span>
+</button>
+<button class="border border-[#d4b46a]/50 px-2.5 py-1 font-label text-[11px] text-[#c4a56a] hover:bg-[#28221b]">
+              APT <span class="font-bold font-die-number text-[12px] text-[#f3ead7]">3d6</span>
+</button>
+<button class="border border-[#d4b46a]/50 px-2.5 py-1 font-label text-[11px] text-[#c4a56a] hover:bg-[#28221b]">
+              VOL <span class="font-bold font-die-number text-[12px] text-[#f3ead7]">2d4</span>
+</button>
+</div>
+<!-- Modificadores -->
+<div class="flex items-center gap-4 text-xs font-body">
+<label class="flex items-center gap-1.5 cursor-pointer text-[#f3ead7] font-medium">
+<input checked="" class="w-3.5 h-3.5 border-[#d4b46a] bg-[#16130f] text-[#d4b46a] focus:ring-0 rounded-none" type="checkbox"/>
+<span>Talento aplica (+1 escalón de dado)</span>
+</label>
+<div class="flex items-center gap-1.5">
+<span class="font-label text-[10px] text-[#c4a56a] uppercase">Dados extra:</span>
+<input class="w-12 h-6 text-center text-xs font-bold font-input border border-[#d4b46a]/60 bg-[#16130f] text-[#f3ead7] focus:outline-none p-0" max="6" min="-3" type="number" value="0"/>
+</div>
+</div>
+<!-- Resumen Previo y Botón de Tirar -->
+<div class="flex items-center justify-between pt-1">
+<div class="font-body italic text-[13px] text-[#c4a56a]">
+              Vas a tirar <strong class="font-bold text-[#f3ead7]">3d8 vs E(9)</strong> · local
+            </div>
+<button class="bg-[#d4b46a] hover:bg-[#e4c47b] text-[#16130f] font-button text-[10px] px-4 py-1.5 border border-[#d4b46a] uppercase tracking-widest font-bold active:scale-95 transition-all">
+              TIRAR DADOS
+            </button>
+</div>
+</div>
+<!-- Columna Derecha: Selector de Dificultad -->
+<div class="col-span-5 border-l border-[#d4b46a]/30 pl-3">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label text-[10px] text-[#c4a56a] uppercase">Dificultad</span>
+<span class="font-label text-[11px] text-[#d4b46a] font-bold">E(9) · Normal</span>
+</div>
+<!-- Selector Dificultad Stepper -->
+<div class="flex items-center border border-[#d4b46a] bg-[#16130f]">
+<button class="w-8 h-9 flex items-center justify-center font-display font-bold text-base hover:bg-[#28221b] border-r border-[#d4b46a] text-[#d4b46a]">
+              −
+            </button>
+<div class="flex-1 text-center font-display font-bold text-2xl text-[#f3ead7]">
+              9
+            </div>
+<button class="w-8 h-9 flex items-center justify-center font-display font-bold text-base hover:bg-[#28221b] border-l border-[#d4b46a] text-[#d4b46a]">
+              +
+            </button>
+</div>
+<!-- Escala de dificultad nocturna -->
+<div class="flex justify-between text-[9px] font-label text-[#c4a56a] mt-1 px-1">
+<span>G(5)</span><span>F(7)</span><span class="text-[#d4b46a] font-bold underline">E(9)</span><span>D(11)</span><span>C(13)</span><span>B(15)</span><span>A(17)</span>
+</div>
+</div>
+</div>
+<!-- Divisor sutil de resultado -->
+<div class="border-t border-[#d4b46a]/40 my-2 pt-2">
+<!-- Caras de Dados & Resultado en caja -->
+<div class="flex items-center justify-between gap-3">
+<!-- Dados tirados -->
+<div class="flex items-center gap-2">
+<!-- Dado 1 -->
+<div class="w-12 h-14 border border-[#d4b46a] bg-[#1a1612] flex flex-col items-center justify-between py-1 shadow-2xs">
+<span class="font-display text-[8px] text-[#c4a56a] tracking-tighter">DADO 1</span>
+<span class="font-die-number text-die-number leading-none text-[#f3ead7]">6</span>
+<span class="font-label text-[9px] text-[#d4b46a] font-bold">d8</span>
+</div>
+<!-- Dado 2 -->
+<div class="w-12 h-14 border border-[#d4b46a] bg-[#1a1612] flex flex-col items-center justify-between py-1 shadow-2xs">
+<span class="font-display text-[8px] text-[#c4a56a] tracking-tighter">DADO 2</span>
+<span class="font-die-number text-die-number leading-none text-[#f3ead7]">8</span>
+<span class="font-label text-[9px] text-[#d4b46a] font-bold">d8</span>
+</div>
+<!-- Dado 3 -->
+<div class="w-12 h-14 border border-[#d4b46a] bg-[#1a1612] flex flex-col items-center justify-between py-1 shadow-2xs">
+<span class="font-display text-[8px] text-[#c4a56a] tracking-tighter">DADO 3</span>
+<span class="font-die-number text-die-number leading-none text-[#f3ead7]">2</span>
+<span class="font-label text-[9px] text-[#d4b46a] font-bold">d8</span>
+</div>
+</div>
+<!-- Resultado Exitoso / Crítico -->
+<div class="flex-1 border border-[#5fa874] bg-[#17261d] p-2 flex flex-col justify-center">
+<div class="font-body text-body font-semibold text-[#5fa874] flex items-center justify-between">
+<span>6 + 8 + 2 = <strong class="font-bold font-die-number text-[16px] text-[#7de397]">16</strong> vs 9</span>
+<span class="font-label text-[11px] font-bold uppercase tracking-wider bg-[#3d7a52] text-white px-2 py-0.5">
+                Éxito extra · Crítico
+              </span>
+</div>
+</div>
+</div>
+<p class="font-body text-[11px] text-[#c4a56a] mt-1.5 italic">
+          * Dados base: d4 → d6 → d8 → d10 → d12. El talento sube un escalón la reserva.
+        </p>
+</div>
+</section>
+<!-- 6. HOJA DE PAPEL PRINCIPAL (Doble filete nocturno y oro) -->
+<article class="bg-[#241f19] border border-[#d4b46a] p-2 relative shadow-xs">
+<!-- Doble Filete Interior de oro -->
+<div class="border border-[#d4b46a]/50 p-3 relative bg-[#1f1a14]">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<!-- Marca de agua decorativa -->
+<div class="text-center font-display text-[9px] tracking-[0.4em] text-[#d4b46a] uppercase mb-2">
+          ~ ~ ~ albor ~ ~ ~
+        </div>
+<!-- Campos Superiores: Nombre y Concepto -->
+<div class="grid grid-cols-12 gap-4 mb-4">
+<!-- Nombre del Personaje -->
+<div class="col-span-5">
+<label class="block font-label text-label text-[#c4a56a] uppercase tracking-wider">
+              Nombre del Personaje
+            </label>
+<input class="w-full bg-transparent border-0 p-0 font-body text-[24px] font-bold text-[#f3ead7] focus:ring-0 leading-tight" type="text" value="Iara Solís"/>
+<div class="w-full h-[2px] bg-gradient-to-r from-[#d4b46a] via-[#e8d5a3] to-[#8c6a28] mt-1"></div>
+</div>
+<!-- Concepto del Personaje -->
+<div class="col-span-7">
+<label class="block font-label text-label text-[#c4a56a] uppercase tracking-wider">
+              Concepto del personaje
+            </label>
+<input class="w-full bg-transparent border-0 p-0 font-body text-[17px] italic font-semibold text-[#f3ead7] focus:ring-0 leading-normal" type="text" value="Cartógrafa que persigue el primer amanecer"/>
+<div class="w-full h-[2px] bg-gradient-to-r from-[#d4b46a] via-[#e8d5a3] to-[#8c6a28] mt-1"></div>
+</div>
+</div>
+<!-- Fila de 5 campos sin caja (Líneas metálicas doradas) -->
+<div class="grid grid-cols-5 gap-3 mb-5">
+<div>
+<span class="block font-label text-[10px] text-[#c4a56a] uppercase">Linaje</span>
+<span class="block font-input text-input text-[#f3ead7] py-0.5">Humana del Delta</span>
+<div class="w-full h-[2px] bg-gradient-to-r from-[#d4b46a] to-[#8c6a28]"></div>
+</div>
+<div>
+<span class="block font-label text-[10px] text-[#c4a56a] uppercase">Ocupación</span>
+<span class="block font-input text-input text-[#f3ead7] py-0.5">Gremio Cartógrafos</span>
+<div class="w-full h-[2px] bg-gradient-to-r from-[#d4b46a] to-[#8c6a28]"></div>
+</div>
+<div>
+<span class="block font-label text-[10px] text-[#c4a56a] uppercase">Rol</span>
+<span class="block font-input text-input text-[#f3ead7] py-0.5">Exploradora</span>
+<div class="w-full h-[2px] bg-gradient-to-r from-[#d4b46a] to-[#8c6a28]"></div>
+</div>
+<div>
+<span class="block font-label text-[10px] text-[#c4a56a] uppercase">Nivel</span>
+<span class="block font-input text-input text-[#f3ead7] py-0.5 font-bold">2</span>
+<div class="w-full h-[2px] bg-gradient-to-r from-[#d4b46a] to-[#8c6a28]"></div>
+</div>
+<div>
+<span class="block font-label text-[10px] text-[#c4a56a] uppercase">Tamaño</span>
+<span class="block font-input text-input text-[#f3ead7] py-0.5">1 (Mediano)</span>
+<div class="w-full h-[2px] bg-gradient-to-r from-[#d4b46a] to-[#8c6a28]"></div>
+</div>
+</div>
+<!-- BANDA DE ESTADÍSTICAS (Franja más oscura #100e0c con 4 Columnas) -->
+<div class="bg-[#100e0c] p-2.5 mb-5 border border-[#d4b46a]">
+<div class="grid grid-cols-4 gap-2">
+<!-- Columna VIGOR -->
+<div class="flex flex-col items-center">
+<div class="w-full bg-gradient-to-r from-[#8c6a28] to-[#d4b46a] text-[#16130f] py-1 px-2 flex items-center justify-between border-b border-[#d4b46a]">
+<span class="font-section-title text-[11px] tracking-widest font-bold">VIGOR</span>
+<span class="font-die-number text-[18px] leading-none font-bold">2</span>
+</div>
+<div class="w-[85%] bg-[#1e1a15] trapezoid-banner text-center py-1 border-x border-b border-[#d4b46a]/60">
+<span class="block font-label text-[8px] text-[#c4a56a] uppercase leading-none">dado base</span>
+<span class="block font-die-number text-[13px] font-bold text-[#e8d5a3] leading-tight">d6</span>
+</div>
+</div>
+<!-- Columna AGILIDAD -->
+<div class="flex flex-col items-center">
+<div class="w-full bg-gradient-to-r from-[#8c6a28] to-[#d4b46a] text-[#16130f] py-1 px-2 flex items-center justify-between border-b border-[#d4b46a]">
+<span class="font-section-title text-[11px] tracking-widest font-bold">AGILIDAD</span>
+<span class="font-die-number text-[18px] leading-none font-bold">3</span>
+</div>
+<div class="w-[85%] bg-[#1e1a15] trapezoid-banner text-center py-1 border-x border-b border-[#d4b46a]/60">
+<span class="block font-label text-[8px] text-[#c4a56a] uppercase leading-none">dado base</span>
+<span class="block font-die-number text-[13px] font-bold text-[#e8d5a3] leading-tight">d8</span>
+</div>
+</div>
+<!-- Columna APTITUD -->
+<div class="flex flex-col items-center">
+<div class="w-full bg-gradient-to-r from-[#8c6a28] to-[#d4b46a] text-[#16130f] py-1 px-2 flex items-center justify-between border-b border-[#d4b46a]">
+<span class="font-section-title text-[11px] tracking-widest font-bold">APTITUD</span>
+<span class="font-die-number text-[18px] leading-none font-bold">3</span>
+</div>
+<div class="w-[85%] bg-[#1e1a15] trapezoid-banner text-center py-1 border-x border-b border-[#d4b46a]/60">
+<span class="block font-label text-[8px] text-[#c4a56a] uppercase leading-none">dado base</span>
+<span class="block font-die-number text-[13px] font-bold text-[#e8d5a3] leading-tight">d6</span>
+</div>
+</div>
+<!-- Columna VOLUNTAD -->
+<div class="flex flex-col items-center">
+<div class="w-full bg-gradient-to-r from-[#8c6a28] to-[#d4b46a] text-[#16130f] py-1 px-2 flex items-center justify-between border-b border-[#d4b46a]">
+<span class="font-section-title text-[11px] tracking-widest font-bold">VOLUNTAD</span>
+<span class="font-die-number text-[18px] leading-none font-bold">2</span>
+</div>
+<div class="w-[85%] bg-[#1e1a15] trapezoid-banner text-center py-1 border-x border-b border-[#d4b46a]/60">
+<span class="block font-label text-[8px] text-[#c4a56a] uppercase leading-none">dado base</span>
+<span class="block font-die-number text-[13px] font-bold text-[#e8d5a3] leading-tight">d4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- RECURSOS - FILA 1 (3 Cajas Oro 1.5px) -->
+<div class="grid grid-cols-3 gap-3 mb-3">
+<!-- Determinación -->
+<div class="border-[1.5px] border-[#d4b46a] p-2 bg-[#1a1612]">
+<div class="flex items-center justify-between border-b border-[#d4b46a]/40 pb-1 mb-1">
+<span class="font-section-title text-[10px] text-[#d4b46a] uppercase">Determinación</span>
+<span class="font-label text-[9px] text-[#c4a56a]">Reserva: 16</span>
+</div>
+<div class="flex items-baseline justify-center gap-1 font-die-number text-xl text-[#f3ead7]">
+<span class="font-bold text-[#e8d5a3]">8</span>
+<span class="text-[#d4b46a] font-normal">/</span>
+<span class="text-[#c4a56a] text-base">8</span>
+</div>
+</div>
+<!-- Chispa -->
+<div class="border-[1.5px] border-[#d4b46a] p-2 bg-[#1a1612]">
+<div class="flex items-center justify-between border-b border-[#d4b46a]/40 pb-1 mb-1">
+<span class="font-section-title text-[10px] text-[#d4b46a] uppercase">Chispa</span>
+<span class="font-label text-[9px] text-[#c4a56a]">Reserva: 20</span>
+</div>
+<div class="flex items-baseline justify-center gap-1 font-die-number text-xl text-[#f3ead7]">
+<span class="font-bold text-[#e8d5a3]">10</span>
+<span class="text-[#d4b46a] font-normal">/</span>
+<span class="text-[#c4a56a] text-base">10</span>
+</div>
+</div>
+<!-- Suerte -->
+<div class="border-[1.5px] border-[#d4b46a] p-2 bg-[#1a1612]">
+<div class="flex items-center justify-between border-b border-[#d4b46a]/40 pb-1 mb-1">
+<span class="font-section-title text-[10px] text-[#d4b46a] uppercase">Suerte</span>
+<span class="font-label text-[9px] text-[#c4a56a]">Restante</span>
+</div>
+<div class="flex items-baseline justify-center gap-1 font-die-number text-xl text-[#f3ead7]">
+<span class="font-bold text-[#e08a2c]">7</span>
+<span class="text-[#d4b46a] font-normal">/</span>
+<span class="text-[#c4a56a] text-base">10</span>
+</div>
+</div>
+</div>
+<!-- RECURSOS - FILA 2 (4 Cajas Secundarias) -->
+<div class="grid grid-cols-4 gap-3 mb-5">
+<div class="border border-[#d4b46a]/50 p-1.5 bg-[#16130f] text-center">
+<span class="block font-label text-[9px] text-[#c4a56a] uppercase">Heridas</span>
+<span class="font-die-number text-[16px] text-[#e06d53] font-bold">0 / 1</span>
+</div>
+<div class="border border-[#d4b46a]/50 p-1.5 bg-[#16130f] text-center">
+<span class="block font-label text-[9px] text-[#c4a56a] uppercase">Movimiento</span>
+<span class="font-die-number text-[16px] text-[#f3ead7] font-bold">6</span>
+</div>
+<div class="border border-[#d4b46a]/50 p-1.5 bg-[#16130f] text-center">
+<span class="block font-label text-[9px] text-[#c4a56a] uppercase">Adrenalina (+VIG)</span>
+<span class="font-die-number text-[16px] text-[#f3ead7] font-bold">1d4+2</span>
+</div>
+<div class="border border-[#d4b46a]/50 p-1.5 bg-[#16130f] text-center">
+<span class="block font-label text-[9px] text-[#c4a56a] uppercase">DP</span>
+<span class="font-die-number text-[16px] text-[#d4b46a] font-bold">1</span>
+</div>
+</div>
+<!-- SECCIÓN - TALENTOS - -->
+<div class="mb-5">
+<div class="flex items-center justify-between border-b border-[#d4b46a] pb-1 mb-2">
+<h3 class="font-section-title text-[13px] text-[#d4b46a] uppercase tracking-[0.14em] font-bold">
+              - TALENTOS -
+            </h3>
+<button class="border border-[#d4b46a] px-2.5 py-0.5 font-button text-[9px] text-[#e8d5a3] hover:bg-[#28221b] uppercase transition-colors">
+              + Añadir
+            </button>
+</div>
+<!-- Lista de Talentos con muesca terminal -->
+<div class="space-y-3 font-body">
+<!-- Fila 1 -->
+<div class="relative pb-1.5 group">
+<div class="flex items-center justify-between gap-3 text-body">
+<div class="w-[160px] font-label text-[12px] font-bold text-[#f3ead7] tracking-wide uppercase shrink-0">
+                  Ojo de halcón
+                </div>
+<div class="flex-1 text-[#f3ead7] text-[14px]">
+                  Repetí una tirada de AGI para orientarte, una vez por escena.
+                </div>
+<button class="font-label text-[10px] text-[#e06d53] uppercase hover:underline shrink-0">
+                  Quitar
+                </button>
+</div>
+<!-- Línea de imprenta dorada con muesca vertical 2x10px -->
+<div class="relative w-full h-[2px] bg-[#d4b46a] mt-1">
+<div class="absolute right-0 bottom-0 w-[2px] h-[10px] bg-[#d4b46a]"></div>
+</div>
+</div>
+<!-- Fila 2 -->
+<div class="relative pb-1.5 group">
+<div class="flex items-center justify-between gap-3 text-body">
+<div class="w-[160px] font-label text-[12px] font-bold text-[#f3ead7] tracking-wide uppercase shrink-0">
+                  Mano firme
+                </div>
+<div class="flex-1 text-[#f3ead7] text-[14px]">
+                  +1 escalón de dado al trazar mapas y cartas náuticas de zonas desconocidas.
+                </div>
+<button class="font-label text-[10px] text-[#e06d53] uppercase hover:underline shrink-0">
+                  Quitar
+                </button>
+</div>
+<div class="relative w-full h-[2px] bg-[#d4b46a] mt-1">
+<div class="absolute right-0 bottom-0 w-[2px] h-[10px] bg-[#d4b46a]"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- SECCIÓN - NOTAS - -->
+<div>
+<div class="border-b border-[#d4b46a] pb-1 mb-2">
+<h3 class="font-section-title text-[13px] text-[#d4b46a] uppercase tracking-[0.14em] font-bold">
+              - NOTAS -
+            </h3>
+</div>
+<textarea class="w-full bg-[#16130f] border border-[#d4b46a]/60 p-2.5 font-body text-[14px] text-[#f3ead7] leading-relaxed focus:outline-none focus:border-[#d4b46a] resize-none shadow-inner" placeholder="Escribí notas de campaña, rumores o hallazgos…" rows="3">Rumores del Delta: El farero del Río de Ceniza asegura que el sol naciente titiló dos veces antes de la última pleamar. Conservo la brújula dorada que me entregó el archivero; parece desviarse 4 grados hacia las Ruinas Hundidas.</textarea>
+</div>
+</div>
+</article>
+<!-- Pie de página de la ficha -->
+<footer class="text-center font-label text-[10px] text-[#c4a56a]/80 tracking-widest uppercase py-2">
+      Albor v0.4 · Sistema de Rol Analógico · Licencia de Exploración
+    </footer>
+</div>
+</div>
+</body></html>

@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import type { Player } from "@owlbear-rodeo/sdk";
 import {
   AlborCharacter,
@@ -10,6 +11,7 @@ import {
   defaultChispaMax,
   defaultDetMax,
   newId,
+  normalizeArma,
 } from "../types";
 import { DiceRoller, type DiceRollSummary } from "./DiceRoller";
 import { ArmaBlock } from "./sheet/ArmaBlock";
@@ -41,9 +43,28 @@ export function CharacterSheet({
   onSave?: () => void;
   onRolled?: (payload: DiceRollSummary & { characterName: string }) => void;
 }) {
+  const addedKey = useRef<string | null>(null);
+
   const patch = (partial: Partial<AlborCharacter>) => {
     if (!onChange || readOnly) return;
     onChange({ ...character, ...partial });
+  };
+
+  const addLine = (key: "equipo" | "dominio") => {
+    addedKey.current = `${key}:${character[key].length}`;
+    patch({ [key]: [...character[key], ""] });
+  };
+
+  const addMaestria = () => {
+    const item = { id: newId(), nombre: "", descripcion: "" };
+    addedKey.current = item.id;
+    patch({ maestrias: [...character.maestrias, item] });
+  };
+
+  const addArma = () => {
+    const item = normalizeArma(undefined);
+    addedKey.current = item.id;
+    patch({ armas: [...character.armas, item] });
   };
 
   const patchStat = (key: StatKey, field: "valor" | "dado", value: number) => {
@@ -476,6 +497,11 @@ export function CharacterSheet({
             <section className="sheet-section">
               <div className="sheet-head">
                 <h3 className="section-title">- Dominio -</h3>
+                {!readOnly && (
+                  <button type="button" onClick={() => addLine("dominio")}>
+                    Agregar
+                  </button>
+                )}
               </div>
               {character.dominio.map((linea, index) => (
                 <WriteLine
@@ -483,6 +509,7 @@ export function CharacterSheet({
                   ariaLabel={`Dominio ${index + 1}`}
                   value={linea}
                   readOnly={readOnly}
+                  autoFocus={addedKey.current === `dominio:${index}`}
                   onChange={(value) => patchLine("dominio", index, value)}
                 />
               ))}
@@ -491,6 +518,11 @@ export function CharacterSheet({
           <section className="sheet-section">
             <div className="sheet-head">
               <h3 className="section-title">- Equipo -</h3>
+              {!readOnly && (
+                <button type="button" onClick={() => addLine("equipo")}>
+                  Agregar
+                </button>
+              )}
             </div>
             {character.equipo.map((item, index) => (
               <WriteLine
@@ -498,6 +530,7 @@ export function CharacterSheet({
                 ariaLabel={`Equipo ${index + 1}`}
                 value={item}
                 readOnly={readOnly}
+                autoFocus={addedKey.current === `equipo:${index}`}
                 onChange={(value) => patchLine("equipo", index, value)}
               />
             ))}
@@ -507,7 +540,14 @@ export function CharacterSheet({
         <section className="sheet-section">
           <div className="sheet-head">
             <h3 className="section-title">- Maestrías -</h3>
-            <span className="sheet-head__hint">descripción</span>
+            <div className="sheet-head__aside">
+              <span className="sheet-head__hint">descripción</span>
+              {!readOnly && (
+                <button type="button" onClick={addMaestria}>
+                  Agregar
+                </button>
+              )}
+            </div>
           </div>
           {character.maestrias.map((item, index) => (
             <div key={item.id} className="talento talento--pair talento--wide">
@@ -517,6 +557,7 @@ export function CharacterSheet({
                 ariaLabel={`Maestría ${index + 1}`}
                 value={item.nombre}
                 readOnly={readOnly}
+                autoFocus={addedKey.current === item.id}
                 onChange={(nombre) => patchNamed("maestrias", item.id, { nombre })}
               />
               <TextField
@@ -533,7 +574,14 @@ export function CharacterSheet({
         <section className="sheet-section">
           <div className="sheet-head">
             <h3 className="section-title">- Armas y Armadura -</h3>
-            <span className="sheet-head__hint">1 dado + momentum (máx. stat)</span>
+            <div className="sheet-head__aside">
+              <span className="sheet-head__hint">1 dado + momentum (máx. stat)</span>
+              {!readOnly && (
+                <button type="button" onClick={addArma}>
+                  Agregar
+                </button>
+              )}
+            </div>
           </div>
           <div className="arma-list">
             {character.armas.map((item) => (
@@ -543,6 +591,7 @@ export function CharacterSheet({
                 character={character}
                 readOnly={readOnly}
                 dicePlusEnabled={dicePlusEnabled}
+                autoFocus={addedKey.current === item.id}
                 onPatch={patchArma}
                 onRolled={onRolled}
               />

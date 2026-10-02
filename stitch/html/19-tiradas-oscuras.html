@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALBOR · Owlbear Rodeo Extension</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Cinzel & Cormorant Garamond -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-high": "#f0e7dd",
+            "secondary": "#795918",
+            "on-secondary-container": "#785817",
+            "on-surface-variant": "#4f4538",
+            "surface-bright": "#fff8f3",
+            "on-secondary-fixed": "#271900",
+            "primary-fixed-dim": "#eebf70",
+            "surface-container": "#efe3c4",
+            "on-secondary": "#ffffff",
+            "background": "#f7f1e4",
+            "primary-container": "#b88e44",
+            "on-error": "#ffffff",
+            "secondary-container": "#fdd184",
+            "tertiary-fixed": "#d4e3ff",
+            "surface": "#fffdf8",
+            "primary-light": "#e4d2a0",
+            "primary-dark": "#8c6a28",
+            "outline-variant": "#d2c4b3",
+            "on-tertiary-fixed-variant": "#234874",
+            "on-tertiary-fixed": "#001c39",
+            "surface-dim": "#e2d9cf",
+            "error": "#9a3b2a",
+            "on-surface-inverse": "#f7f1e4",
+            "primary": "#b88e44",
+            "inverse-primary": "#eebf70",
+            "on-secondary-fixed-variant": "#5e4200",
+            "on-primary-fixed-variant": "#5f4100",
+            "on-tertiary-container": "#002e59",
+            "secondary-fixed-dim": "#ebc075",
+            "surface-inverse": "#2a2724",
+            "surface-container-lowest": "#ffffff",
+            "inverse-surface": "#34302a",
+            "on-surface": "#2c2418",
+            "on-primary-container": "#3f2a00",
+            "surface-variant": "#eae1d8",
+            "accent-sun": "#e08a2c",
+            "inverse-on-surface": "#f9efe6",
+            "surface-container-low": "#fcf2e9",
+            "outline": "#c4a15a",
+            "success": "#3d7a52",
+            "secondary-fixed": "#ffdea8",
+            "surface-tint": "#7b5811",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#a6c8fc",
+            "primary-fixed": "#ffdeab",
+            "on-tertiary": "#ffffff",
+            "on-background": "#1f1b15",
+            "error-container": "#ffdad6",
+            "surface-container-highest": "#eae1d8",
+            "on-primary-fixed": "#271900",
+            "on-primary": "#ffffff",
+            "tertiary": "#3d608d",
+            "tertiary-container": "#7597c8"
+          },
+          "borderRadius": {
+            "DEFAULT": "0px",
+            "none": "0px",
+            "sm": "0px",
+            "md": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "0px"
+          },
+          "spacing": {
+            "space-xs": "4px",
+            "space-sm": "6px",
+            "margin": "16px",
+            "space-md": "10px",
+            "space-xl": "16px",
+            "gutter": "10px",
+            "space-lg": "14px"
+          },
+          "fontFamily": {
+            "input": ["Cormorant Garamond"],
+            "label": ["Cinzel"],
+            "display": ["Cinzel"],
+            "die-number": ["Cinzel"],
+            "button": ["Cinzel"],
+            "section-title": ["Cinzel"],
+            "body": ["Cormorant Garamond"]
+          },
+          "fontSize": {
+            "input": ["15px", { "fontWeight": "600" }],
+            "label": ["11px", { "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "display": ["20px", { "letterSpacing": "0.12em", "fontWeight": "700" }],
+            "die-number": ["22px", { "fontWeight": "700" }],
+            "button": ["10px", { "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "section-title": ["13px", { "letterSpacing": "0.14em", "fontWeight": "700" }],
+            "body": ["14px", { "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 16px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    
+    /* Regla metálica graduada del sistema de diseño Albor */
+    .metallic-baseline {
+      background: linear-gradient(90deg, #e8d5a3 0%, #b88e44 35%, #7a5a22 65%, #d4b46a 100%);
+      height: 1.5px;
+    }
+    
+    /* Escuadras de imprenta (crop marks) 10x10px */
+    .crop-mark-tl {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 10px;
+      height: 10px;
+      border-top: 1.5px solid #b88e44;
+      border-left: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    .crop-mark-br {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 1.5px solid #b88e44;
+      border-right: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    .crop-mark-tr {
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-top: 1.5px solid #b88e44;
+      border-right: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    .crop-mark-bl {
+      position: absolute;
+      bottom: -1px;
+      left: -1px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 1.5px solid #b88e44;
+      border-left: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+
+    /* Filigrana de fondo pergamino táctil sin imágenes externas */
+    .parchment-texture {
+      background-color: #f7f1e4;
+      background-image: radial-gradient(#eadbc5 0.75px, transparent 0.75px), radial-gradient(#d8c29d 0.5px, #f7f1e4 0.5px);
+      background-size: 30px 30px;
+      background-position: 0 0, 15px 15px;
+    }
+  </style>
+</head>
+<body class="parchment-texture text-on-surface min-h-screen py-space-xl px-space-md flex flex-col items-center justify-start select-none" style="background-color: #16130f; color: #f3ead7;">
+<!-- MARCA DE AGUA CENTRADA SUPERIOR -->
+<div class="text-center mb-space-sm">
+<span class="font-label text-[10px] tracking-[0.28em] text-primary lowercase select-none opacity-85" style="color: #d4b46a; opacity: 0.9;">
+      ~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~
+    </span>
+</div>
+<!-- CONTENEDOR POPOVER DE OWLBEAR RODEO (ANCHO FIJO 900PX) -->
+<div class="w-[900px] bg-background border border-outline p-space-md relative flex flex-col" style="background-color: #241f19; border-color: #d4b46a;">
+<!-- ESCUADRAS DE IMPRENTA EXTERIORES -->
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-tr"></div>
+<div class="crop-mark-bl"></div>
+<div class="crop-mark-br"></div>
+<!-- 1. ENCABEZADO SUPERIOR SEGÚN ESPECIFICACIÓN -->
+<header class="w-full flex items-center justify-between pb-space-sm border-b border-outline" style="border-color: #d4b46a;">
+<!-- Lado Izquierdo: Sol Naciente Albor + Título + Subtítulo -->
+<div class="flex items-center gap-space-md">
+<!-- Logo Albor sol naciente -->
+<div class="w-14 h-7 relative flex items-center justify-center border border-outline bg-surface overflow-hidden" style="background-color: #1a1612; border-color: #d4b46a;">
+<svg fill="none" height="100%" viewbox="0 0 100 60" width="100%" xmlns="http://www.w3.org/2000/svg"><!-- Horizon line -->
+<line stroke="#d4b46a" stroke-linecap="round" stroke-width="2" x1="10" x2="90" y1="46" y2="46"></line>
+<!-- Rising Sun semicircle -->
+<path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="#e08a2c" stroke="#d4b46a" stroke-width="1.5"></path>
+<!-- Inner sun core detail -->
+<path d="M 38 46 A 12 12 0 0 1 62 46 Z" fill="#f5ab35"></path>
+<!-- 3 Golden Rays -->
+<!-- Center ray -->
+<line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="50" x2="50" y1="24" y2="10"></line>
+<!-- Left ray -->
+<line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="37" x2="26" y1="28" y2="16"></line>
+<!-- Right ray -->
+<line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="63" x2="74" y1="28" y2="16"></line>
+<!-- Tiny accent stars/sparks -->
+<circle cx="50" cy="6" fill="#d4b46a" r="1.5"></circle></svg>
+</div>
+<div class="flex flex-col">
+<div class="flex items-baseline">
+<h1 class="font-display text-display uppercase tracking-widest text-on-surface font-extrabold leading-none" style="color: #f3ead7;">
+              ALBOR
+            </h1>
+</div>
+<span class="font-body text-[13px] text-secondary tracking-normal italic mt-0.5" style="color: #c4a56a;">
+            Vista del Director (GM) · Koru
+          </span>
+</div>
+</div>
+<!-- Lado Derecho: Botones en Cinzel Mayúsculas con borde dorado fino -->
+<div class="flex items-center gap-space-xs"><button class="font-button text-button px-space-md py-space-xs transition-colors duration-150 active:scale-95 flex items-center gap-1 font-bold" style="background-color: #d4b46a; color: #16130f; border: 1px solid #d4b46a;">
+<span class="material-symbols-outlined text-[13px]" style="color: #16130f;">add</span>
+          NUEVO
+        </button>
+<button class="font-button text-button px-space-md py-space-xs transition-colors duration-150 active:scale-95 flex items-center gap-1" style="background-color: transparent; color: #f3ead7; border: 1px solid #d4b46a;">
+<span class="material-symbols-outlined text-[13px]" style="color: #c4a56a;">content_copy</span>
+          DUPLICAR
+        </button>
+<button class="font-button text-button px-space-md py-space-xs transition-colors duration-150 active:scale-95 flex items-center gap-1" style="background-color: transparent; color: #f3ead7; border: 1px solid #d4b46a;">
+<span class="material-symbols-outlined text-[13px]" style="color: #d4b46a;">folder</span>
+          ARCHIVO ▾
+        </button>
+<button class="font-button text-button px-space-md py-space-xs transition-colors duration-150 active:scale-95 flex items-center gap-1" style="background-color: transparent; color: #f3ead7; border: 1px solid #d4b46a;">
+<span class="material-symbols-outlined text-[13px]" style="color: #d4b46a;">share</span>
+          COMPARTIR ▾
+        </button></div>
+</header>
+<!-- METALLIC BASELINE SEPARADORA -->
+<div class="metallic-baseline w-full my-space-xs"></div>
+<!-- 2. BARRA DE PESTAÑAS (EXACTAMENTE 4 PESTAÑAS) -->
+<nav class="flex items-center pb-space-sm pt-space-xs">
+<div class="flex items-center gap-1"><!-- Ficha (Inactiva) -->
+<a class="px-space-lg py-1 font-label text-label transition-colors duration-150 uppercase" href="#ficha" style="background-color: transparent; color: #f3ead7; border: 1px solid #d4b46a;">
+          Ficha
+        </a>
+<!-- Tirador GM (Inactiva) -->
+<a class="px-space-lg py-1 font-label text-label transition-colors duration-150 uppercase" href="#tirador-gm" style="background-color: transparent; color: #f3ead7; border: 1px solid #d4b46a;">
+          Tirador GM
+        </a>
+<!-- Tiradas (ACTIVA: fondo oro #d4b46a con texto carbón noche #16130f) -->
+<a class="font-bold px-space-lg py-1 font-label text-label flex items-center gap-1 uppercase" href="#tiradas" style="background-color: #d4b46a; color: #16130f; border: 1px solid #d4b46a;">
+          Tiradas
+        </a>
+<!-- Opciones (Inactiva) -->
+<a class="px-space-lg py-1 font-label text-label transition-colors duration-150 uppercase" href="#opciones" style="background-color: transparent; color: #f3ead7; border: 1px solid #d4b46a;">
+          Opciones
+        </a></div>
+</nav>
+<!-- 3. PANEL PRINCIPAL "TIRADAS" -->
+<main class="w-full bg-surface border border-outline relative p-space-md mt-space-xs flex flex-col" style="background-color: #241f19; border-color: #d4b46a;">
+<!-- ESCUADRAS DE CORTE DE IMPRENTA INTERNAS (10x10px) -->
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-tr"></div>
+<div class="crop-mark-bl"></div>
+<div class="crop-mark-br"></div>
+<!-- Barra Superior de Control del Panel -->
+<div class="flex items-center justify-between pb-space-sm border-b border-primary-light mb-space-sm"><h2 class="font-section-title text-section-title uppercase tracking-[0.14em]" style="color: #f3ead7;">
+          - TIRADAS -
+        </h2>
+<button class="font-button text-[9px] uppercase transition-colors px-space-md py-0.5" style="background-color: transparent; color: #c95b45; border: 1px solid #c95b45;">
+          VACIAR
+        </button></div>
+<!-- 4. LISTA DE ENTRADAS DE TIRADAS (ORDEN CRONOLÓGICO INVERSO) -->
+<div class="flex flex-col divide-y divide-primary-light"><!-- ENTRADA 1: Crítico / Éxito Extra -->
+<article class="py-space-sm pl-space-sm pr-space-xs bg-transparent" style="border-left: 3px solid #64a37e; border-bottom: 1px solid #8c6a28;">
+<div class="font-body text-body flex items-baseline flex-wrap gap-x-1 gap-y-0.5" style="color: #f3ead7;">
+<span class="font-bold font-label text-[11px] tracking-wide" style="color: #f3ead7;">IARA SOLÍS (NAHUEL)</span>
+<span style="color: #c4a56a;">—</span>
+<span class="font-medium" style="color: #f3ead7;">AGI +talento 3d10</span>
+<span class="font-mono text-[13px]" style="color: #c4a56a;">[7 + 10 + 2] = 19 vs E(9) →</span>
+<span class="font-semibold" style="color: #64a37e;">Éxito extra · CRÍTICO</span>
+</div>
+<!-- Fila de Dados Táctiles -->
+<div class="mt-space-xs flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5">
+<!-- Dado 1 -->
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D10</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">7</span>
+</div>
+<!-- Dado 2 (Crítico) -->
+<div class="w-8 h-8 flex flex-col items-center justify-center relative" style="background-color: #2e261a; border: 1.5px solid #d4b46a;">
+<span class="absolute top-0.5 right-0.5 text-[8px] leading-none font-bold" style="color: #d4b46a;">★</span>
+<span class="font-label text-[8px] leading-none" style="color: #d4b46a;">D10</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #d4b46a;">10</span>
+</div>
+<!-- Dado 3 -->
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D10</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">2</span>
+</div>
+</div>
+<span class="font-body text-body italic pl-space-sm" style="color: #c4a56a; border-left: 1px solid #8c6a28;">
+            7 + 10 + 2 = 19 vs E(9)
+          </span>
+</div>
+<!-- Pie de entrada -->
+<div class="mt-1 font-body text-[12px]" style="color: #c4a56a;">
+          19:14:02 · Dice+
+        </div>
+</article>
+<!-- ENTRADA 2: Lobo de ceniza -->
+<article class="py-space-sm pl-space-sm pr-space-xs bg-transparent" style="border-left: 3px solid #64a37e; border-bottom: 1px solid #8c6a28;">
+<div class="font-body text-body flex items-baseline flex-wrap gap-x-1 gap-y-0.5" style="color: #f3ead7;">
+<span class="font-bold font-label text-[11px] tracking-wide" style="color: #f3ead7;">LOBO DE CENIZA (KORU)</span>
+<span style="color: #c4a56a;">—</span>
+<span class="font-medium" style="color: #f3ead7;">4d8</span>
+<span class="font-mono text-[13px]" style="color: #c4a56a;">[8 + 6 + 4 + 8] = 26 vs C(13) →</span>
+<span class="font-semibold" style="color: #64a37e;">Éxito extra</span>
+</div>
+<div class="mt-space-xs flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5">
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D8</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">8</span>
+</div>
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D8</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">6</span>
+</div>
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D8</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">4</span>
+</div>
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D8</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">8</span>
+</div>
+</div>
+<span class="font-body text-body italic pl-space-sm" style="color: #c4a56a; border-left: 1px solid #8c6a28;">
+            8 + 6 + 4 + 8 = 26 vs C(13)
+          </span>
+</div>
+<div class="mt-1 font-body text-[12px]" style="color: #c4a56a;">
+          19:11:45 · Mesa local
+        </div>
+</article>
+<!-- ENTRADA 3: Tirada de Arma / Daga curva -->
+<article class="py-space-sm pl-space-sm pr-space-xs bg-transparent" style="border-left: 3px solid #64a37e; border-bottom: 1px solid #8c6a28;">
+<div class="font-body text-body flex items-baseline flex-wrap gap-x-1 gap-y-0.5" style="color: #f3ead7;">
+<span class="font-semibold" style="color: #f3ead7;">Daga curva AGI+1 mom 4d6</span>
+<span class="font-mono text-[13px]" style="color: #c4a56a;">[5 + 3 + 6 + 4] = 18 vs D(11) →</span>
+<span class="font-semibold" style="color: #64a37e;">Éxito extra</span>
+</div>
+<div class="mt-space-xs flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5">
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D6</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">5</span>
+</div>
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D6</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">3</span>
+</div>
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D6</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">6</span>
+</div>
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D6</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">4</span>
+</div>
+</div>
+<span class="font-body text-body italic pl-space-sm" style="color: #c4a56a; border-left: 1px solid #8c6a28;">
+            5 + 3 + 6 + 4 = 18 vs D(11)
+          </span>
+</div>
+<div class="mt-1 font-body text-[12px]" style="color: #c4a56a;">
+          19:08:30 · Ficha
+        </div>
+</article>
+<!-- ENTRADA 4: Éxito Limitado -->
+<article class="py-space-sm pl-space-sm pr-space-xs bg-transparent" style="border-left: 3px solid #c4a56a; border-bottom: 1px solid #8c6a28;">
+<div class="font-body text-body flex items-baseline flex-wrap gap-x-1 gap-y-0.5" style="color: #f3ead7;">
+<span class="font-bold font-label text-[11px] tracking-wide" style="color: #f3ead7;">VALEN ARRECHEA (MICA)</span>
+<span style="color: #c4a56a;">—</span>
+<span class="font-medium" style="color: #f3ead7;">APT Percepción 2d6</span>
+<span class="font-mono text-[13px]" style="color: #c4a56a;">[4 + 3] = 7 vs G(5) →</span>
+<span class="font-semibold" style="color: #c4a56a;">Éxito limitado</span>
+</div>
+<div class="mt-space-xs flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5">
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D6</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">4</span>
+</div>
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D6</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">3</span>
+</div>
+</div>
+<span class="font-body text-body italic pl-space-sm" style="color: #c4a56a; border-left: 1px solid #8c6a28;">
+            4 + 3 = 7 vs G(5)
+          </span>
+</div>
+<div class="mt-1 font-body text-[12px]" style="color: #c4a56a;">
+          19:02:18 · Dice+
+        </div>
+</article>
+<!-- ENTRADA 5: Fracaso -->
+<article class="py-space-sm pl-space-sm pr-space-xs bg-transparent" style="border-left: 3px solid #c95b45; border-bottom: 1px solid #8c6a28;">
+<div class="font-body text-body flex items-baseline flex-wrap gap-x-1 gap-y-0.5" style="color: #f3ead7;">
+<span class="font-bold font-label text-[11px] tracking-wide" style="color: #f3ead7;">CIRO DE LAS BRUMAS (LUCAS)</span>
+<span style="color: #c4a56a;">—</span>
+<span class="font-medium" style="color: #f3ead7;">VOL Resistir frío espectral 2d4</span>
+<span class="font-mono text-[13px]" style="color: #c4a56a;">[2 + 1] = 3 vs E(9) →</span>
+<span class="font-semibold" style="color: #c95b45;">Fracaso</span>
+</div>
+<div class="mt-space-xs flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5">
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #c95b45;">
+<span class="font-label text-[8px] leading-none" style="color: #c95b45;">D4</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #c95b45;">2</span>
+</div>
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #c95b45;">
+<span class="font-label text-[8px] leading-none" style="color: #c95b45;">D4</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #c95b45;">1</span>
+</div>
+</div>
+<span class="font-body text-body italic pl-space-sm" style="color: #c4a56a; border-left: 1px solid #8c6a28;">
+            2 + 1 = 3 vs E(9)
+          </span>
+</div>
+<div class="mt-1 font-body text-[12px]" style="color: #c4a56a;">
+          18:55:10 · Dice+
+        </div>
+</article>
+<!-- ENTRADA 6: Tirada Normal / Éxito -->
+<article class="py-space-sm pl-space-sm pr-space-xs bg-transparent" style="border-left: 3px solid #64a37e;">
+<div class="font-body text-body flex items-baseline flex-wrap gap-x-1 gap-y-0.5" style="color: #f3ead7;">
+<span class="font-bold font-label text-[11px] tracking-wide" style="color: #f3ead7;">IARA SOLÍS (NAHUEL)</span>
+<span style="color: #c4a56a;">—</span>
+<span class="font-medium" style="color: #f3ead7;">VIG Trepar por los riscos 2d6</span>
+<span class="font-mono text-[13px]" style="color: #c4a56a;">[5 + 4] = 9 vs E(9) →</span>
+<span class="font-semibold" style="color: #64a37e;">Éxito</span>
+</div>
+<div class="mt-space-xs flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5">
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D6</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">5</span>
+</div>
+<div class="w-8 h-8 flex flex-col items-center justify-center" style="background-color: #1a1612; border: 1.5px solid #d4b46a;">
+<span class="font-label text-[8px] leading-none" style="color: #c4a56a;">D6</span>
+<span class="font-die-number text-die-number leading-none mt-0.5" style="color: #f3ead7;">4</span>
+</div>
+</div>
+<span class="font-body text-body italic pl-space-sm" style="color: #c4a56a; border-left: 1px solid #8c6a28;">
+            5 + 4 = 9 vs E(9)
+          </span>
+</div>
+<div class="mt-1 font-body text-[12px]" style="color: #c4a56a;">
+          18:42:07 · Dice+
+        </div>
+</article></div>
+</main>
+<!-- 5. SECCIÓN DE ESTADO VACÍO (VARIANTE / PREVISUALIZACIÓN SUTIL) -->
+<section class="mt-space-md bg-background border border-dashed border-outline p-space-md relative" style="background-color: #241f19; border: 1px dashed #d4b46a;"><!-- Encabezado sutil de previsualización -->
+<div class="flex items-center justify-between pb-space-xs mb-space-sm" style="border-bottom: 1px solid #8c6a28;">
+<span class="font-label text-[10px] uppercase tracking-widest font-bold" style="color: #d4b46a;">
+          - VISTA PREVIA: ESTADO VACÍO -
+        </span>
+<span class="font-label text-[9px] uppercase tracking-wider" style="color: #c4a56a;">MODO REFERENCIA</span>
+</div>
+<!-- Contenido Centrado y Sobrio -->
+<div class="py-space-lg flex flex-col items-center justify-center text-center">
+<!-- Sol de Albor a línea fina dorada -->
+<div class="w-16 h-12 flex items-center justify-center mb-space-sm">
+<svg class="w-12 h-12 fill-none stroke-[1.25]" style="stroke: #d4b46a;" viewbox="0 0 64 48">
+<!-- Horizonte de imprenta -->
+<line stroke-linecap="square" x1="4" x2="60" y1="36" y2="36"></line>
+<line stroke-width="0.75" x1="8" x2="56" y1="40" y2="40"></line>
+<!-- Medio sol naciente -->
+<path d="M 22 36 A 10 10 0 0 1 42 36"></path>
+<!-- Rayos estilizados -->
+<line x1="32" x2="32" y1="14" y2="22"></line>
+<line x1="20" x2="25" y1="18" y2="24"></line>
+<line x1="44" x2="39" y1="18" y2="24"></line>
+<line x1="12" x2="19" y1="28" y2="31"></line>
+<line x1="52" x2="45" y1="28" y2="31"></line>
+</svg>
+</div>
+<!-- Texto sobrio en tinta clara sepia -->
+<h3 class="font-label text-[13px] font-bold tracking-widest uppercase" style="color: #f3ead7;">
+          Todavía no hay tiradas.
+        </h3>
+<!-- Divisor ornamental minúsculo -->
+<div class="mt-space-sm flex items-center gap-2">
+<span class="w-6 h-[1px]" style="background-color: #d4b46a;"></span>
+<span class="text-[9px]" style="color: #d4b46a;">✦</span>
+<span class="w-6 h-[1px]" style="background-color: #d4b46a;"></span>
+</div>
+</div></section>
+<!-- PIE SOBRIO DE COPYRIGHT -->
+<footer class="mt-space-sm pt-space-xs border-t border-outline-variant flex items-center justify-center text-[11px] font-body text-secondary" style="color: #c4a56a; border-color: #8c6a28;">
+<span>Albor RPG v1.4.2 · Módulo de Extensión para Owlbear Rodeo</span>
+</footer>
+</div>
+</body></html>

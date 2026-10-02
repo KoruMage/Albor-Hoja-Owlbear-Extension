@@ -1,0 +1,112 @@
+/* Noche: paleta de las pantallas oscuras de Stitch (mesa, ficha, sala, tiradas). */
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #16130f;
+  --paper-2: #241f19;
+  --ink: #f3ead7;
+  --ink-soft: #c4a56a;
+  --gold: #d4b46a;
+  --gold-dark: #d4b46a;
+  --gold-light: #e8d5a3;
+  --charcoal: #100e0c;
+  --line: #8c6a28;
+  --warn: #c95b45;
+  --ok: #64a37e;
+  --fill: #2e2820;
+  --band: #1c1813;
+  --on-gold: #16130f;
+  --metal: linear-gradient(90deg, #e8d5a3, #d4b46a 35%, #8c6a28 70%, #e8d5a3);
+}
+
+html[data-theme="dark"] body {
+  background-image:
+    radial-gradient(circle at 12% 0%, rgba(212, 180, 106, 0.08), transparent 42%),
+    radial-gradient(circle at 90% 100%, rgba(212, 180, 106, 0.06), transparent 46%);
+}
+
+html[data-theme="dark"] button {
+  color: #e8d5a3;
+}
+
+html[data-theme="dark"] button:hover:not(:disabled) {
+  background: var(--fill);
+}
+
+html[data-theme="dark"] button.is-active,
+html[data-theme="dark"] .btn-primary,
+html[data-theme="dark"] .tabs button.is-active,
+html[data-theme="dark"] .picker > button.is-active {
+  background: var(--gold);
+  color: var(--on-gold);
+  border-color: var(--gold);
+}
+
+html[data-theme="dark"] button.is-active:hover:not(:disabled),
+html[data-theme="dark"] .btn-primary:hover:not(:disabled) {
+  background: #e4c47b;
+  color: var(--on-gold);
+}
+
+html[data-theme="dark"] .btn-danger {
+  background: transparent;
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+html[data-theme="dark"] .btn-danger:hover:not(:disabled) {
+  background: rgba(201, 91, 69, 0.14);
+  color: var(--warn);
+}
+
+html[data-theme="dark"] .picker > button {
+  background: #1a1612;
+  color: var(--ink);
+}
+
+html[data-theme="dark"] .picker > button.is-active,
+html[data-theme="dark"] .picker > button.is-active .picker__owner {
+  color: var(--on-gold);
+}
+
+html[data-theme="dark"] .sheet {
+  box-shadow: inset 0 0 0 6px #16130f, inset 0 0 0 7px #8c6a28;
+}
+
+html[data-theme="dark"] .mesa-card {
+  border-color: var(--gold);
+  box-shadow: inset 0 0 0 4px #16130f, inset 0 0 0 5px #8c6a28;
+}
+
+html[data-theme="dark"] .stat-tab {
+  background: linear-gradient(#8c6a28, #d4b46a);
+  color: #16130f;
+}
+
+html[data-theme="dark"] .stat-tab input {
+  color: #16130f;
+}
+
+html[data-theme="dark"] .dado-banner {
+  background: #1e1a15;
+  color: #c4a56a;
+}
+
+html[data-theme="dark"] .dado-banner select,
+html[data-theme="dark"] .dado-banner input,
+html[data-theme="dark"] .die-face strong,
+html[data-theme="dark"] .resource input {
+  color: #e8d5a3;
+}
+
+html[data-theme="dark"] .dialog-backdrop {
+  background: rgba(10, 8, 6, 0.72);
+}
+
+html[data-theme="dark"] input[type="checkbox"] {
+  accent-color: #d4b46a;
+}
+
+html[data-theme="dark"] ::placeholder {
+  color: #8c6a28;
+}

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Albor - Variantes de Sala (Popover)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-pergamino: #f7f1e4;
+      --paper: #fffdf8;
+      --gold: #b88e44;
+      --gold-dark: #8c6a28;
+      --gold-light: #e4d2a0;
+      --carbon: #2a2724;
+      --ink: #2c2418;
+      --sepia: #8a6e3d;
+      --line-gradient: linear-gradient(90deg, #e8d5a3 0%, #b88e44 45%, #7a5a22 75%, #d4b46a 100%);
+    }
+
+    body {
+      background-color: var(--bg-pergamino);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      margin: 0;
+      padding: 48px 24px 80px 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+
+    .font-garamond {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    /* Popover Container strictly 900x700 or stacked cards */
+    .popover-container {
+      width: 900px;
+      min-height: 520px;
+      background-color: var(--paper);
+      border: 1px solid var(--gold);
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
+    }
+
+    /* Double inner golden border */
+    .popover-container::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      border: 1px solid var(--gold-light);
+      pointer-events: none;
+    }
+
+    /* Corner print bracket marks */
+    .bracket-tl, .bracket-br {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      pointer-events: none;
+    }
+    .bracket-tl {
+      top: 10px;
+      left: 10px;
+      border-top: 1.5px solid var(--gold);
+      border-left: 1.5px solid var(--gold);
+    }
+    .bracket-br {
+      bottom: 10px;
+      right: 10px;
+      border-bottom: 1.5px solid var(--gold);
+      border-right: 1.5px solid var(--gold);
+    }
+
+    /* Buttons */
+    .btn-primary {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background-color: var(--carbon);
+      color: var(--bg-pergamino);
+      border: 1px solid var(--gold);
+      padding: 9px 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+      border-radius: 0px;
+    }
+    .btn-primary:hover {
+      background-color: #383430;
+      border-color: #d4b05a;
+    }
+
+    .btn-secondary {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background-color: transparent;
+      color: var(--gold-dark);
+      border: 1px solid var(--gold);
+      padding: 8px 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      border-radius: 0px;
+    }
+    .btn-secondary:hover {
+      background-color: #efe3c4;
+      color: var(--ink);
+    }
+
+    /* Line base input */
+    .input-line {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      border-bottom: 2px solid;
+      border-image: var(--line-gradient) 1;
+      padding: 6px 2px 4px 2px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink);
+      border-radius: 0px;
+    }
+    .input-line::placeholder {
+      color: #bfa882;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .select-line {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      border-bottom: 2px solid;
+      border-image: var(--line-gradient) 1;
+      padding: 6px 20px 4px 2px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink);
+      border-radius: 0px;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7' fill='none'%3E%3Cpath d='M1 1.5L5 5.5L9 1.5' stroke='%238a6e3d' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 6px center;
+    }
+
+    /* Tab styles */
+    .tab-item {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border: 1px solid var(--gold);
+      color: var(--gold-dark);
+      background-color: transparent;
+      cursor: default;
+    }
+    .tab-item.active {
+      background-color: var(--carbon);
+      color: var(--bg-pergamino);
+      border-color: var(--gold);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="selection:bg-[#efe3c4] selection:text-[#2c2418]">
+
+  <div class="max-w-[960px] mx-auto space-y-16">
+
+    <!-- ========================================== -->
+    <!-- VARIANTE 1: DIRECTOR SIN SALA             -->
+    <!-- ========================================== -->
+    <div>
+      <div class="flex items-center justify-between mb-3 text-[11px] font-cinzel text-[#8a6e3d] tracking-widest uppercase">
+        <span>Variante 1 · Director de juego (Sin sala activa)</span>
+        <span>Popover 900 × 700 px</span>
+      </div>
+
+      <div class="popover-container p-8 relative flex flex-col justify-between" style="min-height: 580px;">
+        <div class="bracket-tl"></div>
+        <div class="bracket-br"></div>
+
+        <div>
+          <!-- Watermark -->
+          <div class="text-center font-cinzel text-[11px] text-[#b88e44] tracking-[0.25em] opacity-80 mb-6 uppercase">
+            ~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~
+          </div>
+
+          <!-- Header -->
+          <header class="flex items-center justify-between pb-5 border-b border-[#c4a15a]/50">
+            <div class="flex items-center gap-4">
+              <!-- Sun Icon -->
+              <div class="w-12 h-8 flex-shrink-0 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" width="48" height="28" fill="none">
+                  <line x1="10" y1="46" x2="90" y2="46" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="#e08a2c" stroke="#8c6a28" stroke-width="1.5"/>
+                  <path d="M 38 46 A 12 12 0 0 1 62 46 Z" fill="#f5ab35"/>
+                  <line x1="50" y1="24" x2="50" y2="10" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="37" y1="28" x2="26" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="63" y1="28" x2="74" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+                  <circle cx="50" cy="6" r="1.5" fill="#b88e44"/>
+                </svg>
+              </div>
+              <div>
+                <h1 class="font-cinzel text-[20px] font-bold tracking-[0.14em] text-[#2c2418] leading-none uppercase">ALBOR</h1>
+                <p class="font-garamond italic text-[14px] text-[#8a6e3d] mt-1">Vista del Director (GM) · Koru</p>
+              </div>
+            </div>
+
+            <!-- Header tabs (Director) -->
+            <div class="flex items-center gap-1.5">
+              <span class="tab-item active">Sala</span>
+              <span class="tab-item opacity-50">Mesa</span>
+              <span class="tab-item opacity-50">Tirador GM</span>
+              <span class="tab-item opacity-50">Tiradas</span>
+              <span class="tab-item opacity-50">Opciones</span>
+            </div>
+          </header>
+
+          <!-- Web access row requested by user -->
+          <div class="mt-6 pt-2 pb-5 border-b border-[#e4d2a0]/60 grid grid-cols-12 gap-6 items-end">
+            <div class="col-span-7">
+              <label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#8a6e3d] uppercase mb-1">Nombre</label>
+              <input type="text" value="Koru" class="input-line" readonly>
+            </div>
+            <div class="col-span-5">
+              <label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#8a6e3d] uppercase mb-1">Rol en mesa</label>
+              <select class="select-line">
+                <option selected>Director (GM)</option>
+                <option>Jugador</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Main Sala Section -->
+          <main class="py-12 px-4 flex flex-col items-center justify-center text-center">
+            <!-- Sun emblem decorative -->
+            <div class="w-16 h-10 mb-4 opacity-75">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" width="64" height="38" fill="none">
+                <line x1="12" y1="46" x2="88" y2="46" stroke="#b88e44" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M 34 46 A 16 16 0 0 1 66 46 Z" fill="none" stroke="#b88e44" stroke-width="1.5"/>
+                <line x1="50" y1="25" x2="50" y2="12" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+                <line x1="38" y1="29" x2="28" y2="19" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+                <line x1="62" y1="29" x2="72" y2="19" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <h2 class="font-cinzel text-[14px] font-bold tracking-[0.2em] text-[#8c6a28] uppercase mb-3">- SALA -</h2>
+
+            <p class="font-garamond text-[17px] text-[#2c2418] max-w-md leading-relaxed mb-8">
+              Creá una sala para que los jugadores se unan y veas sus hojas.
+            </p>
+
+            <button class="btn-primary px-8 py-3 text-[12px]">
+              CREAR SALA
+            </button>
+          </main>
+        </div>
+
+        <!-- Footer subtly stating Albor -->
+        <footer class="pt-4 border-t border-[#e4d2a0]/60 flex items-center justify-between text-[12px] text-[#8a6e3d] font-garamond italic">
+          <span>Albor RPG · Módulo de Sala</span>
+          <span>Sin sala activa</span>
+        </footer>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- VARIANTE 2: JUGADOR CON SALA DETECTADA    -->
+    <!-- ========================================== -->
+    <div>
+      <div class="flex items-center justify-between mb-3 text-[11px] font-cinzel text-[#8a6e3d] tracking-widest uppercase">
+        <span>Variante 2 · Jugador (El director ya abrió una sala o unión manual)</span>
+        <span>Popover 900 × 700 px</span>
+      </div>
+
+      <div class="popover-container p-8 relative flex flex-col justify-between" style="min-height: 620px;">
+        <div class="bracket-tl"></div>
+        <div class="bracket-br"></div>
+
+        <div>
+          <!-- Watermark -->
+          <div class="text-center font-cinzel text-[11px] text-[#b88e44] tracking-[0.25em] opacity-80 mb-6 uppercase">
+            ~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~
+          </div>
+
+          <!-- Header -->
+          <header class="flex items-center justify-between pb-5 border-b border-[#c4a15a]/50">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-8 flex-shrink-0 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" width="48" height="28" fill="none">
+                  <line x1="10" y1="46" x2="90" y2="46" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="#e08a2c" stroke="#8c6a28" stroke-width="1.5"/>
+                  <path d="M 38 46 A 12 12 0 0 1 62 46 Z" fill="#f5ab35"/>
+                  <line x1="50" y1="24" x2="50" y2="10" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="37" y1="28" x2="26" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="63" y1="28" x2="74" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+                  <circle cx="50" cy="6" r="1.5" fill="#b88e44"/>
+                </svg>
+              </div>
+              <div>
+                <h1 class="font-cinzel text-[20px] font-bold tracking-[0.14em] text-[#2c2418] leading-none uppercase">ALBOR</h1>
+                <p class="font-garamond italic text-[14px] text-[#8a6e3d] mt-1">Vista de jugador · Nahuel</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1.5">
+              <span class="tab-item active">Sala</span>
+              <span class="tab-item opacity-50">Ficha</span>
+              <span class="tab-item opacity-50">Tiradas</span>
+              <span class="tab-item opacity-50">Opciones</span>
+            </div>
+          </header>
+
+          <!-- Web access row requested by user -->
+          <div class="mt-6 pt-2 pb-5 border-b border-[#e4d2a0]/60 grid grid-cols-12 gap-6 items-end">
+            <div class="col-span-7">
+              <label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#8a6e3d] uppercase mb-1">Nombre</label>
+              <input type="text" value="Nahuel" class="input-line">
+            </div>
+            <div class="col-span-5">
+              <label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#8a6e3d] uppercase mb-1">Rol en mesa</label>
+              <select class="select-line">
+                <option>Director (GM)</option>
+                <option selected>Jugador</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Main Sala Section -->
+          <main class="py-8 px-4 flex flex-col items-center text-center">
+            <h2 class="font-cinzel text-[14px] font-bold tracking-[0.2em] text-[#8c6a28] uppercase mb-4">- SALA -</h2>
+
+            <!-- Detected room card -->
+            <div class="w-full max-w-md p-6 bg-[#fffdf8] border border-[#b88e44] relative mb-8">
+              <div class="text-[12px] font-cinzel text-[#8a6e3d] tracking-widest uppercase mb-1">Sala disponible detectada</div>
+              <p class="font-garamond text-[19px] text-[#8a6e3d] mb-4">
+                El director abrió la sala <strong class="font-cinzel text-[#2c2418] text-[20px] font-bold tracking-widest ml-1">K7M4QP</strong>.
+              </p>
+
+              <button class="btn-primary px-8 py-2.5 w-full justify-center">
+                UNIRSE
+              </button>
+            </div>
+
+            <!-- Divider with label -->
+            <div class="w-full max-w-md flex items-center gap-3 mb-6">
+              <div class="flex-1 h-[1px] bg-[#e4d2a0]"></div>
+              <span class="font-cinzel text-[10px] text-[#8a6e3d] tracking-widest uppercase">O pegar código manual</span>
+              <div class="flex-1 h-[1px] bg-[#e4d2a0]"></div>
+            </div>
+
+            <!-- Code input line + Secondary button -->
+            <div class="w-full max-w-md flex items-end gap-4 text-left">
+              <div class="flex-1">
+                <label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#8a6e3d] uppercase mb-1">Código</label>
+                <input type="text" placeholder="Ej: K7M4QP" class="input-line uppercase tracking-widest font-cinzel text-[16px]">
+              </div>
+              <button class="btn-secondary whitespace-nowrap py-2.5">
+                UNIRSE CON CÓDIGO
+              </button>
+            </div>
+          </main>
+        </div>
+
+        <footer class="pt-4 border-t border-[#e4d2a0]/60 flex items-center justify-between text-[12px] text-[#8a6e3d] font-garamond italic">
+          <span>Albor RPG · Conexión local / Owlbear</span>
+          <span>Esperando confirmación</span>
+        </footer>
+      </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- VARIANTE 3: DIRECTOR DENTRO DE LA SALA    -->
+    <!-- ========================================== -->
+    <div>
+      <div class="flex items-center justify-between mb-3 text-[11px] font-cinzel text-[#8a6e3d] tracking-widest uppercase">
+        <span>Variante 3 · Director dentro de la sala (Conectado)</span>
+        <span>Popover 900 × 700 px</span>
+      </div>
+
+      <div class="popover-container p-8 relative flex flex-col justify-between" style="min-height: 540px;">
+        <div class="bracket-tl"></div>
+        <div class="bracket-br"></div>
+
+        <div>
+          <!-- Watermark -->
+          <div class="text-center font-cinzel text-[11px] text-[#b88e44] tracking-[0.25em] opacity-80 mb-6 uppercase">
+            ~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~
+          </div>
+
+          <!-- Header with code & SALIR button -->
+          <header class="flex items-center justify-between pb-5 border-b border-[#c4a15a]/50">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-8 flex-shrink-0 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 60" width="48" height="28" fill="none">
+                  <line x1="10" y1="46" x2="90" y2="46" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="#e08a2c" stroke="#8c6a28" stroke-width="1.5"/>
+                  <path d="M 38 46 A 12 12 0 0 1 62 46 Z" fill="#f5ab35"/>
+                  <line x1="50" y1="24" x2="50" y2="10" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="37" y1="28" x2="26" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="63" y1="28" x2="74" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+                  <circle cx="50" cy="6" r="1.5" fill="#b88e44"/>
+                </svg>
+              </div>
+              <div>
+                <h1 class="font-cinzel text-[20px] font-bold tracking-[0.14em] text-[#2c2418] leading-none uppercase">ALBOR</h1>
+                <p class="font-garamond italic text-[14px] text-[#8a6e3d] mt-1">Vista del Director (GM) · Koru</p>
+              </div>
+            </div>
+
+            <!-- Right side header: Code badge + SALIR button -->
+            <div class="flex items-center gap-3">
+              <div class="border border-[#b88e44] bg-[#fcf2e9]/50 px-3 py-1.5 text-center flex items-center gap-2">
+                <span class="font-cinzel text-[10px] text-[#8a6e3d] uppercase tracking-wider">Sala:</span>
+                <span class="font-cinzel text-[14px] font-bold tracking-[0.18em] text-[#2c2418]">K7M4QP</span>
+              </div>
+              <button class="btn-secondary py-1.5 px-4 text-[10px]">
+                SALIR
+              </button>
+            </div>
+          </header>
+
+          <!-- Navigation tabs -->
+          <div class="flex items-center gap-1.5 mt-4 pb-4 border-b border-[#e4d2a0]/60">
+            <span class="tab-item active">Sala</span>
+            <span class="tab-item">Mesa</span>
+            <span class="tab-item">Tirador GM</span>
+            <span class="tab-item">Tiradas</span>
+            <span class="tab-item">Opciones</span>
+          </div>
+
+          <!-- Web access row requested by user -->
+          <div class="mt-4 pt-1 pb-4 border-b border-[#e4d2a0]/60 grid grid-cols-12 gap-6 items-end">
+            <div class="col-span-7">
+              <label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#8a6e3d] uppercase mb-1">Nombre</label>
+              <input type="text" value="Koru" class="input-line">
+            </div>
+            <div class="col-span-5">
+              <label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#8a6e3d] uppercase mb-1">Rol en mesa</label>
+              <select class="select-line">
+                <option selected>Director (GM)</option>
+                <option>Jugador</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Main Sala Section -->
+          <main class="py-12 px-4 flex flex-col items-center justify-center text-center">
+            <h2 class="font-cinzel text-[14px] font-bold tracking-[0.2em] text-[#8c6a28] uppercase mb-6">- SALA -</h2>
+
+            <div class="w-full max-w-lg p-6 bg-[#fffdf8] border border-[#b88e44] text-center relative">
+              <!-- Subtle decorative corner accents -->
+              <div class="w-2 h-2 border-t border-l border-[#b88e44] absolute top-1.5 left-1.5"></div>
+              <div class="w-2 h-2 border-b border-r border-[#b88e44] absolute bottom-1.5 right-1.5"></div>
+
+              <div class="flex items-center justify-center gap-2 mb-2">
+                <span class="inline-block w-2 h-2 rounded-full bg-[#3d7a52]"></span>
+                <span class="font-cinzel text-[12px] tracking-[0.14em] text-[#3d7a52] uppercase font-bold">Conexión establecida</span>
+              </div>
+
+              <p class="font-garamond text-[20px] text-[#2c2418] font-semibold mt-1 mb-2">
+                Sala <span class="font-cinzel text-[22px] tracking-[0.16em] text-[#2c2418]">K7M4QP</span> · conectado
+              </p>
+
+              <p class="font-garamond italic text-[15px] text-[#8a6e3d] max-w-sm mx-auto">
+                Los jugadores que ingresen el código aparecerán automáticamente en la pestaña <span class="font-cinzel text-[12px] not-italic font-bold text-[#2c2418]">Mesa</span>.
+              </p>
+            </div>
+          </main>
+        </div>
+
+        <footer class="pt-4 border-t border-[#e4d2a0]/60 flex items-center justify-between text-[12px] text-[#8a6e3d] font-garamond italic">
+          <span>Albor RPG · Sala activa</span>
+          <span class="font-cinzel text-[10px] uppercase text-[#3d7a52] font-semibold">● Sincronizado</span>
+        </footer>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -46,10 +46,6 @@ export interface Arma extends Talento {
 export const PAGE2_COUNTS = {
   lazos: 3,
   etiquetas: 4,
-  equipo: 11,
-  dominio: 6,
-  maestrias: 6,
-  armas: 5,
 } as const;
 
 export interface AlborCharacter {
@@ -201,25 +197,49 @@ function emptyTalentos(count: number): Talento[] {
   }));
 }
 
-function emptyArmas(count: number): Arma[] {
-  return Array.from({ length: count }, () => normalizeArma(undefined));
-}
-
 function emptyLines(count: number): string[] {
   return Array.from({ length: count }, () => "");
+}
+
+const LEGACY_LIST_COUNTS = {
+  equipo: 11,
+  dominio: 6,
+  maestrias: 6,
+  armas: 5,
+} as const;
+
+function isBlankText(value: string): boolean {
+  return value.trim() === "";
+}
+
+function isBlankTalento(item: Talento): boolean {
+  return isBlankText(item.nombre) && isBlankText(item.descripcion);
+}
+
+function dropLegacyBlanks<T>(list: T[], legacyCount: number, isBlank: (item: T) => boolean): T[] {
+  if (list.length < legacyCount) return list;
+  return list.filter((item) => !isBlank(item));
+}
+
+function keptLines(raw: unknown, legacyCount: number): string[] {
+  const list = Array.isArray(raw) ? raw.map((line) => asString(line)) : [];
+  return dropLegacyBlanks(list, legacyCount, isBlankText);
+}
+
+function keptTalentos(raw: unknown, legacyCount: number): Talento[] {
+  const list = Array.isArray(raw) ? raw.map((item) => normalizeTalento(item as Partial<Talento>)) : [];
+  return dropLegacyBlanks(list, legacyCount, isBlankTalento);
+}
+
+function keptArmas(raw: unknown, legacyCount: number): Arma[] {
+  const list = Array.isArray(raw) ? raw.map((item) => normalizeArma(item as Partial<Arma>)) : [];
+  return dropLegacyBlanks(list, legacyCount, isBlankTalento);
 }
 
 function padTalentos(raw: unknown, count: number): Talento[] {
   const list = Array.isArray(raw) ? raw.map((t) => normalizeTalento(t as Partial<Talento>)) : [];
   const padded = [...list];
   while (padded.length < count) padded.push({ id: newId(), nombre: "", descripcion: "" });
-  return padded.slice(0, Math.max(count, list.length));
-}
-
-function padArmas(raw: unknown, count: number): Arma[] {
-  const list = Array.isArray(raw) ? raw.map((t) => normalizeArma(t as Partial<Arma>)) : [];
-  const padded = [...list];
-  while (padded.length < count) padded.push(normalizeArma(undefined));
   return padded.slice(0, Math.max(count, list.length));
 }
 
@@ -263,10 +283,10 @@ export function makeCharacter(): AlborCharacter {
     notas: "",
     lazos: emptyTalentos(PAGE2_COUNTS.lazos),
     etiquetas: emptyLines(PAGE2_COUNTS.etiquetas),
-    equipo: emptyLines(PAGE2_COUNTS.equipo),
-    dominio: emptyLines(PAGE2_COUNTS.dominio),
-    maestrias: emptyTalentos(PAGE2_COUNTS.maestrias),
-    armas: emptyArmas(PAGE2_COUNTS.armas),
+    equipo: [],
+    dominio: [],
+    maestrias: [],
+    armas: [],
   };
 }
 
@@ -318,10 +338,10 @@ export function normalizeCharacter(raw: Partial<AlborCharacter> | undefined): Al
     notas: asString(raw?.notas),
     lazos: padTalentos(raw?.lazos, PAGE2_COUNTS.lazos),
     etiquetas: padLines(raw?.etiquetas, PAGE2_COUNTS.etiquetas),
-    equipo: padLines(raw?.equipo, PAGE2_COUNTS.equipo),
-    dominio: padLines(raw?.dominio, PAGE2_COUNTS.dominio),
-    maestrias: padTalentos(raw?.maestrias, PAGE2_COUNTS.maestrias),
-    armas: padArmas(raw?.armas, PAGE2_COUNTS.armas),
+    equipo: keptLines(raw?.equipo, LEGACY_LIST_COUNTS.equipo),
+    dominio: keptLines(raw?.dominio, LEGACY_LIST_COUNTS.dominio),
+    maestrias: keptTalentos(raw?.maestrias, LEGACY_LIST_COUNTS.maestrias),
+    armas: keptArmas(raw?.armas, LEGACY_LIST_COUNTS.armas),
   };
 }
 

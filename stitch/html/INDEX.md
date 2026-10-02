@@ -32,3 +32,35 @@ Notas:
   barra "Simular diálogo" inventada, y la ficha velada de fondo tiene campos que no son de Albor
   (Fuerza, Intelecto, Arquetipo, etc.). Usar sólo los modales y el velo como referencia.
 - 07 y 08 existen (se obtienen con `get_screen`) pero `list_screens` y `get_project` no las listan.
+
+| Archivo | Título en Stitch | Id de pantalla |
+| --- | --- | --- |
+| `10-mesa.html` | Albor - Vista del Director (Mesa) | `120b4956c6c24452aa1d8a8eb4d4586f` |
+| `11-sala.html` | Albor - Variantes del Popover de Sala (Gestión y Conexión) | `f5cd27ea660943dea253be4d3d15f769` |
+| `12-opciones.html` | Albor - Opciones (Vista del GM Corregida) | `8f8c731a073b4778b2469f87d4a14936` |
+| `13-ficha-sala.html` | Albor - Vista del Director (Ficha Propia y Solo Lectura) | `34d4e1a531f9455d91a19a8dcfcc9746` |
+
+10, 11, 12 y 13 se derivaron con `edit_screens` (10 y 13 desde la vista GM `87df5f41b05c4bc0aefea8de7d885fc8`, 11 desde los estados vacíos `77922901d45c4e728f6dc1c068dc2e2a`, 12 desde opciones `01017eaeca65445f829d3a5a215ff63d`). Las pantallas base quedaron intactas.
+
+| Archivo | Título en Stitch | Id de pantalla |
+| --- | --- | --- |
+| `14-mesa-oscura.html` | Albor - Vista del Director (Mesa - Versión Oscura) | `d6238afb9fae47d589e7ecd8a0441af0` |
+| `15-ficha-oscura.html` | Albor - Hoja de Personaje Nocturna (Iara Solís) | `99ca044811b14226b6ebd3ab76005035` |
+
+14 sale de la mesa `120b4956c6c24452aa1d8a8eb4d4586f` y 15 de la ficha `2e09ac39c99b4687af8e4342c1520bb6`. Fondo `#16130f`, papel `#241f19`, tinta `#f3ead7`, oro `#d4b46a`. Las claras quedaron intactas.
+
+| Archivo | Título en Stitch | Id de pantalla |
+| --- | --- | --- |
+| `16-listas-agregar.html` | Albor - Hoja de Personaje (Segunda Hoja - Listas Dinámicas con Agregar) | `a5478884e92047daad146bcdf9f56b08` |
+
+16 sale de la segunda hoja `b20aa4d5e8a8428fa281d702bda706d5`. Equipo, Dominio, Maestrías y Armas llevan el botón Agregar; no hay filas vacías hasta pulsarlo.
+
+| Archivo | Título en Stitch | Id de pantalla |
+| --- | --- | --- |
+| `17-ficha-p2-oscura.html` | Albor - Hoja de Personaje Nocturna (Segunda Hoja - Lazos y Combate) | `03a66f140b5c4726bf20927b9fd6838a` |
+| `18-opciones-oscuras.html` | Albor - Opciones Nocturnas (Vista del GM) | `8237291ed3aa47b093e9a376c3506334` |
+| `19-tiradas-oscuras.html` | Albor - Historial de Tiradas (Vista GM - Versión Oscura) | `3133bbe28baf4321a025e312090d0302` |
+| `20-sala-oscura.html` | Albor - Variantes del Popover de Sala (Modo Nocturno) | `cf323e5fff4f414b86864ef4890801a0` |
+| `21-tirador-oscuro.html` | Albor - Vista del Director (Tirador GM - Versión Oscura) | `c0477a035ef54dc5aac4f8a37738f5f9` |
+
+17 sale de las listas con Agregar, 18 de las opciones corregidas, 19 del historial, 20 de la sala y 21 del tirador GM. Misma noche que 14 y 15. En 18 hay una sección Apariencia con el checkbox Noche.

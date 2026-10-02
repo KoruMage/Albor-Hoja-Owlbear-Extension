@@ -18,6 +18,7 @@ export function TextField({
   placeholder,
   ariaLabel,
   className,
+  autoFocus,
 }: {
   value: string;
   readOnly?: boolean;
@@ -25,6 +26,7 @@ export function TextField({
   placeholder?: string;
   ariaLabel?: string;
   className?: string;
+  autoFocus?: boolean;
 }) {
   if (readOnly) return <ReadValue value={value} className={className} />;
   return (
@@ -33,6 +35,7 @@ export function TextField({
       value={value}
       placeholder={placeholder}
       aria-label={ariaLabel}
+      autoFocus={autoFocus}
       onChange={(e) => onChange(e.target.value)}
     />
   );
@@ -109,15 +112,23 @@ export function WriteLine({
   readOnly,
   onChange,
   ariaLabel,
+  autoFocus,
 }: {
   value: string;
   readOnly?: boolean;
   onChange: (next: string) => void;
   ariaLabel: string;
+  autoFocus?: boolean;
 }) {
   return (
     <div className="write-line">
-      <TextField value={value} readOnly={readOnly} onChange={onChange} ariaLabel={ariaLabel} />
+      <TextField
+        value={value}
+        readOnly={readOnly}
+        onChange={onChange}
+        ariaLabel={ariaLabel}
+        autoFocus={autoFocus}
+      />
     </div>
   );
 }

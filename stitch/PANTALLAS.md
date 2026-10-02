@@ -284,3 +284,94 @@ del código actual:
     modales con el estilo de la app.
   - En el historial se colorea la entrada entera en verde o rojo; conviene colorear
     sólo un filete lateral o el resultado, para no perder legibilidad.
+
+---
+
+## Pantalla 10: Vista general del director (Mesa)
+
+Derivada con `edit_screens` de la vista GM `87df5f41b05c4bc0aefea8de7d885fc8`. Id `120b4956c6c24452aa1d8a8eb4d4586f`.
+
+```text
+Pestaña Mesa activa, primera al abrir la sala. Grilla, no la hoja completa.
+Encabezado del director con el código K7M4QP, Salir y Nuevo.
+Tarjetas de pergamino: nombre, concepto, quién lo tiene (Koru · director o Nahuel · conectado),
+nivel y rol, VIG/AGI/APT/VOL en corto, DET, Chispa, Suerte y Heridas.
+Las del director llevan Editar; las de un jugador, Ver.
+Si nadie se unió: "Todavía no hay jugadores en la sala."
+Sin "Asignado a".
+```
+
+## Pantalla 11: Sala (crear, unirse, conectado)
+
+Derivada de los estados vacíos `77922901d45c4e728f6dc1c068dc2e2a`. Id `f5cd27ea660943dea253be4d3d15f769`.
+
+```text
+Tres variantes: director sin sala (Crear sala); jugador con el aviso
+"El director abrió la sala K7M4QP" y Unirse, más un código para pegar a mano;
+director dentro de la sala, con el código y Salir, y "Sala K7M4QP · conectado".
+En la vista web, nombre y rol Director / Jugador.
+```
+
+## Pantalla 12: Opciones sin metadata
+
+Derivada de `01017eaeca65445f829d3a5a215ff63d`. Id `8f8c731a073b4778b2469f87d4a14936`.
+
+```text
+Sin el checkbox de sincronizar y sin com.albor/state.
+Ayuda: "Las fichas viven en este navegador. La sala sólo muestra al director lo que cada jugador publica."
+Checkbox de Dice+ y botón Exportar mesa.
+```
+
+## Pantalla 13: Hoja propia y hoja en solo lectura
+
+Derivada de la vista GM `87df5f41b05c4bc0aefea8de7d885fc8`. Id `34d4e1a531f9455d91a19a8dcfcc9746`.
+
+```text
+Desde la grilla, Volver a la mesa. La hoja del director se edita y tiene Guardar.
+La de un jugador muestra "Nahuel · solo lectura", sin Guardar, sin Eliminar y sin Asignado a.
+```
+
+## Pantalla 14: Mesa nocturna
+
+Derivada de la mesa `120b4956c6c24452aa1d8a8eb4d4586f`. Id `d6238afb9fae47d589e7ecd8a0441af0`.
+
+```text
+La misma Mesa del director, en noche cálida. Fondo #16130f, papel #241f19,
+tinta #f3ead7, sepia #c4a56a, oro #d4b46a. La pestaña activa y el botón primario
+van en oro con texto #16130f. Mismos personajes y las mismas stats de Albor.
+```
+
+## Pantalla 15: Ficha nocturna
+
+Derivada de la ficha `2e09ac39c99b4687af8e4342c1520bb6`. Id `99ca044811b14226b6ebd3ab76005035`.
+
+```text
+Ficha de Iara Solís, página 1, con la misma paleta nocturna. La banda de
+estadísticas es #100e0c y los números van en oro claro #e8d5a3.
+```
+
+## Pantalla 16: Listas con Agregar
+
+Derivada de la segunda hoja `b20aa4d5e8a8428fa281d702bda706d5`. Id `a5478884e92047daad146bcdf9f56b08`.
+
+```text
+Equipo, Dominio, Maestrías y Armas tienen un botón "Agregar" a la derecha del
+título. No se muestran filas vacías. Al pulsarlo aparece un solo campo nuevo.
+Lazos y Etiquetas quedan como están, sin ese botón.
+```
+
+## Pantallas 17 a 21: el resto en noche
+
+Misma paleta que la mesa y la ficha nocturnas. Las claras quedaron intactas.
+
+| Pantalla | Id | Sale de |
+| --- | --- | --- |
+| Segunda hoja nocturna | `03a66f140b5c4726bf20927b9fd6838a` | listas con Agregar |
+| Opciones nocturnas | `8237291ed3aa47b093e9a376c3506334` | opciones corregidas |
+| Tiradas nocturnas | `3133bbe28baf4321a025e312090d0302` | historial |
+| Sala nocturna | `cf323e5fff4f414b86864ef4890801a0` | popover de sala |
+| Tirador GM nocturno | `c0477a035ef54dc5aac4f8a37738f5f9` | tirador GM |
+
+Opciones suma la sección Apariencia con el checkbox Noche marcado. La pestaña
+activa y el botón primario van en oro `#d4b46a` con texto `#16130f`. El éxito
+del historial es `#64a37e` y el fracaso `#c95b45`.

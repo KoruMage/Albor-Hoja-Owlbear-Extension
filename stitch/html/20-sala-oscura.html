@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Albor - Variantes de Sala (Popover)</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    :root {
+      --bg-pergamino: #f7f1e4;
+      --paper: #fffdf8;
+      --gold: #b88e44;
+      --gold-dark: #8c6a28;
+      --gold-light: #e4d2a0;
+      --carbon: #2a2724;
+      --ink: #2c2418;
+      --sepia: #8a6e3d;
+      --line-gradient: linear-gradient(90deg, #e8d5a3 0%, #b88e44 45%, #7a5a22 75%, #d4b46a 100%);
+    }
+
+    body {
+      background-color: var(--bg-pergamino);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      margin: 0;
+      padding: 48px 24px 80px 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+
+    .font-garamond {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    /* Popover Container strictly 900x700 or stacked cards */
+    .popover-container {
+      width: 900px;
+      min-height: 520px;
+      background-color: var(--paper);
+      border: 1px solid var(--gold);
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
+    }
+
+    /* Double inner golden border */
+    .popover-container::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      border: 1px solid var(--gold-light);
+      pointer-events: none;
+    }
+
+    /* Corner print bracket marks */
+    .bracket-tl, .bracket-br {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      pointer-events: none;
+    }
+    .bracket-tl {
+      top: 10px;
+      left: 10px;
+      border-top: 1.5px solid var(--gold);
+      border-left: 1.5px solid var(--gold);
+    }
+    .bracket-br {
+      bottom: 10px;
+      right: 10px;
+      border-bottom: 1.5px solid var(--gold);
+      border-right: 1.5px solid var(--gold);
+    }
+
+    /* Buttons */
+    .btn-primary {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background-color: var(--carbon);
+      color: var(--bg-pergamino);
+      border: 1px solid var(--gold);
+      padding: 9px 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+      border-radius: 0px;
+    }
+    .btn-primary:hover {
+      background-color: #383430;
+      border-color: #d4b05a;
+    }
+
+    .btn-secondary {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background-color: transparent;
+      color: var(--gold-dark);
+      border: 1px solid var(--gold);
+      padding: 8px 16px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      border-radius: 0px;
+    }
+    .btn-secondary:hover {
+      background-color: #efe3c4;
+      color: var(--ink);
+    }
+
+    /* Line base input */
+    .input-line {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      border-bottom: 2px solid;
+      border-image: var(--line-gradient) 1;
+      padding: 6px 2px 4px 2px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink);
+      border-radius: 0px;
+    }
+    .input-line::placeholder {
+      color: #bfa882;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .select-line {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      border-bottom: 2px solid;
+      border-image: var(--line-gradient) 1;
+      padding: 6px 20px 4px 2px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink);
+      border-radius: 0px;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7' fill='none'%3E%3Cpath d='M1 1.5L5 5.5L9 1.5' stroke='%238a6e3d' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 6px center;
+    }
+
+    /* Tab styles */
+    .tab-item {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border: 1px solid var(--gold);
+      color: var(--gold-dark);
+      background-color: transparent;
+      cursor: default;
+    }
+    .tab-item.active {
+      background-color: var(--carbon);
+      color: var(--bg-pergamino);
+      border-color: var(--gold);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="selection:bg-[#efe3c4] selection:text-[#2c2418]" style="--bg-pergamino: #16130f; --paper: #241f19; --gold: #d4b46a; --gold-dark: #d4b46a; --gold-light: #524430; --carbon: #d4b46a; --ink: #f3ead7; --sepia: #c4a56a; --line-gradient: linear-gradient(90deg, #524430 0%, #d4b46a 45%, #c4a56a 75%, #524430 100%); background-color: #16130f; color: #f3ead7;">
+<div class="max-w-[960px] mx-auto space-y-16">
+<!-- ========================================== -->
+<!-- VARIANTE 1: DIRECTOR SIN SALA             -->
+<!-- ========================================== -->
+<div>
+<div class="flex items-center justify-between mb-3 text-[11px] font-cinzel text-[#c4a56a] tracking-widest uppercase"><span>Variante 1 · Director de juego (Sin sala activa)</span><span>Popover 900 × 700 px</span></div>
+<div class="popover-container p-8 relative flex flex-col justify-between" style="min-height: 580px;"><div class="bracket-tl" style="border-color: #d4b46a;"></div><div class="bracket-br" style="border-color: #d4b46a;"></div><div><div class="text-center font-cinzel text-[11px] text-[#d4b46a] tracking-[0.25em] opacity-90 mb-6 uppercase">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</div><header class="flex items-center justify-between pb-5 border-b border-[#d4b46a]/40"><div class="flex items-center gap-4"><div class="w-12 h-8 flex-shrink-0 flex items-center justify-center"><svg fill="none" height="28" viewbox="0 0 100 60" width="48" xmlns="http://www.w3.org/2000/svg"><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2" x1="10" x2="90" y1="46" y2="46"></line><path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="#e08a2c" stroke="#d4b46a" stroke-width="1.5"></path><path d="M 38 46 A 12 12 0 0 1 62 46 Z" fill="#f5ab35"></path><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="50" x2="50" y1="24" y2="10"></line><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="37" x2="26" y1="28" y2="16"></line><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="63" x2="74" y1="28" y2="16"></line><circle cx="50" cy="6" fill="#d4b46a" r="1.5"></circle></svg></div><div><h1 class="font-cinzel text-[20px] font-bold tracking-[0.14em] text-[#f3ead7] leading-none uppercase">ALBOR</h1><p class="font-garamond italic text-[14px] text-[#c4a56a] mt-1">Vista del Director (GM) · Koru</p></div></div><div class="flex items-center gap-1.5"><span class="tab-item font-bold uppercase" style="background-color: #d4b46a; color: #16130f; border-color: #d4b46a;">Sala</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7] opacity-60">Mesa</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7] opacity-60">Tirador GM</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7] opacity-60">Tiradas</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7] opacity-60">Opciones</span></div></header><div class="mt-6 pt-2 pb-5 border-b border-[#d4b46a]/30 grid grid-cols-12 gap-6 items-end"><div class="col-span-7"><label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#c4a56a] uppercase mb-1">Nombre</label><input class="input-line text-[#f3ead7]" readonly="" style="border-bottom: 2px solid #d4b46a;" type="text" value="Koru"/></div><div class="col-span-5"><label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#c4a56a] uppercase mb-1">Rol en mesa</label><select class="select-line text-[#f3ead7]" style="border-bottom: 2px solid #d4b46a; background-color: transparent;"><option class="bg-[#241f19] text-[#f3ead7]" selected="">Director (GM)</option><option class="bg-[#241f19] text-[#f3ead7]">Jugador</option></select></div></div><main class="py-12 px-4 flex flex-col items-center justify-center text-center"><div class="w-16 h-10 mb-4 opacity-90"><svg fill="none" height="38" viewbox="0 0 100 60" width="64" xmlns="http://www.w3.org/2000/svg"><line stroke="#d4b46a" stroke-linecap="round" stroke-width="1.5" x1="12" x2="88" y1="46" y2="46"></line><path d="M 34 46 A 16 16 0 0 1 66 46 Z" fill="none" stroke="#d4b46a" stroke-width="1.5"></path><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2" x1="50" x2="50" y1="25" y2="12"></line><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2" x1="38" x2="28" y1="29" y2="19"></line><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2" x1="62" x2="72" y1="29" y2="19"></line></svg></div><h2 class="font-cinzel text-[14px] font-bold tracking-[0.2em] text-[#d4b46a] uppercase mb-3">- SALA -</h2><p class="font-garamond text-[17px] text-[#f3ead7] max-w-md leading-relaxed mb-8">Creá una sala para que los jugadores se unan y veas sus hojas.</p><button class="btn-primary px-8 py-3 text-[12px] font-bold font-cinzel tracking-widest" style="background-color: #d4b46a; color: #16130f; border-color: #d4b46a;">CREAR SALA</button></main></div><footer class="pt-4 border-t border-[#d4b46a]/30 flex items-center justify-between text-[12px] text-[#c4a56a] font-garamond italic"><span>Albor RPG · Módulo de Sala</span><span>Sin sala activa</span></footer></div>
+</div>
+<!-- ========================================== -->
+<!-- VARIANTE 2: JUGADOR CON SALA DETECTADA    -->
+<!-- ========================================== -->
+<div>
+<div class="flex items-center justify-between mb-3 text-[11px] font-cinzel text-[#c4a56a] tracking-widest uppercase"><span>Variante 2 · Jugador (El director ya abrió una sala o unión manual)</span><span>Popover 900 × 700 px</span></div>
+<div class="popover-container p-8 relative flex flex-col justify-between" style="min-height: 620px;"><div class="bracket-tl" style="border-color: #d4b46a;"></div><div class="bracket-br" style="border-color: #d4b46a;"></div><div><div class="text-center font-cinzel text-[11px] text-[#d4b46a] tracking-[0.25em] opacity-90 mb-6 uppercase">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</div><header class="flex items-center justify-between pb-5 border-b border-[#d4b46a]/40"><div class="flex items-center gap-4"><div class="w-12 h-8 flex-shrink-0 flex items-center justify-center"><svg fill="none" height="28" viewbox="0 0 100 60" width="48" xmlns="http://www.w3.org/2000/svg"><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2" x1="10" x2="90" y1="46" y2="46"></line><path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="#e08a2c" stroke="#d4b46a" stroke-width="1.5"></path><path d="M 38 46 A 12 12 0 0 1 62 46 Z" fill="#f5ab35"></path><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="50" x2="50" y1="24" y2="10"></line><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="37" x2="26" y1="28" y2="16"></line><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="63" x2="74" y1="28" y2="16"></line><circle cx="50" cy="6" fill="#d4b46a" r="1.5"></circle></svg></div><div><h1 class="font-cinzel text-[20px] font-bold tracking-[0.14em] text-[#f3ead7] leading-none uppercase">ALBOR</h1><p class="font-garamond italic text-[14px] text-[#c4a56a] mt-1">Vista de jugador · Nahuel</p></div></div><div class="flex items-center gap-1.5"><span class="tab-item font-bold uppercase" style="background-color: #d4b46a; color: #16130f; border-color: #d4b46a;">Sala</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7] opacity-60">Ficha</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7] opacity-60">Tiradas</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7] opacity-60">Opciones</span></div></header><div class="mt-6 pt-2 pb-5 border-b border-[#d4b46a]/30 grid grid-cols-12 gap-6 items-end"><div class="col-span-7"><label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#c4a56a] uppercase mb-1">Nombre</label><input class="input-line text-[#f3ead7]" style="border-bottom: 2px solid #d4b46a;" type="text" value="Nahuel"/></div><div class="col-span-5"><label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#c4a56a] uppercase mb-1">Rol en mesa</label><select class="select-line text-[#f3ead7]" style="border-bottom: 2px solid #d4b46a; background-color: transparent;"><option class="bg-[#241f19] text-[#f3ead7]">Director (GM)</option><option class="bg-[#241f19] text-[#f3ead7]" selected="">Jugador</option></select></div></div><main class="py-8 px-4 flex flex-col items-center text-center"><h2 class="font-cinzel text-[14px] font-bold tracking-[0.2em] text-[#d4b46a] uppercase mb-4">- SALA -</h2><div class="w-full max-w-md p-6 bg-[#241f19] border border-[#d4b46a] relative mb-8"><div class="text-[12px] font-cinzel text-[#c4a56a] tracking-widest uppercase mb-1">Sala disponible detectada</div><p class="font-garamond text-[19px] text-[#f3ead7] mb-4">El director abrió la sala <strong class="font-cinzel text-[#d4b46a] text-[20px] font-bold tracking-widest ml-1">K7M4QP</strong>.</p><button class="btn-primary px-8 py-2.5 w-full justify-center font-cinzel font-bold text-[11px] tracking-widest" style="background-color: #d4b46a; color: #16130f; border-color: #d4b46a;">UNIRSE</button></div><div class="w-full max-w-md flex items-center gap-3 mb-6"><div class="flex-1 h-[1px] bg-[#d4b46a]/40"></div><span class="font-cinzel text-[10px] text-[#c4a56a] tracking-widest uppercase">O pegar código manual</span><div class="flex-1 h-[1px] bg-[#d4b46a]/40"></div></div><div class="w-full max-w-md flex items-end gap-4 text-left"><div class="flex-1"><label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#c4a56a] uppercase mb-1">Código</label><input class="input-line uppercase tracking-widest font-cinzel text-[16px] text-[#f3ead7]" placeholder="Ej: K7M4QP" style="border-bottom: 2px solid #d4b46a;" type="text"/></div><button class="btn-secondary whitespace-nowrap py-2.5 font-cinzel font-bold text-[11px] text-[#f3ead7] border border-[#d4b46a] bg-transparent">UNIRSE CON CÓDIGO</button></div></main></div><footer class="pt-4 border-t border-[#d4b46a]/30 flex items-center justify-between text-[12px] text-[#c4a56a] font-garamond italic"><span>Albor RPG · Conexión local / Owlbear</span><span>Esperando confirmación</span></footer></div>
+</div>
+<!-- ========================================== -->
+<!-- VARIANTE 3: DIRECTOR DENTRO DE LA SALA    -->
+<!-- ========================================== -->
+<div>
+<div class="flex items-center justify-between mb-3 text-[11px] font-cinzel text-[#c4a56a] tracking-widest uppercase"><span>Variante 3 · Director dentro de la sala (Conectado)</span><span>Popover 900 × 700 px</span></div>
+<div class="popover-container p-8 relative flex flex-col justify-between" style="min-height: 540px;"><div class="bracket-tl" style="border-color: #d4b46a;"></div><div class="bracket-br" style="border-color: #d4b46a;"></div><div><div class="text-center font-cinzel text-[11px] text-[#d4b46a] tracking-[0.25em] opacity-90 mb-6 uppercase">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</div><header class="flex items-center justify-between pb-5 border-b border-[#d4b46a]/40"><div class="flex items-center gap-4"><div class="w-12 h-8 flex-shrink-0 flex items-center justify-center"><svg fill="none" height="28" viewbox="0 0 100 60" width="48" xmlns="http://www.w3.org/2000/svg"><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2" x1="10" x2="90" y1="46" y2="46"></line><path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="#e08a2c" stroke="#d4b46a" stroke-width="1.5"></path><path d="M 38 46 A 12 12 0 0 1 62 46 Z" fill="#f5ab35"></path><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="50" x2="50" y1="24" y2="10"></line><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="37" x2="26" y1="28" y2="16"></line><line stroke="#d4b46a" stroke-linecap="round" stroke-width="2.5" x1="63" x2="74" y1="28" y2="16"></line><circle cx="50" cy="6" fill="#d4b46a" r="1.5"></circle></svg></div><div><h1 class="font-cinzel text-[20px] font-bold tracking-[0.14em] text-[#f3ead7] leading-none uppercase">ALBOR</h1><p class="font-garamond italic text-[14px] text-[#c4a56a] mt-1">Vista del Director (GM) · Koru</p></div></div><div class="flex items-center gap-3"><div class="border border-[#d4b46a] bg-[#16130f] px-3 py-1.5 text-center flex items-center gap-2"><span class="font-cinzel text-[10px] text-[#c4a56a] uppercase tracking-wider">Sala:</span><span class="font-cinzel text-[14px] font-bold tracking-[0.18em] text-[#d4b46a]">K7M4QP</span></div><button class="btn-secondary py-1.5 px-4 text-[10px] font-cinzel font-bold text-[#f3ead7] border border-[#d4b46a] bg-transparent">SALIR</button></div></header><div class="flex items-center gap-1.5 mt-4 pb-4 border-b border-[#d4b46a]/30"><span class="tab-item font-bold uppercase" style="background-color: #d4b46a; color: #16130f; border-color: #d4b46a;">Sala</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7]">Mesa</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7]">Tirador GM</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7]">Tiradas</span><span class="tab-item uppercase border border-[#d4b46a] text-[#f3ead7]">Opciones</span></div><div class="mt-4 pt-1 pb-4 border-b border-[#d4b46a]/30 grid grid-cols-12 gap-6 items-end"><div class="col-span-7"><label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#c4a56a] uppercase mb-1">Nombre</label><input class="input-line text-[#f3ead7]" style="border-bottom: 2px solid #d4b46a;" type="text" value="Koru"/></div><div class="col-span-5"><label class="block font-cinzel text-[11px] font-semibold tracking-wider text-[#c4a56a] uppercase mb-1">Rol en mesa</label><select class="select-line text-[#f3ead7]" style="border-bottom: 2px solid #d4b46a; background-color: transparent;"><option class="bg-[#241f19] text-[#f3ead7]" selected="">Director (GM)</option><option class="bg-[#241f19] text-[#f3ead7]">Jugador</option></select></div></div><main class="py-12 px-4 flex flex-col items-center justify-center text-center"><h2 class="font-cinzel text-[14px] font-bold tracking-[0.2em] text-[#d4b46a] uppercase mb-6">- SALA -</h2><div class="w-full max-w-lg p-6 bg-[#241f19] border border-[#d4b46a] text-center relative"><div class="w-2 h-2 border-t border-l border-[#d4b46a] absolute top-1.5 left-1.5"></div><div class="w-2 h-2 border-b border-r border-[#d4b46a] absolute bottom-1.5 right-1.5"></div><div class="flex items-center justify-center gap-2 mb-2"><span class="inline-block w-2 h-2 rounded-full bg-[#3d7a52]"></span><span class="font-cinzel text-[12px] tracking-[0.14em] text-[#3d7a52] uppercase font-bold">Conexión establecida</span></div><p class="font-garamond text-[20px] text-[#f3ead7] font-semibold mt-1 mb-2">Sala <span class="font-cinzel text-[22px] tracking-[0.16em] text-[#d4b46a]">K7M4QP</span> · conectado</p><p class="font-garamond italic text-[15px] text-[#c4a56a] max-w-sm mx-auto">Los jugadores que ingresen el código aparecerán automáticamente en la pestaña <span class="font-cinzel text-[12px] not-italic font-bold text-[#f3ead7]">Mesa</span>.</p></div></main></div><footer class="pt-4 border-t border-[#d4b46a]/30 flex items-center justify-between text-[12px] text-[#c4a56a] font-garamond italic"><span>Albor RPG · Sala activa</span><span class="font-cinzel text-[10px] uppercase text-[#3d7a52] font-semibold">● Sincronizado</span></footer></div>
+</div>
+</div>
+</body>
+</html>

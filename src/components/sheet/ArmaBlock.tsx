@@ -25,6 +25,7 @@ export function ArmaBlock({
   dicePlusEnabled,
   onPatch,
   onRolled,
+  autoFocus,
 }: {
   item: Arma;
   character: AlborCharacter;
@@ -32,6 +33,7 @@ export function ArmaBlock({
   dicePlusEnabled: boolean;
   onPatch: (id: string, next: Partial<Arma>) => void;
   onRolled?: (payload: DiceRollSummary & { characterName: string }) => void;
+  autoFocus?: boolean;
 }) {
   const [momentum, setMomentum] = useState(1);
   const [target, setTarget] = useState(9);
@@ -100,6 +102,7 @@ export function ArmaBlock({
           ariaLabel="Arma o armadura"
           value={item.nombre}
           readOnly={readOnly}
+          autoFocus={autoFocus}
           onChange={(nombre) => onPatch(item.id, { nombre })}
         />
         <TextField

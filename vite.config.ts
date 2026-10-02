@@ -8,5 +8,12 @@ export default defineConfig({
   server: {
     cors: true,
     host: true,
+    proxy: {
+      "/rooms": {
+        target: "http://127.0.0.1:8787",
+        ws: true,
+        changeOrigin: true,
+      },
+    },
   },
 });

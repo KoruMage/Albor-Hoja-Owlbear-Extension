@@ -352,6 +352,38 @@
   letter-spacing: 0.08em;
 }
 
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.sheet-head .section-title {
+  margin: 0;
+}
+
+.sheet-head__aside {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+.sheet-head__hint {
+  font-family: Cinzel, serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sheet-head button {
+  padding: 2px 8px;
+  font-size: 0.68rem;
+}
+
 .page2-mid {
   display: grid;
   grid-template-columns: 1fr 1fr;

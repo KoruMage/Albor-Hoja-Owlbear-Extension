@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Albor - Vista del Director (Mesa) · Versión Nocturna</title>
+<!-- Tailwind CSS v3 CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Cinzel & Cormorant Garamond -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            albor: {
+              void: '#16130f',
+              surface: '#241f19',
+              inset: '#1a1611',
+              box: '#14110e',
+              border: '#d4b46a',
+              borderMuted: '#8c6a28',
+              gold: '#d4b46a',
+              text: '#f3ead7',
+              muted: '#c4a56a',
+              connected: '#64a37e',
+              connectedBorder: '#487c5e',
+              alert: '#c95b45',
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            cormorant: ['Cormorant Garamond', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- Typography and Frame Styles -->
+<style data-purpose="base-styling">
+    body {
+      background-color: #16130f;
+      color: #f3ead7;
+      font-family: 'Cinzel', serif;
+    }
+    .font-cormorant {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #1c1813;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #8c6a28;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#16130f] flex items-center justify-center p-2 sm:p-4 select-none">
+<!-- BEGIN: DirectorTablePopover -->
+<!-- Popover container: strictly 900px wide, min-height 700px, corners 0px -->
+<main class="w-full max-w-[900px] min-h-[700px] bg-[#241f19] border border-albor-gold flex flex-col p-5 shadow-2xl relative text-albor-text box-border" data-purpose="director-container">
+<!-- BEGIN: WatermarkRibbon -->
+<!-- Header watermark tracking text -->
+<div class="text-center font-cinzel text-[11px] tracking-[0.25em] text-[#c4a56a] pb-2 border-b border-albor-borderMuted/40" data-purpose="header-watermark">
+      ~ ~ ~ ALBOR ~ ~ JUEGO ~ DE ~ ROL ~ ~ ~
+    </div>
+<!-- END: WatermarkRibbon -->
+<!-- BEGIN: TopBar -->
+<!-- Brand solar insignia, Room badge and Primary actions -->
+<header class="flex flex-row justify-between items-center py-3 border-b border-albor-borderMuted" data-purpose="main-header">
+<!-- Brand & Director designation -->
+<div class="flex items-center gap-3">
+<!-- Stylized Sun Sigil SVG -->
+<svg class="w-8 h-8 text-[#d4b46a] shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 40 40">
+<circle cx="20" cy="20" r="7" stroke="#d4b46a" stroke-width="1.5"></circle>
+<circle cx="20" cy="20" r="13" stroke="#8c6a28" stroke-dasharray="2 3" stroke-width="1"></circle>
+<path d="M20 3v4M20 33v4M3 20h4M33 20h4M8 8l3 3M29 29l3 3M8 32l3-3M29 11l3-3" stroke="#d4b46a" stroke-linecap="round" stroke-width="1.5"></path>
+</svg>
+<div class="flex flex-col">
+<h1 class="text-2xl font-bold tracking-widest text-[#f3ead7] leading-none">ALBOR</h1>
+<span class="text-xs font-cormorant italic text-[#c4a56a] tracking-wide mt-1">Vista del Director (GM) · Koru</span>
+</div>
+</div>
+<!-- Room Code and Global Table Actions -->
+<div class="flex items-center gap-2">
+<!-- Room Tag -->
+<div class="px-3 py-1.5 border border-albor-gold bg-[#1c1813] text-xs font-cinzel tracking-wider text-[#f3ead7]">
+<span class="text-[#c4a56a]">SALA:</span> <span class="font-bold tracking-widest">K7M4QP</span>
+</div>
+<!-- Leave Button -->
+<button class="px-4 py-1.5 border border-albor-gold bg-transparent text-xs font-cinzel uppercase tracking-widest text-[#f3ead7] hover:bg-[#2e2821] transition-colors" type="button">
+          SALIR
+        </button>
+<!-- New Character Button -->
+<button class="px-4 py-1.5 bg-albor-gold text-[#16130f] border border-albor-gold text-xs font-cinzel font-bold uppercase tracking-wider hover:bg-[#e4c988] transition-colors" type="button">
+          NUEVO
+        </button>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: NavigationTabs -->
+<!-- View Switcher Tabs -->
+<nav class="flex flex-wrap gap-2 pt-3 pb-2 border-b border-albor-borderMuted" data-purpose="navigation-tabs">
+<!-- Active Tab: Mesa -->
+<button class="px-5 py-1.5 bg-albor-gold text-[#16130f] font-cinzel font-bold text-xs tracking-widest border border-albor-gold" type="button">
+        MESA
+      </button>
+<!-- Inactive Tabs -->
+<button class="px-5 py-1.5 bg-transparent border border-albor-borderMuted text-[#f3ead7] hover:border-albor-gold hover:text-white font-cinzel text-xs tracking-widest transition-colors" type="button">
+        FICHA
+      </button>
+<button class="px-5 py-1.5 bg-transparent border border-albor-borderMuted text-[#f3ead7] hover:border-albor-gold hover:text-white font-cinzel text-xs tracking-widest transition-colors" type="button">
+        TIRADOR GM
+      </button>
+<button class="px-5 py-1.5 bg-transparent border border-albor-borderMuted text-[#f3ead7] hover:border-albor-gold hover:text-white font-cinzel text-xs tracking-widest transition-colors" type="button">
+        TIRADAS
+      </button>
+<button class="px-5 py-1.5 bg-transparent border border-albor-borderMuted text-[#f3ead7] hover:border-albor-gold hover:text-white font-cinzel text-xs tracking-widest transition-colors" type="button">
+        OPCIONES
+      </button>
+</nav>
+<!-- END: NavigationTabs -->
+<!-- BEGIN: PanelMeta -->
+<!-- Sub-header metadata and status line -->
+<div class="pt-2 pb-2" data-purpose="panel-header">
+<div class="flex justify-between items-center text-xs">
+<span class="text-[#d4b46a] tracking-widest font-semibold text-xs">- MESA -</span>
+<span class="text-[#c4a56a] text-[11px] tracking-wider font-cinzel">4 PERSONAJES EN PARTIDA</span>
+</div>
+<p class="font-cormorant italic text-xs text-[#c4a56a] mt-0.5 tracking-wide">
+        Todavía no hay jugadores en la sala.
+      </p>
+</div>
+<!-- END: PanelMeta -->
+<!-- BEGIN: CharacterGrid -->
+<!-- 2x2 Grid of Albor Character Cards with zero radius borders -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-3 flex-grow pb-1" data-purpose="characters-roster">
+<!-- CARD 1: Iara Solís -->
+<article class="border border-albor-gold bg-[#1e1a14] p-3 flex flex-col justify-between relative" data-purpose="character-card-1">
+<div>
+<!-- Title & Badges -->
+<div class="flex justify-between items-start">
+<h2 class="text-sm font-bold tracking-widest text-[#f3ead7] uppercase font-cinzel">IARA SOLÍS</h2>
+<span class="px-2 py-0.5 border border-albor-gold/70 text-[9px] font-cinzel tracking-wider text-[#d4b46a] bg-[#16130f]">
+              KORU · DIRECTOR
+            </span>
+</div>
+<!-- Concept & Archetype -->
+<p class="font-cormorant italic text-xs text-[#c4a56a] leading-tight mt-0.5">
+            Cartógrafa que persigue el primer amanecer
+          </p>
+<div class="text-[10px] font-cinzel text-[#f3ead7] tracking-widest uppercase mt-1">
+            NIVEL 2 · EXPLORADORA
+          </div>
+<div class="w-full h-px bg-albor-borderMuted my-2"></div>
+<!-- Canonical Attributes (VIG, AGI, APT, VOL) -->
+<div class="grid grid-cols-4 text-center bg-[#14110e] border-y border-albor-borderMuted py-1.5 px-1">
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">VIG</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">2d6</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">AGI</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">3d8</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">APT</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">3d6</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">VOL</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">2d4</span>
+</div>
+</div>
+<!-- Secondary Trackers (DET, CHISPA, SUERTE, HERIDAS) -->
+<div class="grid grid-cols-4 text-center pt-2 pb-1 text-[11px]">
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">DET</span>
+<span class="font-cinzel text-xs text-[#f3ead7] font-semibold">8/8</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">CHISPA</span>
+<span class="font-cinzel text-xs text-[#f3ead7] font-semibold">10/10</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">SUERTE</span>
+<span class="font-cinzel text-xs text-albor-gold font-semibold">7/10</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">HERIDAS</span>
+<span class="font-cinzel text-xs text-albor-alert font-semibold">0/1</span>
+</div>
+</div>
+</div>
+<!-- Action Row -->
+<div class="flex justify-end pt-1">
+<button class="px-4 py-1 bg-albor-gold text-[#16130f] font-cinzel font-bold text-[10px] tracking-widest uppercase hover:bg-[#e4c988] transition-colors border border-albor-gold" type="button">
+            EDITAR
+          </button>
+</div>
+</article>
+<!-- CARD 2: Bruno Del Monte -->
+<article class="border border-albor-gold bg-[#1e1a14] p-3 flex flex-col justify-between relative" data-purpose="character-card-2">
+<div>
+<!-- Title & Badges -->
+<div class="flex justify-between items-start">
+<h2 class="text-sm font-bold tracking-widest text-[#f3ead7] uppercase font-cinzel">BRUNO DEL MONTE</h2>
+<span class="px-2 py-0.5 border border-albor-connectedBorder text-[9px] font-cinzel tracking-wider text-albor-connected bg-[#121c15]">
+              NAHUEL · CONECTADO
+            </span>
+</div>
+<!-- Concept & Archetype -->
+<p class="font-cormorant italic text-xs text-[#c4a56a] leading-tight mt-0.5">
+            Forjador de reliquias de cobre solar
+          </p>
+<div class="text-[10px] font-cinzel text-[#f3ead7] tracking-widest uppercase mt-1">
+            NIVEL 2 · ARTESANO
+          </div>
+<div class="w-full h-px bg-albor-borderMuted my-2"></div>
+<!-- Canonical Attributes (VIG, AGI, APT, VOL) -->
+<div class="grid grid-cols-4 text-center bg-[#14110e] border-y border-albor-borderMuted py-1.5 px-1">
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">VIG</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">3d8</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">AGI</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">2d6</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">APT</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">3d8</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">VOL</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">2d6</span>
+</div>
+</div>
+<!-- Secondary Trackers (DET, CHISPA, SUERTE, HERIDAS) -->
+<div class="grid grid-cols-4 text-center pt-2 pb-1 text-[11px]">
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">DET</span>
+<span class="font-cinzel text-xs text-[#f3ead7] font-semibold">10/10</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">CHISPA</span>
+<span class="font-cinzel text-xs text-[#f3ead7] font-semibold">8/8</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">SUERTE</span>
+<span class="font-cinzel text-xs text-albor-gold font-semibold">5/10</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">HERIDAS</span>
+<span class="font-cinzel text-xs text-albor-alert font-semibold">0/1</span>
+</div>
+</div>
+</div>
+<!-- Action Row -->
+<div class="flex justify-end pt-1">
+<button class="px-5 py-1 bg-transparent text-[#f3ead7] border border-albor-gold font-cinzel text-[10px] tracking-widest uppercase hover:bg-[#2e2821] transition-colors" type="button">
+            VER
+          </button>
+</div>
+</article>
+<!-- CARD 3: Tala -->
+<article class="border border-albor-gold bg-[#1e1a14] p-3 flex flex-col justify-between relative" data-purpose="character-card-3">
+<div>
+<!-- Title & Badges -->
+<div class="flex justify-between items-start">
+<h2 class="text-sm font-bold tracking-widest text-[#f3ead7] uppercase font-cinzel">TALA</h2>
+<span class="px-2 py-0.5 border border-albor-connectedBorder text-[9px] font-cinzel tracking-wider text-albor-connected bg-[#121c15]">
+              SOFI · CONECTADO
+            </span>
+</div>
+<!-- Concept & Archetype -->
+<p class="font-cormorant italic text-xs text-[#c4a56a] leading-tight mt-0.5">
+            Centinela de los valles del crepúsculo
+          </p>
+<div class="text-[10px] font-cinzel text-[#f3ead7] tracking-widest uppercase mt-1">
+            NIVEL 1 · RASTREADORA
+          </div>
+<div class="w-full h-px bg-albor-borderMuted my-2"></div>
+<!-- Canonical Attributes (VIG, AGI, APT, VOL) -->
+<div class="grid grid-cols-4 text-center bg-[#14110e] border-y border-albor-borderMuted py-1.5 px-1">
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">VIG</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">2d6</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">AGI</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">3d8</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">APT</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">2d6</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">VOL</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">2d6</span>
+</div>
+</div>
+<!-- Secondary Trackers (DET, CHISPA, SUERTE, HERIDAS) -->
+<div class="grid grid-cols-4 text-center pt-2 pb-1 text-[11px]">
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">DET</span>
+<span class="font-cinzel text-xs text-[#f3ead7] font-semibold">8/8</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">CHISPA</span>
+<span class="font-cinzel text-xs text-[#f3ead7] font-semibold">6/6</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">SUERTE</span>
+<span class="font-cinzel text-xs text-albor-gold font-semibold">9/10</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">HERIDAS</span>
+<span class="font-cinzel text-xs text-albor-alert font-semibold">0/1</span>
+</div>
+</div>
+</div>
+<!-- Action Row -->
+<div class="flex justify-end pt-1">
+<button class="px-5 py-1 bg-transparent text-[#f3ead7] border border-albor-gold font-cinzel text-[10px] tracking-widest uppercase hover:bg-[#2e2821] transition-colors" type="button">
+            VER
+          </button>
+</div>
+</article>
+<!-- CARD 4: Lobo de Ceniza -->
+<article class="border border-albor-gold bg-[#1e1a14] p-3 flex flex-col justify-between relative" data-purpose="character-card-4">
+<div>
+<!-- Title & Badges -->
+<div class="flex justify-between items-start">
+<h2 class="text-sm font-bold tracking-widest text-[#f3ead7] uppercase font-cinzel">LOBO DE CENIZA</h2>
+<span class="px-2 py-0.5 border border-albor-gold/70 text-[9px] font-cinzel tracking-wider text-[#d4b46a] bg-[#16130f]">
+              KORU · DIRECTOR
+            </span>
+</div>
+<!-- Concept & Archetype -->
+<p class="font-cormorant italic text-xs text-[#c4a56a] leading-tight mt-0.5">
+            Compañero bestial adiestrado en la niebla
+          </p>
+<div class="text-[10px] font-cinzel text-[#f3ead7] tracking-widest uppercase mt-1">
+            NIVEL 1 · BESTIA ALIADA
+          </div>
+<div class="w-full h-px bg-albor-borderMuted my-2"></div>
+<!-- Canonical Attributes (VIG, AGI, APT, VOL) -->
+<div class="grid grid-cols-4 text-center bg-[#14110e] border-y border-albor-borderMuted py-1.5 px-1">
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">VIG</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">3d8</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">AGI</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">2d6</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">APT</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">1d4</span>
+</div>
+<div>
+<span class="block text-[9px] text-[#c4a56a] tracking-wider">VOL</span>
+<span class="font-cinzel text-xs font-bold text-[#f3ead7]">2d4</span>
+</div>
+</div>
+<!-- Secondary Trackers (DET, CHISPA, SUERTE, HERIDAS) -->
+<div class="grid grid-cols-4 text-center pt-2 pb-1 text-[11px]">
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">DET</span>
+<span class="font-cinzel text-xs text-[#f3ead7] font-semibold">6/6</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">CHISPA</span>
+<span class="font-cinzel text-xs text-[#f3ead7] font-semibold">4/4</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">SUERTE</span>
+<span class="font-cinzel text-xs text-albor-gold font-semibold">4/10</span>
+</div>
+<div>
+<span class="block text-[8px] text-[#c4a56a] uppercase tracking-wider">HERIDAS</span>
+<span class="font-cinzel text-xs text-albor-alert font-semibold">0/1</span>
+</div>
+</div>
+</div>
+<!-- Action Row -->
+<div class="flex justify-end pt-1">
+<button class="px-4 py-1 bg-albor-gold text-[#16130f] font-cinzel font-bold text-[10px] tracking-widest uppercase hover:bg-[#e4c988] transition-colors border border-albor-gold" type="button">
+            EDITAR
+          </button>
+</div>
+</article>
+</section>
+<!-- END: CharacterGrid -->
+</main>
+<!-- END: DirectorTablePopover -->
+</body></html>

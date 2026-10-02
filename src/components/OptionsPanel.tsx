@@ -3,20 +3,15 @@ export function OptionsPanel({
   web,
   dicePlusEnabled,
   onDicePlusChange,
-  syncWithLocal,
-  onSyncWithLocalChange,
   onExport,
 }: {
   isGM: boolean;
   web: boolean;
   dicePlusEnabled: boolean;
   onDicePlusChange: (enabled: boolean) => void;
-  syncWithLocal: boolean;
-  onSyncWithLocalChange: (enabled: boolean) => void;
   onExport: () => void;
 }) {
   const showDice = isGM || web;
-  const showSync = isGM && !web;
 
   return (
     <section className="panel options">
@@ -37,19 +32,8 @@ export function OptionsPanel({
       )}
       <div className="options__block">
         <h4 className="options__heading">- Datos de la mesa -</h4>
-        {showSync && (
-          <label className="check">
-            <input
-              type="checkbox"
-              checked={syncWithLocal}
-              onChange={(e) => onSyncWithLocalChange(e.target.checked)}
-            />
-            Sincronizar la sala con las fichas locales de este navegador
-          </label>
-        )}
         <p className="hint">
-          Entorno: {web ? "web / localStorage" : "Owlbear Rodeo"} · metadata{" "}
-          <code>com.albor/state</code>
+          Las fichas viven en este navegador. La sala sólo muestra al director lo que cada jugador publica.
         </p>
         <button type="button" onClick={onExport}>
           Exportar mesa

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALBOR · Vista del Director (GM) · Tirador GM</title>
+<!-- Fonts: Cinzel & Cormorant Garamond -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-container": "#b88e44",
+            "on-primary-fixed": "#271900",
+            "inverse-on-surface": "#f9efe6",
+            "secondary-fixed": "#ffdea8",
+            "secondary": "#795918",
+            "on-primary": "#ffffff",
+            "secondary-container": "#fdd184",
+            "primary-dark": "#8c6a28",
+            "on-error-container": "#93000a",
+            "surface-inverse": "#2a2724",
+            "success": "#3d7a52",
+            "on-tertiary-container": "#002e59",
+            "primary-light": "#e4d2a0",
+            "primary-fixed": "#ffdeab",
+            "on-secondary-container": "#785817",
+            "primary": "#b88e44",
+            "error": "#9a3b2a",
+            "on-surface-inverse": "#f7f1e4",
+            "surface-variant": "#eae1d8",
+            "on-background": "#1f1b15",
+            "surface-tint": "#7b5811",
+            "surface-container": "#f6ece3",
+            "on-surface": "#2c2418",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#271900",
+            "on-tertiary": "#ffffff",
+            "outline": "#c4a15a",
+            "on-surface-variant": "#4f4538",
+            "inverse-surface": "#34302a",
+            "secondary-fixed-dim": "#ebc075",
+            "surface": "#fffdf8",
+            "surface-container-low": "#fcf2e9",
+            "on-secondary-fixed-variant": "#5e4200",
+            "on-primary-fixed-variant": "#5f4100",
+            "on-primary-container": "#3f2a00",
+            "tertiary-fixed-dim": "#a6c8fc",
+            "tertiary": "#3d608d",
+            "surface-dim": "#e2d9cf",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed": "#001c39",
+            "accent-sun": "#e08a2c",
+            "on-tertiary-fixed-variant": "#234874",
+            "background": "#f7f1e4",
+            "primary-fixed-dim": "#eebf70",
+            "on-error": "#ffffff",
+            "surface-container-highest": "#eae1d8",
+            "tertiary-fixed": "#d4e3ff",
+            "surface-container-high": "#f0e7dd",
+            "tertiary-container": "#7597c8",
+            "outline-variant": "#d2c4b3",
+            "surface-bright": "#fff8f3",
+            "inverse-primary": "#eebf70"
+          },
+          borderRadius: {
+            "DEFAULT": "0px",
+            "none": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "0px"
+          },
+          spacing: {
+            "space-md": "10px",
+            "margin": "16px",
+            "gutter": "10px",
+            "space-xs": "4px",
+            "space-xl": "16px",
+            "space-sm": "6px",
+            "space-lg": "14px"
+          },
+          fontFamily: {
+            "section-title": ["Cinzel", "serif"],
+            "display": ["Cinzel", "serif"],
+            "die-number": ["Cinzel", "serif"],
+            "input": ["Cormorant Garamond", "serif"],
+            "button": ["Cinzel", "serif"],
+            "body": ["Cormorant Garamond", "serif"],
+            "label": ["Cinzel", "serif"]
+          },
+          fontSize: {
+            "section-title": ["13px", { "letterSpacing": "0.14em", "fontWeight": "700" }],
+            "display": ["20px", { "letterSpacing": "0.12em", "fontWeight": "700" }],
+            "die-number": ["22px", { "fontWeight": "700" }],
+            "input": ["15px", { "fontWeight": "600" }],
+            "button": ["10px", { "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "body": ["14px", { "fontWeight": "500" }],
+            "label": ["11px", { "letterSpacing": "0.04em", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    /* Baseline metallic gradient specified in DESIGN.md */
+    .metallic-baseline {
+      background: linear-gradient(90deg, #e8d5a3 0%, #b88e44 35%, #7a5a22 65%, #d4b46a 100%);
+    }
+
+    /* Traditional printer crop marks */
+    .crop-mark-tl {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 10px;
+      height: 10px;
+      border-top: 1.5px solid #8c6a28;
+      border-left: 1.5px solid #8c6a28;
+      pointer-events: none;
+    }
+    .crop-mark-br {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 1.5px solid #8c6a28;
+      border-right: 1.5px solid #8c6a28;
+      pointer-events: none;
+    }
+
+    /* Custom subtle parchment scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f7f1e4;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c4a15a;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8c6a28;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 selection:bg-[#d4b46a] selection:text-[#16130f] bg-[#16130f]">
+<!-- Owlbear Rodeo Popover Canvas: 900px ancho x 700px alto con scroll interno si aplica -->
+<div class="w-[900px] h-[700px] bg-[#16130f] text-[#f3ead7] border border-[#d4b46a] relative flex flex-col overflow-hidden"><div class="w-full text-center py-1 border-b border-[#d4b46a]/40 bg-[#241f19] select-none"><span class="font-section-title text-[10px] uppercase text-[#c4a56a] tracking-[0.3em] opacity-80">~ ~ ~ ALBOR ~ ~ JUEGO ~ DE ~ ROL ~ ~ ~</span></div><header class="w-full px-space-lg py-2 flex items-center justify-between border-b-2 border-[#d4b46a] bg-[#16130f] select-none"><div class="flex items-center gap-3"><div class="w-8 h-8 flex items-center justify-center relative flex-shrink-0"><img alt="Logo Albor" class="w-8 h-6 object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UgJlE_0JNeKGx4tNPQcavIE6_Leyp_gZEgrz6RMR8sIjvhqrOKZ3WiV3efpn8bbvE_h2d_2h8zZlvKvaMzomf_ud6rh8IrB50tmP63uJc9bOvsLnEgarhRgkoBUhsnPD9mWDNmB8ZDlxclpLEnsu-vnQmjYHR1WA_S0D0NrfXXMPAcQSRqkaGh-TyIL7q4wR7_8yxtRlbl8N3ZRyRrwF4xEJqsKrWrokKTO6MIdC9xPE3INl0FBSG-Vwg"/></div><div><div class="flex items-baseline gap-2"><h1 class="font-display text-display text-[#f3ead7] uppercase tracking-widest leading-none">ALBOR</h1></div><p class="font-body text-body italic text-[#c4a56a] leading-none mt-0.5">Vista del Director (GM) · <span class="font-label text-label text-[#e8d5a3] not-italic font-semibold">Koru</span></p></div></div><div class="flex items-center gap-1.5"><button class="px-2.5 py-1 bg-[#241f19] border border-[#d4b46a] hover:border-[#e8d5a3] text-[#f3ead7] hover:text-[#e8d5a3] font-button text-button transition-colors duration-150 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">add_circle</span><span>NUEVO</span></button><button class="px-2.5 py-1 bg-[#241f19] border border-[#d4b46a] hover:border-[#e8d5a3] text-[#f3ead7] hover:text-[#e8d5a3] font-button text-button transition-colors duration-150 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">content_copy</span><span>DUPLICAR</span></button><button class="px-2.5 py-1 bg-[#241f19] border border-[#d4b46a] hover:border-[#e8d5a3] text-[#f3ead7] hover:text-[#e8d5a3] font-button text-button transition-colors duration-150 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">folder</span><span>ARCHIVO</span><span class="material-symbols-outlined text-[11px]">arrow_drop_down</span></button><button class="px-2.5 py-1 bg-[#241f19] border border-[#d4b46a] hover:border-[#e8d5a3] text-[#f3ead7] hover:text-[#e8d5a3] font-button text-button transition-colors duration-150 flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">share</span><span>COMPARTIR</span><span class="material-symbols-outlined text-[11px]">arrow_drop_down</span></button></div></header><nav class="w-full px-space-lg flex items-center justify-between border-b border-[#d4b46a] bg-[#241f19] select-none"><div class="flex items-end gap-1 -mb-[1px]"><button class="px-4 py-2 font-label text-label text-[#c4a56a] hover:text-[#f3ead7] bg-transparent border-t border-l border-r border-[#d4b46a]/40 hover:border-[#d4b46a] transition-colors">Ficha</button><button class="px-4 py-2 font-button text-button bg-[#d4b46a] text-[#16130f] border-t-2 border-l border-r border-[#d4b46a] font-bold shadow-none flex items-center gap-1.5 z-10"><span class="material-symbols-outlined text-[14px] text-[#16130f]">casino</span><span>Tirador GM</span></button><button class="px-4 py-2 font-label text-label text-[#c4a56a] hover:text-[#f3ead7] bg-transparent border-t border-l border-r border-[#d4b46a]/40 hover:border-[#d4b46a] transition-colors">Tiradas</button><button class="px-4 py-2 font-label text-label text-[#c4a56a] hover:text-[#f3ead7] bg-transparent border-t border-l border-r border-[#d4b46a]/40 hover:border-[#d4b46a] transition-colors">Opciones</button></div></nav><main class="flex-1 overflow-y-auto p-space-md grid grid-cols-12 gap-space-md bg-[#16130f]"><section class="col-span-8 flex flex-col gap-space-md"><div class="relative bg-[#241f19] border border-[#d4b46a] p-space-lg flex flex-col gap-space-md"><div class="crop-mark-tl" style="border-color: #d4b46a;"></div><div class="crop-mark-br" style="border-color: #d4b46a;"></div><div class="border-b border-[#d4b46a]/50 pb-2 flex items-baseline justify-between"><h2 class="font-section-title text-section-title text-[#e8d5a3] uppercase">- TIRADOR DEL DIRECTOR -</h2><span class="font-body text-body italic text-[#c4a56a] text-[13px]">Tiradas libres para PNJ, trampas, daño o checks sin ficha · Dice+</span></div><div class="flex flex-col gap-1"><label class="font-label text-label text-[#c4a56a] uppercase font-bold tracking-wider">Quién tira</label><div class="relative flex items-center"><input class="w-full bg-transparent border-0 px-0 py-1 font-input text-input text-[#f3ead7] focus:ring-0 focus:outline-none placeholder:text-[#c4a56a]/50" placeholder="Koru" type="text" value="Lobo de ceniza"/></div><div class="h-[2px] w-full metallic-baseline"></div></div><div class="grid grid-cols-12 gap-3 pt-1"><div class="col-span-4 bg-[#16130f] border border-[#d4b46a]/70 p-2 flex flex-col justify-between"><span class="font-label text-[10px] text-[#c4a56a] uppercase font-semibold">Cantidad</span><div class="flex items-center justify-between mt-1"><button class="w-6 h-6 flex items-center justify-center bg-[#241f19] border border-[#d4b46a] hover:border-[#e8d5a3] text-[#f3ead7] font-button font-bold text-xs select-none">−</button><span class="font-display text-xl font-bold text-[#e8d5a3] px-2">4</span><button class="w-6 h-6 flex items-center justify-center bg-[#241f19] border border-[#d4b46a] hover:border-[#e8d5a3] text-[#f3ead7] font-button font-bold text-xs select-none">+</button></div></div><div class="col-span-8 bg-[#16130f] border border-[#d4b46a]/70 p-2 flex flex-col justify-between"><span class="font-label text-[10px] text-[#c4a56a] uppercase font-semibold mb-1">Dado</span><div class="flex items-center"><select class="w-full bg-[#241f19] border border-[#d4b46a] px-2 py-1 font-button text-xs text-[#f3ead7] focus:outline-none focus:ring-0 focus:border-[#e8d5a3]"><option value="d4">d4</option><option value="d6">d6</option><option selected="" value="d8">d8</option><option value="d10">d10</option><option value="d12">d12</option></select></div></div></div><div class="bg-[#16130f] border border-[#d4b46a]/70 p-2.5 flex flex-col gap-2"><div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="font-label text-label text-[#c4a56a] uppercase font-semibold">Dificultad Objetivo:</span><div class="flex items-center gap-1"><button class="w-5 h-5 flex items-center justify-center bg-[#241f19] border border-[#d4b46a] hover:border-[#e8d5a3] text-[#f3ead7] font-button text-xs select-none">−</button><span class="font-die-number text-die-number text-[#e8d5a3] px-1.5 leading-none">13</span><span class="font-label text-label text-[#e8d5a3] font-bold">(C)</span><button class="w-5 h-5 flex items-center justify-center bg-[#241f19] border border-[#d4b46a] hover:border-[#e8d5a3] text-[#f3ead7] font-button text-xs select-none">+</button></div></div><button class="font-label text-[10px] text-[#c4a56a] hover:text-[#e8d5a3] underline decoration-[#d4b46a] underline-offset-2">— (solo total / sin dif)</button></div><div class="grid grid-cols-8 gap-0.5 border-t border-[#d4b46a]/40 pt-1.5 text-center"><div class="py-0.5 bg-[#241f19] text-[#c4a56a] text-[10px] font-label border border-transparent">G (5)</div><div class="py-0.5 bg-[#241f19] text-[#c4a56a] text-[10px] font-label border border-transparent">F (7)</div><div class="py-0.5 bg-[#241f19] text-[#c4a56a] text-[10px] font-label border border-transparent">E (9)</div><div class="py-0.5 bg-[#241f19] text-[#c4a56a] text-[10px] font-label border border-transparent">D (11)</div><div class="py-0.5 bg-[#382e20] text-[#e8d5a3] font-bold text-[10px] font-label border border-[#d4b46a]">C (13)</div><div class="py-0.5 bg-[#241f19] text-[#c4a56a] text-[10px] font-label border border-transparent">B (15)</div><div class="py-0.5 bg-[#241f19] text-[#c4a56a] text-[10px] font-label border border-transparent">A (17)</div><div class="py-0.5 bg-[#241f19] text-[#c4a56a] text-[10px] font-label border border-transparent">S (19)</div></div></div><div class="flex items-center justify-between pt-1 border-t border-[#d4b46a]/50"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#e8d5a3] text-base">info</span><p class="font-body text-body italic text-[#c4a56a] text-base">Vas a tirar <strong class="not-italic text-[#f3ead7] font-semibold font-label">4d8</strong> vs dificultad <strong class="not-italic text-[#e8d5a3] font-semibold font-label">C (13)</strong>.</p></div><button class="px-5 py-2 bg-[#d4b46a] hover:bg-[#e8d5a3] active:bg-[#c4a56a] text-[#16130f] border-2 border-[#d4b46a] font-button text-[12px] uppercase tracking-wider font-bold shadow-none transition-transform active:scale-95 duration-100 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-[#16130f]">casino</span><span>TIRAR</span></button></div><div class="mt-1 border-2 border-[#3d7a52] bg-[#1a231b] p-space-md flex flex-col gap-space-sm relative"><div class="flex items-center justify-between border-b border-[#3d7a52]/40 pb-1.5"><div class="flex items-center gap-2"><span class="inline-flex items-center justify-center w-5 h-5 bg-[#3d7a52] text-[#f3ead7] text-[12px] font-bold">✓</span><span class="font-section-title text-[12px] text-[#5cb87a] uppercase">TIRADA RESUELTA · DICE+</span></div><div class="px-2.5 py-0.5 bg-[#d4b46a] text-[#16130f] font-label text-[10px] tracking-wider uppercase font-bold border border-[#b88e44] flex items-center gap-1 shadow-sm"><span class="material-symbols-outlined text-[13px] text-[#16130f]">military_tech</span><span>CRÍTICO</span></div></div><div class="flex items-center justify-center gap-3 py-1"><div class="w-12 h-12 bg-[#241f19] border-2 border-[#d4b46a] flex flex-col items-center justify-center relative shadow-sm"><span class="font-die-number text-die-number text-[#e8d5a3] leading-none">8</span><span class="font-label text-[8px] text-[#c4a56a] font-semibold">d8</span><div class="absolute -top-1 -right-1 w-2 h-2 bg-[#d4b46a]"></div></div><span class="font-display text-[#d4b46a] text-sm font-bold">+</span><div class="w-12 h-12 bg-[#241f19] border-2 border-[#d4b46a] flex flex-col items-center justify-center relative shadow-sm"><span class="font-die-number text-die-number text-[#e8d5a3] leading-none">6</span><span class="font-label text-[8px] text-[#c4a56a] font-semibold">d8</span><div class="absolute -top-1 -right-1 w-2 h-2 bg-[#d4b46a]"></div></div><span class="font-display text-[#d4b46a] text-sm font-bold">+</span><div class="w-12 h-12 bg-[#241f19] border-2 border-[#d4b46a]/60 flex flex-col items-center justify-center relative shadow-sm"><span class="font-die-number text-die-number text-[#c4a56a] leading-none">4</span><span class="font-label text-[8px] text-[#c4a56a] font-semibold">d8</span></div><span class="font-display text-[#d4b46a] text-sm font-bold">+</span><div class="w-12 h-12 bg-[#241f19] border-2 border-[#d4b46a] flex flex-col items-center justify-center relative shadow-sm"><span class="font-die-number text-die-number text-[#e8d5a3] leading-none">8</span><span class="font-label text-[8px] text-[#c4a56a] font-semibold">d8</span><div class="absolute -top-1 -right-1 w-2 h-2 bg-[#d4b46a]"></div></div></div><div class="text-center py-1 bg-[#241f19] border border-[#3d7a52]/40"><p class="font-section-title text-[12px] text-[#f3ead7]">8 + 6 + 4 + 8 = <span class="text-base text-[#e8d5a3] font-extrabold">26</span> vs 13 → <span class="text-[#5cb87a] font-bold tracking-wider">Éxito extra · Crítico · Dice+</span></p></div><p class="font-body text-[12px] italic text-[#c4a56a] text-center leading-tight">* Regla de crítico: tres o más dados d6+ con al menos tres caras pares ≥ 6 (los dados 8, 6 y 8 cumplen la condición de maestría).</p></div></div></section><aside class="col-span-4 flex flex-col gap-space-md"><div class="relative bg-[#241f19] border border-[#d4b46a] p-space-md flex flex-col gap-space-md h-full"><div class="crop-mark-tl" style="border-color: #d4b46a;"></div><div class="crop-mark-br" style="border-color: #d4b46a;"></div><div class="border-b border-[#d4b46a]/50 pb-1.5 flex items-center justify-between"><h3 class="font-section-title text-section-title text-[#e8d5a3] uppercase">- REFERENCIA RÁPIDA -</h3><span class="material-symbols-outlined text-[#d4b46a] text-[16px]">menu_book</span></div><div class="flex flex-col gap-1"><h4 class="font-label text-[10px] text-[#c4a56a] uppercase font-bold tracking-wider border-b border-[#d4b46a]/30 pb-0.5">Bandas de Dificultad</h4><div class="flex flex-col text-xs font-body divide-y divide-[#d4b46a]/20"><div class="flex justify-between py-1"><span class="font-label text-[10px] text-[#c4a56a] font-semibold">G (5)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-[#c4a56a] font-semibold">F (7)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-[#c4a56a] font-semibold">E (9)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-[#c4a56a] font-semibold">D (11)</span></div><div class="flex justify-between py-1 px-1 bg-[#382e20] border-l-2 border-[#d4b46a] -mx-1 font-semibold"><span class="font-label text-[10px] text-[#e8d5a3] font-bold">C (13)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-[#c4a56a] font-semibold">B (15)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-[#c4a56a] font-semibold">A (17)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-[#c4a56a] font-semibold">S (19)</span></div></div></div><div class="flex flex-col gap-1 pt-1"><h4 class="font-label text-[10px] text-[#c4a56a] uppercase font-bold tracking-wider border-b border-[#d4b46a]/30 pb-0.5">Grados de Éxito</h4><div class="flex flex-col text-xs font-body gap-1 pt-0.5"><div class="flex items-center justify-between py-0.5 border-b border-[#d4b46a]/20"><span class="font-label text-[10px] text-[#5cb87a] font-bold">más de 5 por encima:</span><span class="text-[#5cb87a] font-semibold italic">Éxito extra</span></div><div class="flex items-center justify-between py-0.5 border-b border-[#d4b46a]/20"><span class="font-label text-[10px] text-[#f3ead7] font-bold">de 0 a 5 por encima:</span><span class="text-[#f3ead7] italic">Éxito</span></div><div class="flex items-center justify-between py-0.5 border-b border-[#d4b46a]/20"><span class="font-label text-[10px] text-[#c4a56a] font-bold">de 1 a 2 por debajo:</span><span class="text-[#c4a56a] italic">Éxito limitado</span></div><div class="flex items-center justify-between py-0.5"><span class="font-label text-[10px] text-[#e06c58] font-bold">peor:</span><span class="text-[#e06c58] font-semibold italic">Fracaso</span></div></div></div><div class="bg-[#16130f] border border-[#d4b46a]/60 p-2 mt-auto"><div class="flex items-center gap-1.5 mb-1"><span class="material-symbols-outlined text-[#d4b46a] text-sm">bookmark</span><span class="font-label text-[10px] text-[#e8d5a3] uppercase font-bold">Regla de Crítico</span></div><p class="font-body text-[12px] italic text-[#f3ead7] leading-tight">Tres o más dados d6 o mayores con al menos tres caras pares ≥ 6. Otorga impacto pleno e iniciativa narrativa inmediata.</p></div></div></aside></main></div>
+</body></html>

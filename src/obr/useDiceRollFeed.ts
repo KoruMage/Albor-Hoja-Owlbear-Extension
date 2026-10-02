@@ -9,6 +9,14 @@ export function broadcastDiceRoll(payload: DiceRollBroadcast) {
   });
 }
 
+export function notifyDiceRoll(payload: DiceRollBroadcast) {
+  if (!OBR.isAvailable) return;
+  const kind = payload.critical ? "SUCCESS" : payload.fumble ? "WARNING" : "DEFAULT";
+  OBR.onReady(() => {
+    OBR.notification.show(`🎲 ${payload.characterName}: ${payload.summary}`, kind);
+  });
+}
+
 export function useDiceRollFeed() {
   useEffect(() => {
     if (!OBR.isAvailable) return;

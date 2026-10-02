@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Albor - Hoja de Personaje (Owlbear Rodeo)</title>
+<!-- Fonts: Cinzel & Cormorant Garamond -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-error": "#ffffff",
+            "surface-dim": "#e2d9cf",
+            "on-primary-container": "#3f2a00",
+            "on-surface": "#1f1b15",
+            "inverse-on-surface": "#f9efe6",
+            "on-secondary-container": "#785817",
+            "on-tertiary": "#ffffff",
+            "on-error-container": "#93000a",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#efe3c4",
+            "surface": "#fffdf8",
+            "on-tertiary-container": "#002e59",
+            "on-secondary-fixed": "#271900",
+            "inverse-primary": "#eebf70",
+            "tertiary-fixed-dim": "#a6c8fc",
+            "surface-container-low": "#fcf2e9",
+            "inverse-surface": "#34302a",
+            "tertiary-fixed": "#d4e3ff",
+            "on-background": "#1f1b15",
+            "accent-sun": "#e08a2c",
+            "primary-container": "#b88e44",
+            "primary-fixed-dim": "#eebf70",
+            "background": "#f7f1e4",
+            "error-container": "#ffdad6",
+            "error": "#9a3b2a",
+            "on-primary": "#ffffff",
+            "surface-bright": "#fff8f3",
+            "primary-light": "#e4d2a0",
+            "success": "#3d7a52",
+            "outline-variant": "#d2c4b3",
+            "secondary": "#795918",
+            "tertiary-container": "#7597c8",
+            "secondary-container": "#fdd184",
+            "primary-fixed": "#ffdeab",
+            "surface-container-highest": "#eae1d8",
+            "primary": "#b88e44",
+            "on-primary-fixed": "#271900",
+            "secondary-fixed-dim": "#ebc075",
+            "on-surface-variant": "#8a6e3d",
+            "on-tertiary-fixed-variant": "#234874",
+            "on-secondary-fixed-variant": "#5e4200",
+            "secondary-fixed": "#ffdea8",
+            "tertiary": "#3d608d",
+            "on-primary-fixed-variant": "#5f4100",
+            "outline": "#c4a15a",
+            "surface-inverse": "#2a2724",
+            "primary-dark": "#8c6a28",
+            "surface-variant": "#eae1d8",
+            "on-tertiary-fixed": "#001c39",
+            "surface-container-high": "#f0e7dd",
+            "surface-tint": "#7b5811",
+            "on-surface-inverse": "#f7f1e4",
+            "on-secondary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0px",
+            "none": "0px",
+            "sm": "0px",
+            "md": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "0px"
+          },
+          "spacing": {
+            "space-md": "10px",
+            "margin": "16px",
+            "space-lg": "14px",
+            "space-xs": "4px",
+            "space-xl": "16px",
+            "space-sm": "6px",
+            "gutter": "10px"
+          },
+          "fontFamily": {
+            "display": ["Cinzel", "serif"],
+            "label": ["Cinzel", "serif"],
+            "input": ["Cormorant Garamond", "serif"],
+            "button": ["Cinzel", "serif"],
+            "section-title": ["Cinzel", "serif"],
+            "die-number": ["Cinzel", "serif"],
+            "body": ["Cormorant Garamond", "serif"],
+            "mono": ["Fira Code", "monospace"]
+          },
+          "fontSize": {
+            "display": ["20px", { "letterSpacing": "0.12em", "fontWeight": "700" }],
+            "label": ["11px", { "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "input": ["15px", { "fontWeight": "600" }],
+            "button": ["10px", { "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "section-title": ["13px", { "letterSpacing": "0.14em", "fontWeight": "700" }],
+            "die-number": ["22px", { "fontWeight": "700" }],
+            "body": ["14px", { "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Custom classical print styling */
+    .crop-mark {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      pointer-events: none;
+    }
+    .crop-tl {
+      top: -1px;
+      left: -1px;
+      border-top: 2px solid #b88e44;
+      border-left: 2px solid #b88e44;
+    }
+    .crop-br {
+      bottom: -1px;
+      right: -1px;
+      border-bottom: 2px solid #b88e44;
+      border-right: 2px solid #b88e44;
+    }
+    .crop-tr {
+      top: -1px;
+      right: -1px;
+      border-top: 2px solid #b88e44;
+      border-right: 2px solid #b88e44;
+    }
+    .crop-bl {
+      bottom: -1px;
+      left: -1px;
+      border-bottom: 2px solid #b88e44;
+      border-left: 2px solid #b88e44;
+    }
+    /* Metallic rule line */
+    .rule-gold {
+      height: 1px;
+      background: linear-gradient(90deg, rgba(184, 142, 68, 0) 0%, rgba(184, 142, 68, 0.8) 25%, #8c6a28 50%, rgba(184, 142, 68, 0.8) 75%, rgba(184, 142, 68, 0) 100%);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen py-8 flex flex-col items-center justify-start selection:bg-primary-container selection:text-on-primary-container" style="background-color: #16130f; color: #f3ead7;">
+<!-- Popover Container 900px -->
+<main class="w-[900px] bg-background border border-outline shadow-none relative flex flex-col p-6 box-border" style="background-color: #241f19; border-color: #d4b46a; color: #f3ead7;">
+<!-- 1. Marca de agua superior centrada -->
+<header class="w-full text-center pb-3 pt-1 select-none">
+<p class="font-display text-[10px] text-primary tracking-[0.3em] font-semibold" style="color: #d4b46a; opacity: 0.7;">
+        ~ ~ ~ ALBOR ~ ~ JUEGO ~ DE ~ ROL ~ ~ ~
+      </p>
+</header>
+<!-- 2. Cabecera principal (TopAppBar aligned with Shared Components JSON) -->
+<section class="w-full flex items-center justify-between pb-4 border-b border-outline" style="border-color: rgba(212, 180, 106, 0.4);">
+<!-- Left: Logo & GM Title -->
+<div class="flex items-center gap-3">
+<div class="w-16 h-8 flex items-center justify-center overflow-hidden border border-outline bg-surface p-0.5" style="background-color: #1a1612; border-color: #d4b46a;">
+<img alt="Sol Naciente Albor" class="max-h-full max-w-full object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UgJlE_0JNeKGx4tNPQcavIE6_Leyp_gZEgrz6RMR8sIjvhqrOKZ3WiV3efpn8bbvE_h2d_2h8zZlvKvaMzomf_ud6rh8IrB50tmP63uJc9bOvsLnEgarhRgkoBUhsnPD9mWDNmB8ZDlxclpLEnsu-vnQmjYHR1WA_S0D0NrfXXMPAcQSRqkaGh-TyIL7q4wR7_8yxtRlbl8N3ZRyRrwF4xEJqsKrWrokKTO6MIdC9xPE3INl0FBSG-Vwg"/>
+</div>
+<div class="flex flex-col">
+<h1 class="font-display text-display text-on-surface uppercase tracking-widest leading-none" style="color: #f3ead7;">
+            ALBOR
+          </h1>
+<span class="font-body text-body italic text-on-surface-variant leading-tight mt-0.5" style="color: #c4a56a;">
+            Vista del Director (GM) · Koru
+          </span>
+</div>
+</div>
+<!-- Right: Action Buttons -->
+<div class="flex items-center gap-2"><button class="cursor-pointer select-none active:scale-95 duration-100 font-button text-button uppercase px-3 py-1.5 border border-primary transition-colors flex items-center gap-1" style="background-color: transparent; border-color: #d4b46a; color: #f3ead7;" type="button"><span>Nuevo</span></button><button class="cursor-pointer select-none active:scale-95 duration-100 font-button text-button uppercase px-3 py-1.5 border border-primary transition-colors flex items-center gap-1" style="background-color: transparent; border-color: #d4b46a; color: #f3ead7;" type="button"><span>Duplicar</span></button><button class="cursor-pointer select-none active:scale-95 duration-100 font-button text-button uppercase px-3 py-1.5 border border-primary transition-colors flex items-center gap-1" style="background-color: transparent; border-color: #d4b46a; color: #f3ead7;" type="button"><span class="material-symbols-outlined text-[13px]" style="color: #d4b46a;">folder</span><span>ARCHIVO ▾</span></button><button class="cursor-pointer select-none active:scale-95 duration-100 font-button text-button uppercase px-3 py-1.5 border border-primary transition-colors flex items-center gap-1" style="background-color: transparent; border-color: #d4b46a; color: #f3ead7;" type="button"><span class="material-symbols-outlined text-[13px]" style="color: #d4b46a;">share</span><span>COMPARTIR ▾</span></button></div>
+</section>
+<!-- 3. Barra de navegación principal -->
+<nav aria-label="Navegación principal" class="w-full flex items-center gap-2 pt-3 pb-2 border-b border-outline" style="border-color: rgba(212, 180, 106, 0.4);"><button class="cursor-pointer select-none active:scale-95 duration-100 px-4 py-1.5 font-label text-label transition-colors" style="background-color: transparent; border: 1px solid #d4b46a; color: #c4a56a;" type="button">FICHA</button><button class="cursor-pointer select-none active:scale-95 duration-100 px-4 py-1.5 font-label text-label transition-colors" style="background-color: transparent; border: 1px solid #d4b46a; color: #c4a56a;" type="button">TIRADAS</button><button class="cursor-pointer select-none active:scale-95 duration-100 font-bold px-4 py-1.5 font-label text-label" style="background-color: #d4b46a; color: #16130f; border: 1px solid #d4b46a;" type="button">OPCIONES</button></nav>
+<!-- 4. Fila secundaria de selector de personajes / fichas -->
+<section class="w-full flex items-center justify-between py-3 border-b border-outline/70" style="border-color: rgba(212, 180, 106, 0.4);"><div class="flex items-center gap-1.5 overflow-x-auto"><button class="cursor-pointer font-label text-[10px] uppercase tracking-wider px-3 py-1 transition-colors" style="background-color: #241f19; border: 1px solid #d4b46a; color: #f3ead7;" type="button">IARA SOLÍS</button><button class="cursor-pointer font-label text-[10px] uppercase tracking-wider px-3 py-1 transition-colors" style="background-color: #241f19; border: 1px solid #d4b46a; color: #f3ead7;" type="button">VALEN ARRECHEA</button><button class="cursor-pointer font-label text-[10px] uppercase tracking-wider px-3 py-1 transition-colors" style="background-color: #241f19; border: 1px solid #d4b46a; color: #f3ead7;" type="button">CIRO DE LAS BRUMAS</button><button class="cursor-pointer font-label text-[12px] font-bold px-2 py-0.5 transition-colors" style="background-color: #241f19; border: 1px solid #d4b46a; color: #d4b46a;" title="Añadir ficha" type="button">+</button></div><div class="flex items-center gap-2"><span class="font-body text-body italic" style="color: #c4a56a;">Sincronizar con ficha local:</span><div class="relative inline-block"><button class="cursor-pointer font-body text-body px-3 py-0.5 transition-colors flex items-center gap-2" style="background-color: #241f19; border: 1px solid #d4b46a; color: #f3ead7;" type="button"><span>Elegir... (Iara_v2.json)</span><span class="font-label text-[9px]" style="color: #d4b46a;">▾</span></button></div></div></section>
+<!-- 5. Contenido principal - Panel "OPCIONES" -->
+<section class="mt-6 mb-2 relative bg-surface border border-primary p-8 min-h-[380px] flex flex-col" style="background-color: #241f19; border: 1px solid #d4b46a;">
+<!-- Ornamental Corner Printer Crop Marks -->
+<div class="crop-mark crop-tl"></div>
+<div class="crop-mark crop-tr"></div>
+<div class="crop-mark crop-bl"></div>
+<div class="crop-mark crop-br"></div>
+<!-- Panel Title -->
+<div class="w-full flex items-center justify-center mb-8 relative"><div class="absolute inset-x-0 h-px" style="background-color: rgba(212, 180, 106, 0.4);"></div><h2 class="relative px-6 font-display text-section-title uppercase tracking-[0.25em]" style="background-color: #241f19; color: #d4b46a;">- OPCIONES -</h2></div>
+<!-- Inner Configuration Blocks -->
+<div class="space-y-8 max-w-2xl mx-auto w-full"><article class="space-y-3"><div class="flex items-center gap-2"><h3 class="font-display text-[12px] font-bold tracking-[0.18em] uppercase" style="color: #d4b46a;">- APARIENCIA -</h3><div class="flex-1 h-px" style="background-color: rgba(212, 180, 106, 0.35);"></div></div><div class="pl-2 pt-1"><label class="flex items-center gap-3 cursor-pointer group select-none"><div class="relative flex items-center justify-center w-4 h-4 border" style="border-color: #d4b46a; background-color: #241f19;"><input checked="" class="opacity-0 absolute inset-0 cursor-pointer peer" type="checkbox"/><div class="w-2.5 h-2.5 peer-checked:block hidden" style="background-color: #d4b46a;"></div></div><span class="font-body text-[15px] leading-snug" style="color: #f3ead7;">Noche</span></label></div></article><article class="space-y-3"><div class="flex items-center gap-2"><h3 class="font-display text-[12px] font-bold tracking-[0.18em] uppercase" style="color: #d4b46a;">- DADOS -</h3><div class="flex-1 h-px" style="background-color: rgba(212, 180, 106, 0.35);"></div></div><div class="pl-2 pt-1"><label class="flex items-start gap-3 cursor-pointer group select-none"><div class="relative flex items-center justify-center w-4 h-4 mt-0.5 border" style="border-color: #d4b46a; background-color: #241f19;"><input checked="" class="opacity-0 absolute inset-0 cursor-pointer peer" type="checkbox"/><div class="w-2.5 h-2.5 peer-checked:block hidden" style="background-color: #d4b46a;"></div></div><span class="font-body text-[15px] leading-snug" style="color: #f3ead7;">Usar Dice+ (dados 3D en Owlbear). Si no está instalada, se tira en local.</span></label></div></article><article class="space-y-4 pt-2"><div class="flex items-center gap-2"><h3 class="font-display text-[12px] font-bold tracking-[0.18em] uppercase" style="color: #d4b46a;">- DATOS DE LA MESA -</h3><div class="flex-1 h-px" style="background-color: rgba(212, 180, 106, 0.35);"></div></div><div class="pl-2 space-y-4"><p class="font-body text-[15px] italic leading-snug" style="color: #c4a56a;">Las fichas viven en este navegador. La sala sólo muestra al director lo que cada jugador publica.</p><div class="pt-2"><button class="cursor-pointer select-none active:scale-95 duration-100 font-button text-button uppercase px-4 py-2 border transition-colors duration-150 inline-flex items-center gap-2" style="background-color: transparent; border-color: #d4b46a; color: #f3ead7;" type="button"><span class="material-symbols-outlined text-[14px]" style="color: #d4b46a;">file_download</span><span>EXPORTAR MESA</span></button></div></div></article></div>
+<!-- Subtle bottom filleted stamp line -->
+<div class="mt-auto pt-8 flex items-center justify-center">
+<div class="w-24 rule-gold"></div>
+</div>
+</section>
+<!-- Bottom Footer Note -->
+<footer class="w-full text-center pt-2">
+<span class="font-body text-[11px] text-on-surface-variant/70 italic" style="color: rgba(196, 165, 106, 0.7);">
+        Albor RPG v1.4.2 · Módulo de Extensión para Owlbear Rodeo
+      </span>
+</footer>
+</main>
+</body></html>

@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:rooms": "wrangler dev --config worker/wrangler.jsonc --port 8787",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "deploy": "npm run build && cp -r static_root/. dist/ && wrangler pages deploy dist --project-name=albor-hoja-owlbear"

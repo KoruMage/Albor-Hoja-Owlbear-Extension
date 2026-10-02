@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Albor - Hoja de Personaje (Segunda Hoja - Listas Dinámicas)</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Cinzel & Cormorant Garamond -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-dim": "#e2d9cf",
+            "secondary-container": "#fdd184",
+            "tertiary-container": "#7597c8",
+            "on-tertiary-fixed-variant": "#234874",
+            "on-surface-variant": "#8a6e3d",
+            "surface-container": "#efe3c4",
+            "inverse-on-surface": "#f9efe6",
+            "on-tertiary": "#ffffff",
+            "accent-sun": "#e08a2c",
+            "on-surface-inverse": "#f7f1e4",
+            "on-surface": "#1f1b15",
+            "error-container": "#ffdad6",
+            "error": "#9a3b2a",
+            "background": "#f7f1e4",
+            "on-background": "#1f1b15",
+            "success": "#3d7a52",
+            "on-primary-fixed": "#271900",
+            "primary-fixed-dim": "#eebf70",
+            "inverse-surface": "#34302a",
+            "on-error-container": "#93000a",
+            "surface-container-highest": "#eae1d8",
+            "on-secondary": "#ffffff",
+            "on-primary-container": "#3f2a00",
+            "primary-dark": "#8c6a28",
+            "on-tertiary-container": "#002e59",
+            "secondary-fixed-dim": "#ebc075",
+            "primary-container": "#b88e44",
+            "outline-variant": "#d2c4b3",
+            "on-error": "#ffffff",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#d4e3ff",
+            "primary-light": "#e4d2a0",
+            "on-secondary-container": "#785817",
+            "on-secondary-fixed": "#271900",
+            "tertiary-fixed-dim": "#a6c8fc",
+            "surface-bright": "#fff8f3",
+            "surface-tint": "#7b5811",
+            "surface-container-high": "#f0e7dd",
+            "on-tertiary-fixed": "#001c39",
+            "inverse-primary": "#eebf70",
+            "surface-variant": "#eae1d8",
+            "outline": "#c4a15a",
+            "secondary": "#795918",
+            "secondary-fixed": "#ffdea8",
+            "surface-inverse": "#2a2724",
+            "surface": "#fffdf8",
+            "primary": "#b88e44",
+            "tertiary": "#3d608d",
+            "surface-container-low": "#fcf2e9",
+            "on-primary-fixed-variant": "#5f4100",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed": "#ffdeab",
+            "on-secondary-fixed-variant": "#5e4200"
+          },
+          "borderRadius": {
+            "DEFAULT": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "6px",
+            "gutter": "10px",
+            "margin": "16px",
+            "space-xl": "16px",
+            "space-md": "10px",
+            "space-lg": "14px",
+            "space-xs": "4px"
+          },
+          "fontFamily": {
+            "die-number": ["Cinzel", "serif"],
+            "body": ["Cormorant Garamond", "serif"],
+            "button": ["Cinzel", "serif"],
+            "section-title": ["Cinzel", "serif"],
+            "label": ["Cinzel", "serif"],
+            "input": ["Cormorant Garamond", "serif"],
+            "display": ["Cinzel", "serif"]
+          },
+          "fontSize": {
+            "die-number": ["22px", { "fontWeight": "700" }],
+            "body": ["14px", { "fontWeight": "500" }],
+            "button": ["10px", { "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "section-title": ["13px", { "letterSpacing": "0.14em", "fontWeight": "700" }],
+            "label": ["11px", { "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "input": ["15px", { "fontWeight": "600" }],
+            "display": ["20px", { "letterSpacing": "0.12em", "fontWeight": "700" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .gold-line {
+      background: linear-gradient(90deg, #e8d5a3 0%, #b88e44 40%, #7a5a22 75%, #d4b46a 100%);
+      height: 1px;
+    }
+    .gold-line-2px {
+      background: linear-gradient(90deg, #e8d5a3 0%, #b88e44 40%, #7a5a22 75%, #d4b46a 100%);
+      height: 2px;
+    }
+    /* Estilo para muesca artesanal al final del renglón */
+    .row-notch::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: -4px;
+      width: 2px;
+      height: 9px;
+      background-color: #b88e44;
+    }
+    /* Cursor titilante manual */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .typing-cursor {
+      animation: blink 1s infinite;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen py-8 px-4 flex flex-col items-center select-none" style="background-color: #16130f; color: #f3ead7;">
+<!-- ==================== CONTENEDOR PRINCIPAL TIPO POPOVER (900px) ==================== -->
+<main class="w-full max-w-[900px] border border-[#d4b46a] p-3 relative select-none" style="background-color: #16130f; color: #f3ead7;">
+<!-- Esquinas ornamentales exteriores (crop marks de imprenta doradas) -->
+<div class="absolute -top-[1px] -left-[1px] w-[10px] h-[10px] border-t-2 border-l-2 border-[#d4b46a] pointer-events-none"></div>
+<div class="absolute -top-[1px] -right-[1px] w-[10px] h-[10px] border-t-2 border-r-2 border-[#d4b46a] pointer-events-none"></div>
+<div class="absolute -bottom-[1px] -left-[1px] w-[10px] h-[10px] border-b-2 border-l-2 border-[#d4b46a] pointer-events-none"></div>
+<div class="absolute -bottom-[1px] -right-[1px] w-[10px] h-[10px] border-b-2 border-r-2 border-[#d4b46a] pointer-events-none"></div>
+<!-- ENCABEZADO SUPERIOR EDITORIAL -->
+<div class="text-center font-display text-label tracking-[0.25em] py-1 border-b border-[#d4b46a]/60 mb-2" style="color: #c4a56a;">
+  ~ ~ ~ ALBOR ~ ~ JUEGO ~ DE ~ ROL ~ ~ ~
+</div>
+<!-- BARRA SUPERIOR DE ALBOR (TopNavBar Nocturno) -->
+<header class="w-full flex flex-wrap items-center justify-between px-space-lg py-space-sm border-b border-[#d4b46a]" style="background-color: #1b1713;">
+<!-- Identidad de Marca -->
+<div class="flex items-center gap-3">
+<div class="w-12 h-6 flex items-center justify-center overflow-hidden border border-[#d4b46a] p-0.5" style="background-color: #241f19;">
+<img alt="Sol Naciente Albor" class="h-full object-contain filter brightness-95 sepia-[0.3]" src="https://lh3.googleusercontent.com/aida/AEtjO1UgJlE_0JNeKGx4tNPQcavIE6_Leyp_gZEgrz6RMR8sIjvhqrOKZ3WiV3efpn8bbvE_h2d_2h8zZlvKvaMzomf_ud6rh8IrB50tmP63uJc9bOvsLnEgarhRgkoBUhsnPD9mWDNmB8ZDlxclpLEnsu-vnQmjYHR1WA_S0D0NrfXXMPAcQSRqkaGh-TyIL7q4wR7_8yxtRlbl8N3ZRyRrwF4xEJqsKrWrokKTO6MIdC9xPE3INl0FBSG-Vwg"/>
+</div>
+<div>
+<span class="font-display text-display tracking-widest leading-none" style="color: #f3ead7;">ALBOR</span>
+<span class="block font-label text-[9px] tracking-wider" style="color: #c4a56a;">VISTA DE JUGADOR · NAHUEL</span>
+</div>
+</div>
+<!-- Acciones de Cabecera -->
+<div class="flex items-center gap-1.5 mt-2 sm:mt-0">
+<button class="border border-[#d4b46a] px-2.5 py-1 font-button text-button transition-colors duration-150 active:scale-95 uppercase" onmouseout="this.style.backgroundColor='transparent'" onmouseover="this.style.backgroundColor='#2e2820'" style="background: transparent; color: #e8d5a3;">
+      Nuevo
+    </button>
+<button class="border border-[#d4b46a] px-2.5 py-1 font-button text-button transition-colors duration-150 active:scale-95 uppercase" onmouseout="this.style.backgroundColor='transparent'" onmouseover="this.style.backgroundColor='#2e2820'" style="background: transparent; color: #e8d5a3;">
+      Duplicar
+    </button>
+<button class="border border-[#d4b46a] px-2 py-1 font-button text-button transition-colors duration-150 active:scale-95 flex items-center justify-center" onmouseout="this.style.backgroundColor='transparent'" onmouseover="this.style.backgroundColor='#2e2820'" style="background: transparent; color: #e8d5a3;" title="Archivo">
+<span class="material-symbols-outlined text-[16px]" style="color: #c4a56a;">folder</span>
+</button>
+<button class="border border-[#d4b46a] px-2 py-1 font-button text-button transition-colors duration-150 active:scale-95 flex items-center justify-center" onmouseout="this.style.backgroundColor='transparent'" onmouseover="this.style.backgroundColor='#2e2820'" style="background: transparent; color: #e8d5a3;" title="Compartir">
+<span class="material-symbols-outlined text-[16px]" style="color: #c4a56a;">share</span>
+</button>
+</div>
+</header>
+<!-- BARRA DE PESTAÑAS (Ficha Activa en Oro) -->
+<nav class="flex items-center justify-between border-b border-[#d4b46a] px-space-md py-1 mt-1" style="background-color: #1a1612;">
+<div class="flex items-center gap-1">
+<!-- Ficha (Activa: fondo #d4b46a, texto #16130f) -->
+<button class="font-bold px-3 py-1 font-button text-button uppercase" style="background-color: #d4b46a; color: #16130f;">
+      Ficha
+    </button>
+<!-- Tiradas -->
+<button class="px-3 py-1 font-label text-label transition-colors duration-150" onmouseout="this.style.backgroundColor='transparent'" onmouseover="this.style.backgroundColor='#2e2820'" style="color: #c4a56a;">
+      Tiradas
+    </button>
+<!-- Opciones -->
+<button class="px-3 py-1 font-label text-label transition-colors duration-150" onmouseout="this.style.backgroundColor='transparent'" onmouseover="this.style.backgroundColor='#2e2820'" style="color: #c4a56a;">
+      Opciones
+    </button>
+</div>
+<div class="font-label text-[10px]" style="color: #c4a56a;">
+    HOJA II / II
+  </div>
+</nav>
+<!-- SELECTOR DE PERSONAJE & ARCHIVO LOCAL -->
+<div class="flex flex-wrap items-center justify-between px-space-md py-1.5 border-b border-[#d4b46a]/60 text-xs" style="background-color: #201a14;">
+<div class="flex items-center gap-1">
+<span class="font-label text-[10px] mr-1" style="color: #c4a56a;">PERSONAJES:</span>
+<button class="font-label text-label font-bold px-2 py-0.5 shadow-none border border-[#d4b46a] uppercase" style="background-color: #d4b46a; color: #16130f;">
+      IARA SOLÍS
+    </button>
+<button class="border border-[#d4b46a]/40 font-label text-label px-2 py-0.5 uppercase transition-colors" onmouseout="this.style.backgroundColor='#28221b'" onmouseover="this.style.backgroundColor='#2e2820'" style="background-color: #28221b; color: #c4a56a;">
+      VALEN ARRECHEA
+    </button>
+<button class="border border-[#d4b46a]/40 font-label text-label px-2 py-0.5 uppercase transition-colors" onmouseout="this.style.backgroundColor='#28221b'" onmouseover="this.style.backgroundColor='#2e2820'" style="background-color: #28221b; color: #c4a56a;">
+      CIRO DE LAS BRUMAS
+    </button>
+<button class="border border-[#d4b46a]/50 px-1.5 py-0.5 font-bold hover:bg-[#2e2820]" style="background-color: #28221b; color: #e8d5a3;">
+      +
+    </button>
+</div>
+<div class="font-label text-[10px] mt-1 sm:mt-0 flex items-center gap-1" style="color: #c4a56a;">
+<span>Sincronizar con ficha local:</span>
+<span class="underline cursor-pointer hover:text-[#e8d5a3]">Elegir... (Iara_v2.json)</span>
+</div>
+</div>
+<!-- BARRA DE AVISO DE GUARDADO -->
+<div class="flex items-center justify-between px-space-md py-1 border-b border-[#d4b46a] text-xs" style="background-color: #1e1913;">
+<div class="flex items-center gap-1.5 font-label text-[11px] font-semibold" style="color: #e08a2c;">
+<span class="inline-block w-2 h-2 rounded-full bg-[#e08a2c]"></span>
+<span>Hay cambios sin guardar.</span>
+</div>
+<button class="font-button text-button px-3 py-0.5 font-bold transition-all active:scale-95 uppercase" style="background-color: #d4b46a; color: #16130f;">
+    GUARDAR
+  </button>
+</div>
+<!-- ==================== PAPEL INTERIOR: SEGUNDA HOJA (PÁGINA II) ==================== -->
+<div class="mt-3 border-2 border-[#d4b46a] p-5 relative" style="background-color: #241f19; color: #f3ead7;">
+<!-- Doble filete oro interior sutil -->
+<div class="absolute inset-[3px] border border-[#8c6a28]/60 pointer-events-none"></div>
+<!-- Crop marks decorativos en las 4 esquinas interiores -->
+<div class="absolute top-2 left-2 w-2 h-2 border-t border-l border-[#d4b46a] pointer-events-none"></div>
+<div class="absolute top-2 right-2 w-2 h-2 border-t border-r border-[#d4b46a] pointer-events-none"></div>
+<div class="absolute bottom-2 left-2 w-2 h-2 border-b border-l border-[#d4b46a] pointer-events-none"></div>
+<div class="absolute bottom-2 right-2 w-2 h-2 border-b border-r border-[#d4b46a] pointer-events-none"></div>
+<!-- Encabezado de página interior -->
+<header class="text-center mb-4">
+<p class="font-label text-[10px] tracking-[0.2em] uppercase" style="color: #c4a56a;">
+      ~ ~ ~ ALBOR ~ ~ HOJA DE PERSONAJE ~ PÁGINA II ~ ~ ~
+    </p>
+<h1 class="font-display text-2xl font-bold tracking-wider mt-0.5 mb-1" style="color: #f3ead7;">
+      IARA SOLÍS
+    </h1>
+<div class="gold-line max-w-[280px] mx-auto"></div>
+</header>
+<!-- ==================== 1. SECCIÓN LAZOS ==================== -->
+<section class="mb-5">
+<div class="flex items-center justify-between border-b border-[#d4b46a]/60 pb-1 mb-2">
+<h2 class="font-section-title text-section-title tracking-widest uppercase" style="color: #f3ead7;">
+        - LAZOS -
+      </h2>
+<span class="font-label text-[10px] uppercase tracking-wider" style="color: #c4a56a;">
+        VÍNCULO &amp; DESCRIPCIÓN
+      </span>
+</div>
+<div class="space-y-2">
+<!-- Fila 1 -->
+<div class="relative pb-1">
+<div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+<span class="font-label text-label font-bold min-w-[160px]" style="color: #f3ead7;">Tío Ernesto</span>
+<p class="font-body text-body italic flex-1" style="color: #f3ead7;">
+            "Me enseñó a leer las estrellas y a no temerle a las corrientes del Delta."
+          </p>
+</div>
+<div class="gold-line mt-1 relative row-notch"></div>
+</div>
+<!-- Fila 2 -->
+<div class="relative pb-1">
+<div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+<span class="font-label text-label font-bold min-w-[160px]" style="color: #f3ead7;">Mateo del Faro</span>
+<p class="font-body text-body italic flex-1" style="color: #f3ead7;">
+            "Guarda mis mapas en secreto frente a las patrullas del gremio."
+          </p>
+</div>
+<div class="gold-line mt-1 relative row-notch"></div>
+</div>
+<!-- Fila 3 -->
+<div class="relative pb-1">
+<div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+<span class="font-label text-label font-bold min-w-[160px]" style="color: #f3ead7;">Sombra de Juncal</span>
+<p class="font-body text-body italic flex-1" style="color: #f3ead7;">
+            "Espía ribereña que me debe dos favores y un barco."
+          </p>
+</div>
+<div class="gold-line mt-1 relative row-notch"></div>
+</div>
+</div>
+</section>
+<!-- ==================== 2. DOS COLUMNAS (ETIQUETAS & DOMINIO / EQUIPO) ==================== -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5">
+<!-- Columna Izquierda: Etiquetas y Dominio -->
+<div class="flex flex-col gap-4">
+<!-- Subsección ETIQUETAS -->
+<div>
+<div class="border-b border-[#d4b46a]/60 pb-1 mb-2">
+<h3 class="font-section-title text-section-title tracking-widest uppercase" style="color: #f3ead7;">
+            - ETIQUETAS -
+          </h3>
+</div>
+<div class="space-y-1.5">
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">1:</span>
+<span class="font-input text-input" style="color: #f3ead7;">Curiosa</span>
+</div>
+<div class="gold-line"></div>
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">2:</span>
+<span class="font-input text-input" style="color: #f3ead7;">Terca</span>
+</div>
+<div class="gold-line"></div>
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">3:</span>
+<span class="font-input text-input" style="color: #f3ead7;">Nadadora</span>
+</div>
+<div class="gold-line"></div>
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">4:</span>
+<span class="font-input text-input italic" style="color: #c4a56a/60;">—</span>
+</div>
+<div class="gold-line"></div>
+</div>
+</div>
+<!-- Subsección DOMINIO -->
+<div>
+<div class="flex items-center justify-between border-b border-[#d4b46a]/60 pb-1 mb-2">
+<h3 class="font-section-title text-section-title tracking-widest uppercase" style="color: #f3ead7;">
+            - DOMINIO -
+          </h3>
+<!-- Botón AGREGAR en Cinzel con borde 1px #d4b46a y texto #e8d5a3 -->
+<button class="border border-[#d4b46a] font-button text-button px-2 py-0.5 uppercase transition-colors duration-150" onmouseout="this.style.backgroundColor='transparent'" onmouseover="this.style.backgroundColor='#2e2820'" style="background: transparent; color: #e8d5a3;">
+            AGREGAR
+          </button>
+</div>
+<!-- Una sola línea escrita limpia, sin renglones vacíos preasignados -->
+<div class="space-y-1.5">
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">1:</span>
+<span class="font-input text-input" style="color: #f3ead7;">Delta del río</span>
+</div>
+<div class="gold-line relative row-notch"></div>
+</div>
+</div>
+</div>
+<!-- Columna Derecha: EQUIPO -->
+<div>
+<div class="flex items-center justify-between border-b border-[#d4b46a]/60 pb-1 mb-2">
+<h3 class="font-section-title text-section-title tracking-widest uppercase" style="color: #f3ead7;">
+          - EQUIPO -
+        </h3>
+<!-- Botón AGREGAR -->
+<button class="border border-[#d4b46a] font-button text-button px-2 py-0.5 uppercase transition-colors duration-150" onmouseout="this.style.backgroundColor='transparent'" onmouseover="this.style.backgroundColor='#2e2820'" style="background: transparent; color: #e8d5a3;">
+          AGREGAR
+        </button>
+</div>
+<!-- Sólo tres líneas escritas. Ninguna vacía debajo. -->
+<div class="space-y-2">
+<div class="relative pb-0.5">
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">1:</span>
+<span class="font-input text-input" style="color: #f3ead7;">Brújula de bronce</span>
+</div>
+<div class="gold-line mt-1 relative row-notch"></div>
+</div>
+<div class="relative pb-0.5">
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">2:</span>
+<span class="font-input text-input" style="color: #f3ead7;">Cuerda 15 m</span>
+</div>
+<div class="gold-line mt-1 relative row-notch"></div>
+</div>
+<div class="relative pb-0.5">
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">3:</span>
+<span class="font-input text-input" style="color: #f3ead7;">Tinta y plumas</span>
+</div>
+<div class="gold-line mt-1 relative row-notch"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 3. SECCIÓN MAESTRÍAS ==================== -->
+<section class="mb-5">
+<div class="flex items-center justify-between border-b border-[#d4b46a]/60 pb-1 mb-2">
+<h2 class="font-section-title text-section-title tracking-widest uppercase" style="color: #f3ead7;">
+        - MAESTRÍAS -
+      </h2>
+<div class="flex items-center gap-3">
+<span class="font-label text-[10px] uppercase tracking-wider" style="color: #c4a56a;">
+          DESCRIPCIÓN
+        </span>
+<button class="border border-[#d4b46a] font-button text-button px-2 py-0.5 uppercase transition-colors duration-150" onmouseout="this.style.backgroundColor='transparent'" onmouseover="this.style.backgroundColor='#2e2820'" style="background: transparent; color: #e8d5a3;">
+          AGREGAR
+        </button>
+</div>
+</div>
+<!-- Una sola fila ya completa sobre línea base dorada con muesca vertical -->
+<div class="relative pb-1">
+<div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+<div class="flex items-center gap-2 min-w-[200px]">
+<span class="material-symbols-outlined text-[14px]" style="color: #d4b46a;">star</span>
+<span class="font-label text-label font-bold" style="color: #f3ead7;">Cartografía</span>
+</div>
+<p class="font-body text-body italic flex-1" style="color: #f3ead7;">
+          "Lee un mapa aunque esté mojado"
+        </p>
+</div>
+<div class="gold-line-2px mt-1 relative row-notch"></div>
+</div>
+</section>
+<!-- ==================== 4. SECCIÓN ARMAS Y ARMADURA ==================== -->
+<section class="mb-4">
+<div class="flex items-center justify-between border-b border-[#d4b46a]/60 pb-1 mb-2">
+<h2 class="font-section-title text-section-title tracking-widest uppercase" style="color: #f3ead7;">
+        - ARMAS Y ARMADURA -
+      </h2>
+<button class="border border-[#d4b46a] font-button text-button px-2 py-0.5 uppercase transition-colors duration-150" onmouseout="this.style.backgroundColor='transparent'" onmouseover="this.style.backgroundColor='#2e2820'" style="background: transparent; color: #e8d5a3;">
+        AGREGAR
+      </button>
+</div>
+<!-- Un solo bloque completo de arma -->
+<div class="border border-[#d4b46a] p-3 relative" style="background-color: #1e1914;">
+<!-- Esquinas del bloque de arma -->
+<div class="absolute -top-[1px] -left-[1px] w-[5px] h-[5px] border-t border-l border-[#d4b46a]"></div>
+<div class="absolute -top-[1px] -right-[1px] w-[5px] h-[5px] border-t border-r border-[#d4b46a]"></div>
+<div class="absolute -bottom-[1px] -left-[1px] w-[5px] h-[5px] border-b border-l border-[#d4b46a]"></div>
+<div class="absolute -bottom-[1px] -right-[1px] w-[5px] h-[5px] border-b border-r border-[#d4b46a]"></div>
+<div class="flex flex-wrap items-baseline justify-between gap-2 pb-1.5 border-b border-[#d4b46a]/40">
+<div class="flex items-center gap-2">
+<span class="font-display text-input font-bold" style="color: #f3ead7;">Daga curva</span>
+<span class="font-label text-[10px] font-medium uppercase tracking-wider" style="color: #c4a56a;">· Arma Ligera</span>
+</div>
+<div class="font-body text-body italic" style="color: #c4a56a;">
+          Notas: <span style="color: #f3ead7;">ligera, arrojadiza</span>
+</div>
+</div>
+<!-- Parámetros canónicos de Albor con Agilidad (AGI 3) -->
+<div class="flex flex-wrap items-center justify-between gap-3 pt-2 text-xs">
+<div class="flex items-center gap-3">
+<div>
+<span class="font-label text-[10px] font-bold" style="color: #c4a56a;">STAT:</span>
+<span class="font-label text-label font-bold ml-1" style="color: #e8d5a3;">AGI (3)</span>
+</div>
+<div class="w-[1px] h-3 bg-[#d4b46a]/50"></div>
+<div>
+<span class="font-label text-[10px] font-bold" style="color: #c4a56a;">DADO:</span>
+<span class="font-label text-label font-bold ml-1" style="color: #e8d5a3;">D6</span>
+</div>
+<div class="w-[1px] h-3 bg-[#d4b46a]/50"></div>
+<div>
+<span class="font-label text-[10px] font-bold" style="color: #c4a56a;">MOMENTUM:</span>
+<span class="font-label text-label font-bold ml-1" style="color: #e8d5a3;">0</span>
+</div>
+<div class="w-[1px] h-3 bg-[#d4b46a]/50"></div>
+<div class="flex items-center gap-1">
+<span class="font-label text-[10px] font-bold" style="color: #c4a56a;">DIFICULTAD:</span>
+<span class="inline-flex items-center border border-[#d4b46a]/60 px-1 font-label text-[10px]" style="background-color: #241f19;">
+<span class="cursor-pointer pr-1 hover:text-[#e8d5a3]" style="color: #c4a56a;">-</span>
+<span class="font-bold px-1" style="color: #e8d5a3;">9</span>
+<span class="cursor-pointer pl-1 hover:text-[#e8d5a3]" style="color: #c4a56a;">+</span>
+</span>
+<span class="font-label text-label font-bold ml-0.5" style="color: #e8d5a3;">E(9)</span>
+</div>
+</div>
+<!-- Botón de Tirada táctil canónico en Oro -->
+<button class="border border-[#d4b46a] px-3 py-1 font-button text-button font-bold active:scale-95 transition-all uppercase" style="background-color: #d4b46a; color: #16130f;">
+          TIRAR 3D6
+        </button>
+</div>
+</div>
+</section>
+<!-- ==================== 5. PIE DE HOJA EDITORIAL ==================== -->
+<footer class="pt-3 mt-4 border-t border-[#d4b46a]/60 flex flex-col sm:flex-row items-center justify-between text-[11px]" style="color: #c4a56a;">
+<span class="font-label font-bold tracking-wider">ALBOR · ALBOR V0.4 — 2026</span>
+<span class="font-body italic text-center sm:text-right">
+      Albor es un juego de rol, fantasía y exploración creado por Augusto Marini.
+    </span>
+</footer>
+</div>
+<!-- ==================== 6. DEBAJO DE LA HOJA: DEMOSTRACIÓN INTERACTIVA ==================== -->
+<div class="mt-4 border border-dashed border-[#d4b46a] p-3.5 relative" style="background-color: #1a1612;">
+<div class="flex items-center justify-between mb-2">
+<span class="font-display text-[11px] tracking-[0.14em] uppercase font-bold" style="color: #c4a56a;">
+      - GESTO INTERACTIVO: COMPORTAMIENTO AL PULSAR «AGREGAR» -
+    </span>
+<span class="font-label text-[9px] px-1.5 py-0.5 border border-[#d4b46a]" style="background-color: rgba(212,180,106,0.15); color: #e8d5a3;">
+      PATRÓN DINÁMICO
+    </span>
+</div>
+<!-- Muestra del bloque EQUIPO con botón en estado presionado y nuevo renglón -->
+<div class="border border-[#d4b46a] p-3" style="background-color: #241f19;">
+<div class="flex items-center justify-between border-b border-[#d4b46a]/60 pb-1 mb-2">
+<span class="font-section-title text-[12px] tracking-widest uppercase font-bold" style="color: #f3ead7;">
+        - EQUIPO -
+      </span>
+<!-- Botón AGREGAR en hover / activo -->
+<button class="border border-[#d4b46a] font-button text-button px-2 py-0.5 uppercase shadow-none ring-1 ring-[#d4b46a]/50" style="background-color: #2e2820; color: #e8d5a3;">
+        AGREGAR
+      </button>
+</div>
+<div class="space-y-1.5">
+<!-- Renglón 1 existente -->
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">1:</span>
+<span class="font-input text-input" style="color: #f3ead7;">Brújula de bronce</span>
+</div>
+<div class="gold-line"></div>
+<!-- Renglón 2 existente -->
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">2:</span>
+<span class="font-input text-input" style="color: #f3ead7;">Cuerda 15 m</span>
+</div>
+<div class="gold-line"></div>
+<!-- Renglón 3 existente -->
+<div class="flex items-center gap-2">
+<span class="font-label text-[11px] font-bold w-4" style="color: #c4a56a;">3:</span>
+<span class="font-input text-input" style="color: #f3ead7;">Tinta y plumas</span>
+</div>
+<div class="gold-line"></div>
+<!-- Renglón 4 RECIÉN AGREGADO con cursor -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-2 flex-1">
+<span class="font-label text-[11px] font-bold w-4" style="color: #d4b46a;">4:</span>
+<div class="flex items-center">
+<span class="font-input text-input font-semibold" style="color: #f3ead7;">Frasco con aceite de linaza</span>
+<span class="inline-block w-[1.5px] h-4 ml-0.5 typing-cursor" style="background-color: #d4b46a;"></span>
+</div>
+</div>
+<span class="font-label text-[10px] tracking-wider uppercase pl-2" style="color: #c4a56a;">
+          ✦ recién agregado (un solo campo dinámico)
+        </span>
+</div>
+<div class="gold-line-2px"></div>
+</div>
+</div>
+<!-- Nota editorial en Cormorant Garamond dorada -->
+<p class="font-body text-body italic mt-2 text-center" style="color: #c4a56a;">
+    "Al pulsar «Agregar», se añade únicamente un renglón nuevo listo para escribir, evitando listas infinitas vacías preasignadas."
+  </p>
+</div>
+</main>
+</body></html>

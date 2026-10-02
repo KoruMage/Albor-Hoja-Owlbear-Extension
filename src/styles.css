@@ -160,6 +160,46 @@ code {
   opacity: 0.6;
 }
 
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 10px;
+  background: transparent;
+  color: var(--ink-soft);
+  letter-spacing: 0.08em;
+}
+
+.theme-toggle__track {
+  position: relative;
+  width: 28px;
+  height: 14px;
+  border: 1px solid var(--gold);
+  background: transparent;
+}
+
+.theme-toggle__knob {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 10px;
+  height: 10px;
+  background: var(--gold);
+}
+
+.theme-toggle[aria-checked="true"] {
+  color: var(--ink);
+}
+
+.theme-toggle[aria-checked="true"] .theme-toggle__track {
+  background: var(--gold);
+}
+
+.theme-toggle[aria-checked="true"] .theme-toggle__knob {
+  left: 15px;
+  background: var(--paper);
+}
+
 /* Controles */
 
 button,

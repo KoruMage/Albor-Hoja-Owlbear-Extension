@@ -482,3 +482,129 @@
 .dialog__actions > button {
   padding: 6px 14px;
 }
+
+/* Sala y vista general del director */
+
+.room-code {
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--gold-dark);
+}
+
+.room-status {
+  margin: 0 0 8px;
+}
+
+.room-panel__identity,
+.room-panel__join {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: flex-end;
+  margin-bottom: 8px;
+}
+
+.room-panel__identity label,
+.room-panel__join label {
+  min-width: 140px;
+}
+
+.room-panel__invite {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.room-panel__invite p,
+.room-panel__or {
+  margin: 0;
+}
+
+.room-panel .btn-primary {
+  margin-top: 4px;
+}
+
+.back-link {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: Cinzel, serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.back-link:hover {
+  background: transparent;
+  color: var(--gold-dark);
+}
+
+.read-banner {
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--gold);
+  color: var(--ink-soft);
+  font-family: Cinzel, serif;
+  letter-spacing: 0.06em;
+}
+
+.mesa__note {
+  margin-top: 0;
+}
+
+.mesa__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 10px;
+}
+
+.mesa-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--paper-2);
+  border: 1px solid var(--gold-light);
+  box-shadow: inset 0 0 0 4px var(--paper), inset 0 0 0 5px var(--gold-light);
+}
+
+.mesa-card h4 {
+  margin: 0;
+  font-family: Cinzel, serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.mesa-card p {
+  margin: 0;
+}
+
+.mesa-card__concept {
+  font-style: italic;
+}
+
+.mesa-card__who,
+.mesa-card__meta,
+.mesa-card__stats,
+.mesa-card__resources {
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+}
+
+.mesa-card__who,
+.mesa-card__stats {
+  font-family: Cinzel, serif;
+  letter-spacing: 0.04em;
+}
+
+.mesa-card > button {
+  align-self: flex-start;
+  margin-top: 6px;
+}
