@@ -1,6 +1,7 @@
 import type { Player } from "@owlbear-rodeo/sdk";
 import {
   AlborCharacter,
+  Arma,
   DIE_SIZES,
   DieSize,
   STATS_INFO,
@@ -11,11 +12,11 @@ import {
   newId,
 } from "../types";
 import { DiceRoller, type DiceRollSummary } from "./DiceRoller";
+import { ArmaBlock } from "./sheet/ArmaBlock";
+import { AreaField, NumberField, TextField, WriteLine } from "./sheet/fields";
+import { ResourceBox, SingleResource } from "./sheet/ResourceBox";
 
-function num(value: string, fallback: number): number {
-  const n = Number(value);
-  return Number.isFinite(n) ? n : fallback;
-}
+const WORDMARK = "~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~";
 
 export function CharacterSheet({
   character,
@@ -25,6 +26,7 @@ export function CharacterSheet({
   dicePlusEnabled,
   dirty,
   onChange,
+  onAssign,
   onSave,
   onRolled,
 }: {
@@ -35,6 +37,7 @@ export function CharacterSheet({
   dicePlusEnabled: boolean;
   dirty?: boolean;
   onChange?: (next: AlborCharacter) => void;
+  onAssign?: (ownerId: string | null) => void;
   onSave?: () => void;
   onRolled?: (payload: DiceRollSummary & { characterName: string }) => void;
 }) {
@@ -84,12 +87,18 @@ export function CharacterSheet({
   };
 
   const patchNamed = (
-    key: "lazos" | "maestrias" | "armas",
+    key: "lazos" | "maestrias",
     id: string,
     next: Partial<Talento>,
   ) => {
     patch({
       [key]: character[key].map((item) => (item.id === id ? { ...item, ...next } : item)),
+    });
+  };
+
+  const patchArma = (id: string, next: Partial<Arma>) => {
+    patch({
+      armas: character.armas.map((item) => (item.id === id ? { ...item, ...next } : item)),
     });
   };
 
@@ -99,25 +108,37 @@ export function CharacterSheet({
     patch({ [key]: next });
   };
 
-  const saveBar = (sticky: boolean) =>
-    !readOnly && onSave && (
-      <div className={sticky ? "sheet-save sheet-save--sticky" : "sheet-save"}>
-        <button
-          type="button"
-          className="btn-primary"
-          disabled={!dirty}
-          onClick={onSave}
-        >
-          Guardar
-        </button>
-        <span className={dirty ? "warn" : "muted"}>
-          {dirty ? "Hay cambios sin guardar." : "Los cambios se guardan al pulsar Guardar."}
-        </span>
-      </div>
-    );
+  const showAssign = Boolean(isGM && players);
+  const ownerLabel = (() => {
+    if (!character.ownerId) return "Sin asignar";
+    const owner = players?.find((p) => p.id === character.ownerId);
+    if (!owner) return "Asignado (desconectado)";
+    return `${owner.name}${owner.role === "GM" ? " (GM)" : ""}`;
+  })();
+
+  const nameField = (
+    <label className="field-center">
+      Nombre del Personaje
+      <TextField
+        value={character.nombre}
+        readOnly={readOnly}
+        onChange={(nombre) => patch({ nombre })}
+      />
+    </label>
+  );
 
   return (
-    <>
+    <div className={readOnly ? "sheet-stack sheet-stack--read" : "sheet-stack"}>
+      {!readOnly && onSave && (
+        <div className={dirty ? "sheet-save sheet-save--dirty" : "sheet-save"}>
+          <span className={dirty ? "sheet-save__status warn" : "sheet-save__status muted"}>
+            {dirty ? "Hay cambios sin guardar." : "Los cambios se guardan al pulsar Guardar."}
+          </span>
+          <button type="button" className="btn-primary" disabled={!dirty} onClick={onSave}>
+            Guardar
+          </button>
+        </div>
+      )}
       {!readOnly && onRolled && (
         <DiceRoller
           character={character}
@@ -125,303 +146,310 @@ export function CharacterSheet({
           onRolled={onRolled}
         />
       )}
-      {saveBar(true)}
+
       <div className="sheet">
-      <p className="wordmark">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</p>
+        <p className="wordmark">{WORDMARK}</p>
 
-      <label className="field-center">
-        Nombre del Personaje
-        <input
-          value={character.nombre}
-          disabled={readOnly}
-          onChange={(e) => patch({ nombre: e.target.value })}
-        />
-      </label>
+        {nameField}
 
-      <label className="field-full">
-        Concepto del personaje
-        <input
-          value={character.concepto}
-          disabled={readOnly}
-          onChange={(e) => patch({ concepto: e.target.value })}
-        />
-      </label>
+        <label className="field-full field-concept">
+          Concepto del personaje
+          <TextField
+            value={character.concepto}
+            readOnly={readOnly}
+            onChange={(concepto) => patch({ concepto })}
+          />
+        </label>
 
-      <div className="id-row">
-        <label>
-          Linaje
-          <input
-            value={character.linaje}
-            disabled={readOnly}
-            onChange={(e) => patch({ linaje: e.target.value })}
-          />
-        </label>
-        <label>
-          Ocupación (o Gremio)
-          <input
-            value={character.ocupacion}
-            disabled={readOnly}
-            onChange={(e) => patch({ ocupacion: e.target.value })}
-          />
-        </label>
-        <label>
-          Rol
-          <input
-            value={character.rol}
-            disabled={readOnly}
-            onChange={(e) => patch({ rol: e.target.value })}
-          />
-        </label>
-        <label>
-          Nivel
-          <input
-            type="number"
-            min={1}
-            value={character.nivel}
-            disabled={readOnly}
-            onChange={(e) => patch({ nivel: num(e.target.value, 1) })}
-          />
-        </label>
-        <label>
-          Tamaño
-          <input
-            value={character.tamano}
-            disabled={readOnly}
-            onChange={(e) => patch({ tamano: e.target.value })}
-          />
-        </label>
-        {isGM && players && (
+        <div className={showAssign ? "id-row id-row--gm" : "id-row"}>
           <label>
-            Asignado a
-            <select
-              value={character.ownerId ?? ""}
-              disabled={readOnly}
-              onChange={(e) => patch({ ownerId: e.target.value || null })}
-            >
-              <option value="">Sin asignar</option>
-              {(players ?? []).map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
-                </option>
-              ))}
-            </select>
+            Linaje
+            <TextField
+              value={character.linaje}
+              readOnly={readOnly}
+              onChange={(linaje) => patch({ linaje })}
+            />
           </label>
-        )}
-      </div>
-
-      <div className="attr-bar">
-        {STATS_INFO.map((s) => (
-          <div key={s.key} className="stat-block">
-            <div className="stat-tab">
-              <strong>{s.label.toUpperCase()}</strong>
-              <input
-                type="number"
-                min={1}
-                max={8}
-                value={character.stats[s.key].valor}
-                disabled={readOnly}
-                onChange={(e) => patchStat(s.key, "valor", num(e.target.value, 1))}
-                aria-label={`${s.label} dados`}
-              />
-            </div>
-            <div className="dado-banner">
-              dado base
-              <select
-                value={character.stats[s.key].dado}
-                disabled={readOnly}
-                onChange={(e) =>
-                  patchStat(s.key, "dado", Number(e.target.value) as DieSize)
-                }
-                aria-label={`${s.label} dado base`}
-              >
-                {DIE_SIZES.map((d) => (
-                  <option key={d} value={d}>
-                    d{d}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="resource-board">
-        <ResourceBox
-          title="Determinación"
-          leftLabel="actual"
-          rightLabel="Máxima"
-          actual={character.det.actual}
-          max={character.det.max}
-          extraLabel="Reserva"
-          extra={character.reservaDet}
-          readOnly={readOnly}
-          onActual={(n) => patch({ det: { ...character.det, actual: n } })}
-          onMax={(n) =>
-            patch({ det: { actual: Math.min(character.det.actual, n), max: n } })
-          }
-          onExtra={(n) => patch({ reservaDet: n })}
-        />
-        <ResourceBox
-          title="Chispa"
-          leftLabel="actual"
-          rightLabel="Máxima"
-          actual={character.chispa.actual}
-          max={character.chispa.max}
-          extraLabel="Reserva"
-          extra={character.reservaChispa}
-          readOnly={readOnly}
-          onActual={(n) => patch({ chispa: { ...character.chispa, actual: n } })}
-          onMax={(n) =>
-            patch({ chispa: { actual: Math.min(character.chispa.actual, n), max: n } })
-          }
-          onExtra={(n) => patch({ reservaChispa: n })}
-        />
-        <ResourceBox
-          title="Suerte"
-          leftLabel="Restante"
-          rightLabel="Total"
-          actual={character.suerte.actual}
-          max={character.suerte.max}
-          readOnly={readOnly}
-          onActual={(n) => patch({ suerte: { ...character.suerte, actual: n } })}
-          onMax={(n) =>
-            patch({ suerte: { actual: Math.min(character.suerte.actual, n), max: n } })
-          }
-        />
-      </div>
-
-      <div className="resource-board resource-board--secondary">
-        <ResourceBox
-          title="Heridas"
-          leftLabel="actuales"
-          rightLabel="Capacidad"
-          actual={character.heridas.actual}
-          max={character.heridas.max}
-          readOnly={readOnly}
-          onActual={(n) => patch({ heridas: { ...character.heridas, actual: n } })}
-          onMax={(n) =>
-            patch({ heridas: { actual: Math.min(character.heridas.actual, n), max: n } })
-          }
-        />
-        <label className="resource-box">
-          <h4>Movimiento</h4>
-          <input
-            type="number"
-            value={character.mov}
-            disabled={readOnly}
-            onChange={(e) => patch({ mov: num(e.target.value, 0) })}
-          />
-        </label>
-        <label className="resource-box">
-          <h4>Adrenalina (+VIG)</h4>
-          <input
-            value={character.adrenalina}
-            disabled={readOnly}
-            onChange={(e) => patch({ adrenalina: e.target.value })}
-          />
-        </label>
-        <label className="resource-box">
-          <h4>DP</h4>
-          <input
-            type="number"
-            value={character.dp}
-            disabled={readOnly}
-            onChange={(e) => patch({ dp: num(e.target.value, 0) })}
-          />
-        </label>
-      </div>
-
-      <section className="talentos">
-        <div className="panel__head">
-          <h3 className="section-title">- Talentos -</h3>
-          {!readOnly && (
-            <button
-              type="button"
-              onClick={() =>
-                patch({
-                  talentos: [
-                    ...character.talentos,
-                    { id: newId(), nombre: "", descripcion: "" },
-                  ],
-                })
-              }
-            >
-              Añadir
-            </button>
+          <label>
+            Ocupación (o Gremio)
+            <TextField
+              value={character.ocupacion}
+              readOnly={readOnly}
+              onChange={(ocupacion) => patch({ ocupacion })}
+            />
+          </label>
+          <label>
+            Rol
+            <TextField
+              value={character.rol}
+              readOnly={readOnly}
+              onChange={(rol) => patch({ rol })}
+            />
+          </label>
+          <label className="id-row__num">
+            Nivel
+            <NumberField
+              value={character.nivel}
+              min={1}
+              fallback={1}
+              readOnly={readOnly}
+              onChange={(nivel) => patch({ nivel })}
+            />
+          </label>
+          <label className="id-row__num">
+            Tamaño
+            <TextField
+              value={character.tamano}
+              readOnly={readOnly}
+              onChange={(tamano) => patch({ tamano })}
+            />
+          </label>
+          {showAssign && players && (
+            <label className="id-row__assign">
+              Asignado a
+              {readOnly ? (
+                <TextField value={ownerLabel} readOnly onChange={() => undefined} />
+              ) : (
+                <select
+                  value={character.ownerId ?? ""}
+                  onChange={(e) => {
+                    const ownerId = e.target.value || null;
+                    if (onAssign) onAssign(ownerId);
+                    else patch({ ownerId });
+                  }}
+                >
+                  <option value="">Sin asignar</option>
+                  {players.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                      {p.role === "GM" ? " (GM)" : ""}
+                    </option>
+                  ))}
+                  {character.ownerId && !players.some((p) => p.id === character.ownerId) && (
+                    <option value={character.ownerId}>Asignado (desconectado)</option>
+                  )}
+                </select>
+              )}
+            </label>
           )}
         </div>
-        {character.talentos.length === 0 && <p className="muted">Sin talentos aún.</p>}
-        {character.talentos.map((t) => (
-          <div key={t.id} className="talento">
-            <input
-              placeholder="Nombre"
-              value={t.nombre}
-              disabled={readOnly}
-              onChange={(e) => patchTalento(t.id, { nombre: e.target.value })}
+
+        <div className="attr-bar">
+          {STATS_INFO.map((s) => (
+            <div key={s.key} className="stat-block">
+              <div className="stat-tab">
+                <strong>{s.label.toUpperCase()}</strong>
+                <NumberField
+                  value={character.stats[s.key].valor}
+                  min={1}
+                  max={8}
+                  fallback={1}
+                  readOnly={readOnly}
+                  ariaLabel={`${s.label} dados`}
+                  onChange={(n) => patchStat(s.key, "valor", n)}
+                />
+              </div>
+              <div className="dado-banner">
+                <span>dado base</span>
+                {readOnly ? (
+                  <span className="dado-banner__value">d{character.stats[s.key].dado}</span>
+                ) : (
+                  <select
+                    value={character.stats[s.key].dado}
+                    onChange={(e) =>
+                      patchStat(s.key, "dado", Number(e.target.value) as DieSize)
+                    }
+                    aria-label={`${s.label} dado base`}
+                  >
+                    {DIE_SIZES.map((d) => (
+                      <option key={d} value={d}>
+                        d{d}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="resource-board">
+          <ResourceBox
+            title="Determinación"
+            leftLabel="actual"
+            rightLabel="Máxima"
+            actual={character.det.actual}
+            max={character.det.max}
+            extraLabel="Reserva"
+            extra={character.reservaDet}
+            readOnly={readOnly}
+            onActual={(n) => patch({ det: { ...character.det, actual: n } })}
+            onMax={(n) =>
+              patch({ det: { actual: Math.min(character.det.actual, n), max: n } })
+            }
+            onExtra={(n) => patch({ reservaDet: n })}
+          />
+          <ResourceBox
+            title="Chispa"
+            leftLabel="actual"
+            rightLabel="Máxima"
+            actual={character.chispa.actual}
+            max={character.chispa.max}
+            extraLabel="Reserva"
+            extra={character.reservaChispa}
+            readOnly={readOnly}
+            onActual={(n) => patch({ chispa: { ...character.chispa, actual: n } })}
+            onMax={(n) =>
+              patch({ chispa: { actual: Math.min(character.chispa.actual, n), max: n } })
+            }
+            onExtra={(n) => patch({ reservaChispa: n })}
+          />
+          <ResourceBox
+            title="Suerte"
+            leftLabel="Restante"
+            rightLabel="Total"
+            actual={character.suerte.actual}
+            max={character.suerte.max}
+            readOnly={readOnly}
+            onActual={(n) => patch({ suerte: { ...character.suerte, actual: n } })}
+            onMax={(n) =>
+              patch({ suerte: { actual: Math.min(character.suerte.actual, n), max: n } })
+            }
+          />
+        </div>
+
+        <div className="resource-board resource-board--secondary">
+          <ResourceBox
+            small
+            title="Heridas"
+            leftLabel="actuales"
+            rightLabel="Capacidad"
+            actual={character.heridas.actual}
+            max={character.heridas.max}
+            readOnly={readOnly}
+            onActual={(n) => patch({ heridas: { ...character.heridas, actual: n } })}
+            onMax={(n) =>
+              patch({ heridas: { actual: Math.min(character.heridas.actual, n), max: n } })
+            }
+          />
+          <SingleResource title="Movimiento">
+            <NumberField
+              value={character.mov}
+              readOnly={readOnly}
+              onChange={(mov) => patch({ mov })}
             />
-            <textarea
-              placeholder="descripción"
-              value={t.descripcion}
-              disabled={readOnly}
-              onChange={(e) => patchTalento(t.id, { descripcion: e.target.value })}
+          </SingleResource>
+          <SingleResource title="Adrenalina (+VIG)">
+            <TextField
+              value={character.adrenalina}
+              readOnly={readOnly}
+              onChange={(adrenalina) => patch({ adrenalina })}
             />
+          </SingleResource>
+          <SingleResource title="DP">
+            <NumberField
+              value={character.dp}
+              readOnly={readOnly}
+              onChange={(dp) => patch({ dp })}
+            />
+          </SingleResource>
+        </div>
+
+        <section className="sheet-section">
+          <div className="sheet-head">
+            <h3 className="section-title">- Talentos -</h3>
             {!readOnly && (
               <button
                 type="button"
-                className="btn-danger"
+                className="btn-small"
                 onClick={() =>
-                  patch({ talentos: character.talentos.filter((x) => x.id !== t.id) })
+                  patch({
+                    talentos: [
+                      ...character.talentos,
+                      { id: newId(), nombre: "", descripcion: "" },
+                    ],
+                  })
                 }
               >
-                Quitar
+                Añadir
               </button>
             )}
           </div>
-        ))}
-      </section>
+          {character.talentos.length === 0 && <p className="muted">Sin talentos aún.</p>}
+          {character.talentos.map((t) => (
+            <div key={t.id} className={readOnly ? "talento talento--pair" : "talento"}>
+              <TextField
+                className="talento__name"
+                placeholder="Nombre"
+                ariaLabel="Nombre del talento"
+                value={t.nombre}
+                readOnly={readOnly}
+                onChange={(nombre) => patchTalento(t.id, { nombre })}
+              />
+              <AreaField
+                placeholder="descripción"
+                ariaLabel="Descripción del talento"
+                rows={1}
+                value={t.descripcion}
+                readOnly={readOnly}
+                onChange={(descripcion) => patchTalento(t.id, { descripcion })}
+              />
+              {!readOnly && (
+                <button
+                  type="button"
+                  className="btn-danger talento__remove"
+                  onClick={() =>
+                    patch({ talentos: character.talentos.filter((x) => x.id !== t.id) })
+                  }
+                >
+                  Quitar
+                </button>
+              )}
+            </div>
+          ))}
+        </section>
 
-      <section>
-        <h3 className="section-title">Notas</h3>
-        <textarea
-          className="notes"
-          value={character.notas}
-          disabled={readOnly}
-          onChange={(e) => patch({ notas: e.target.value })}
-        />
-      </section>
+        <section className="sheet-section">
+          <div className="sheet-head">
+            <h3 className="section-title">- Notas -</h3>
+          </div>
+          <AreaField
+            className="notes"
+            ariaLabel="Notas"
+            rows={3}
+            value={character.notas}
+            readOnly={readOnly}
+            onChange={(notas) => patch({ notas })}
+          />
+        </section>
       </div>
 
       <div className="sheet">
-        <p className="wordmark">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</p>
-        <label className="field-center">
-          Nombre del Personaje
-          <input
-            value={character.nombre}
-            disabled={readOnly}
-            onChange={(e) => patch({ nombre: e.target.value })}
-          />
-        </label>
+        <p className="wordmark">{WORDMARK}</p>
+        {nameField}
 
-        <section>
-          <div className="panel__head">
+        <section className="sheet-section">
+          <div className="sheet-head">
             <h3 className="section-title">- Lazos -</h3>
-            <span className="muted">notas</span>
+            <span className="sheet-head__hint">notas</span>
           </div>
-          {character.lazos.map((item) => (
+          {character.lazos.map((item, index) => (
             <div key={item.id} className="talento talento--pair">
-              <input
+              <TextField
+                className="talento__name"
                 placeholder="Lazo"
+                ariaLabel={`Lazo ${index + 1}`}
                 value={item.nombre}
-                disabled={readOnly}
-                onChange={(e) => patchNamed("lazos", item.id, { nombre: e.target.value })}
+                readOnly={readOnly}
+                onChange={(nombre) => patchNamed("lazos", item.id, { nombre })}
               />
-              <input
+              <TextField
+                className="talento__notes"
                 placeholder="notas"
+                ariaLabel={`Notas del lazo ${index + 1}`}
                 value={item.descripcion}
-                disabled={readOnly}
-                onChange={(e) =>
-                  patchNamed("lazos", item.id, { descripcion: e.target.value })
-                }
+                readOnly={readOnly}
+                onChange={(descripcion) => patchNamed("lazos", item.id, { descripcion })}
               />
             </div>
           ))}
@@ -429,170 +457,110 @@ export function CharacterSheet({
 
         <div className="page2-mid">
           <div>
-            <h3 className="section-title">- Etiquetas -</h3>
-            <div className="tag-grid">
-              {character.etiquetas.map((etiqueta, index) => (
-                <input
-                  key={`etq-${index}`}
-                  value={etiqueta}
-                  disabled={readOnly}
-                  onChange={(e) => patchLine("etiquetas", index, e.target.value)}
+            <section className="sheet-section">
+              <div className="sheet-head">
+                <h3 className="section-title">- Etiquetas -</h3>
+              </div>
+              <div className="tag-grid">
+                {character.etiquetas.map((etiqueta, index) => (
+                  <WriteLine
+                    key={`etq-${index}`}
+                    ariaLabel={`Etiqueta ${index + 1}`}
+                    value={etiqueta}
+                    readOnly={readOnly}
+                    onChange={(value) => patchLine("etiquetas", index, value)}
+                  />
+                ))}
+              </div>
+            </section>
+            <section className="sheet-section">
+              <div className="sheet-head">
+                <h3 className="section-title">- Dominio -</h3>
+              </div>
+              {character.dominio.map((linea, index) => (
+                <WriteLine
+                  key={`dom-${index}`}
+                  ariaLabel={`Dominio ${index + 1}`}
+                  value={linea}
+                  readOnly={readOnly}
+                  onChange={(value) => patchLine("dominio", index, value)}
                 />
               ))}
+            </section>
+          </div>
+          <section className="sheet-section">
+            <div className="sheet-head">
+              <h3 className="section-title">- Equipo -</h3>
             </div>
-            <h3 className="section-title">- Dominio -</h3>
-            {character.dominio.map((linea, index) => (
-              <input
-                key={`dom-${index}`}
-                className="line-input"
-                value={linea}
-                disabled={readOnly}
-                onChange={(e) => patchLine("dominio", index, e.target.value)}
-              />
-            ))}
-          </div>
-          <div>
-            <h3 className="section-title">- Equipo -</h3>
             {character.equipo.map((item, index) => (
-              <input
+              <WriteLine
                 key={`eq-${index}`}
-                className="line-input"
+                ariaLabel={`Equipo ${index + 1}`}
                 value={item}
-                disabled={readOnly}
-                onChange={(e) => patchLine("equipo", index, e.target.value)}
+                readOnly={readOnly}
+                onChange={(value) => patchLine("equipo", index, value)}
               />
             ))}
-          </div>
+          </section>
         </div>
 
-        <section>
-          <div className="panel__head">
+        <section className="sheet-section">
+          <div className="sheet-head">
             <h3 className="section-title">- Maestrías -</h3>
-            <span className="muted">descripción</span>
+            <span className="sheet-head__hint">descripción</span>
           </div>
-          {character.maestrias.map((item) => (
-            <div key={item.id} className="talento talento--pair">
-              <input
+          {character.maestrias.map((item, index) => (
+            <div key={item.id} className="talento talento--pair talento--wide">
+              <TextField
+                className="talento__name"
                 placeholder="Maestría"
+                ariaLabel={`Maestría ${index + 1}`}
                 value={item.nombre}
-                disabled={readOnly}
-                onChange={(e) =>
-                  patchNamed("maestrias", item.id, { nombre: e.target.value })
-                }
+                readOnly={readOnly}
+                onChange={(nombre) => patchNamed("maestrias", item.id, { nombre })}
               />
-              <input
+              <TextField
                 placeholder="descripción"
+                ariaLabel={`Descripción de la maestría ${index + 1}`}
                 value={item.descripcion}
-                disabled={readOnly}
-                onChange={(e) =>
-                  patchNamed("maestrias", item.id, { descripcion: e.target.value })
-                }
+                readOnly={readOnly}
+                onChange={(descripcion) => patchNamed("maestrias", item.id, { descripcion })}
               />
             </div>
           ))}
         </section>
 
-        <section>
-          <div className="panel__head">
+        <section className="sheet-section">
+          <div className="sheet-head">
             <h3 className="section-title">- Armas y Armadura -</h3>
-            <span className="muted">notas</span>
+            <span className="sheet-head__hint">1 dado + momentum (máx. stat)</span>
           </div>
-          {character.armas.map((item) => (
-            <div key={item.id} className="talento talento--pair">
-              <input
-                placeholder="Arma o armadura"
-                value={item.nombre}
-                disabled={readOnly}
-                onChange={(e) => patchNamed("armas", item.id, { nombre: e.target.value })}
+          <div className="arma-list">
+            {character.armas.map((item) => (
+              <ArmaBlock
+                key={item.id}
+                item={item}
+                character={character}
+                readOnly={readOnly}
+                dicePlusEnabled={dicePlusEnabled}
+                onPatch={patchArma}
+                onRolled={onRolled}
               />
-              <input
-                placeholder="notas"
-                value={item.descripcion}
-                disabled={readOnly}
-                onChange={(e) =>
-                  patchNamed("armas", item.id, { descripcion: e.target.value })
-                }
-              />
-            </div>
-          ))}
+            ))}
+          </div>
         </section>
 
         <footer className="sheet-footer">
-        <div>
-          <strong>albor</strong>
-          <div>Albor v0.4 — 2026</div>
-        </div>
-        <div>
-          Albor es un juego de rol, fantasía y exploración creado por Augusto Marini.
-          Todos los derechos reservados.
-        </div>
-      </footer>
-    </div>
-      {saveBar(false)}
-    </>
-  );
-}
-
-function ResourceBox({
-  title,
-  leftLabel,
-  rightLabel,
-  actual,
-  max,
-  extraLabel,
-  extra,
-  readOnly,
-  onActual,
-  onMax,
-  onExtra,
-}: {
-  title: string;
-  leftLabel: string;
-  rightLabel: string;
-  actual: number;
-  max: number;
-  extraLabel?: string;
-  extra?: number;
-  readOnly?: boolean;
-  onActual: (n: number) => void;
-  onMax: (n: number) => void;
-  onExtra?: (n: number) => void;
-}) {
-  return (
-    <div className="resource-box">
-      <h4>{title}</h4>
-      <span className="resource">
-        <label>
-          {leftLabel}
-          <input
-            type="number"
-            value={actual}
-            disabled={readOnly}
-            onChange={(e) => onActual(num(e.target.value, 0))}
-          />
-        </label>
-        <span>/</span>
-        <label>
-          {rightLabel}
-          <input
-            type="number"
-            value={max}
-            disabled={readOnly}
-            onChange={(e) => onMax(num(e.target.value, 0))}
-          />
-        </label>
-      </span>
-      {onExtra && extraLabel !== undefined && extra !== undefined && (
-        <label>
-          {extraLabel}
-          <input
-            type="number"
-            value={extra}
-            disabled={readOnly}
-            onChange={(e) => onExtra(num(e.target.value, 0))}
-          />
-        </label>
-      )}
+          <div className="sheet-footer__brand">
+            <strong>albor</strong>
+            <span>Albor v0.4 — 2026</span>
+          </div>
+          <p className="sheet-footer__legal">
+            Albor es un juego de rol, fantasía y exploración creado por Augusto Marini.
+            Todos los derechos reservados.
+          </p>
+        </footer>
+      </div>
     </div>
   );
 }

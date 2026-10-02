@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Albor - Variantes de Estado (Owlbear Rodeo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-pergamino: #f7f1e4;
+      --paper: #fffdf8;
+      --gold: #b88e44;
+      --gold-dark: #8c6a28;
+      --gold-light: #e4d2a0;
+      --carbon: #2a2724;
+      --ink: #2c2418;
+      --sepia: #8a6e3d;
+    }
+    body {
+      background-color: #ede6d6;
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      margin: 0;
+      padding: 40px 20px;
+    }
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+    }
+    .font-body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+    /* Estructura fija de popover de Owlbear: 900 x 700 px exactos */
+    .owlbear-popover {
+      width: 900px;
+      height: 700px;
+      background-color: var(--bg-pergamino);
+      border: 1px solid var(--gold);
+      box-shadow: 0 4px 20px rgba(44, 36, 24, 0.08);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      overflow: hidden;
+      margin: 0 auto;
+    }
+    .gold-line-2 {
+      border-bottom: 2px solid var(--gold);
+    }
+    .gold-line-1 {
+      border-bottom: 1px solid var(--gold);
+    }
+    .btn-secondary {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: transparent;
+      color: var(--gold-dark);
+      border: 1px solid var(--gold);
+      padding: 6px 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-secondary:hover {
+      background-color: #efe3c4;
+    }
+    .btn-primary {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background-color: var(--carbon);
+      color: var(--bg-pergamino);
+      border: 1px solid var(--gold);
+      padding: 8px 18px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background-color: #1e1c1a;
+    }
+    .btn-danger {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: transparent;
+      color: #9a3b2a;
+      border: 1px solid #9a3b2a;
+      padding: 6px 14px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .tab-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border: 1px solid var(--gold);
+      background: transparent;
+      color: var(--gold-dark);
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background-color: var(--carbon);
+      color: var(--bg-pergamino);
+    }
+    /* Sol lineal de Albor */
+    .sun-icon {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body class="space-y-16">
+
+  <!-- ========================================== -->
+  <!-- VARIANTE 1: CARGA                          -->
+  <!-- ========================================== -->
+  <section class="flex flex-col items-center">
+    <div class="w-[900px] mb-3 flex items-center justify-between">
+      <span class="font-cinzel text-xs uppercase tracking-widest text-[#8a6e3d] font-bold">Variante 1 · Carga</span>
+      <span class="font-cinzel text-xs text-[#8a6e3d]">900 × 700 px</span>
+    </div>
+
+    <div class="owlbear-popover justify-center items-center p-8">
+      <!-- Marca de agua sutil superior -->
+      <div class="absolute top-4 text-center w-full">
+        <div class="font-cinzel text-[11px] text-[#b88e44] tracking-[0.25em] lowercase select-none">
+          ~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~
+        </div>
+      </div>
+
+      <!-- Contenido central de carga -->
+      <div class="flex flex-col items-center justify-center space-y-6">
+        <!-- Sol naciente lineal de Albor -->
+        <svg class="w-24 h-14" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Línea del horizonte -->
+          <line x1="8" y1="46" x2="92" y2="46" stroke="#b88e44" stroke-width="1.75" stroke-linecap="round"/>
+          <!-- Semicírculo del sol naciente -->
+          <path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="none" stroke="#b88e44" stroke-width="1.75"/>
+          <!-- Rayos dorados -->
+          <line x1="50" y1="24" x2="50" y2="8" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+          <line x1="36" y1="29" x2="24" y2="16" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+          <line x1="64" y1="29" x2="76" y2="16" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+          <!-- Chispa superior -->
+          <circle cx="50" cy="4" r="1.5" fill="#b88e44"/>
+        </svg>
+
+        <!-- Texto de carga en Cinzel sepia -->
+        <div class="font-cinzel text-base tracking-[0.14em] text-[#8a6e3d] select-none animate-pulse">
+          Cargando la mesa...
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- VARIANTE 2: JUGADOR SIN PERSONAJE           -->
+  <!-- ========================================== -->
+  <section class="flex flex-col items-center">
+    <div class="w-[900px] mb-3 flex items-center justify-between">
+      <span class="font-cinzel text-xs uppercase tracking-widest text-[#8a6e3d] font-bold">Variante 2 · Jugador sin personaje</span>
+      <span class="font-cinzel text-xs text-[#8a6e3d]">900 × 700 px</span>
+    </div>
+
+    <div class="owlbear-popover">
+      <!-- Marca de agua superior -->
+      <div class="pt-3 pb-1 text-center w-full">
+        <div class="font-cinzel text-[11px] text-[#b88e44] tracking-[0.25em] lowercase select-none">
+          ~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~
+        </div>
+      </div>
+
+      <!-- Encabezado de la app: Vista de jugador · Nahuel -->
+      <div class="px-8 pb-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <!-- Logo pequeño de Albor -->
+          <svg class="w-9 h-6" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="46" x2="90" y2="46" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+            <path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="#e08a2c" stroke="#8c6a28" stroke-width="1.5"/>
+            <line x1="50" y1="24" x2="50" y2="10" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="37" y1="28" x2="26" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="63" y1="28" x2="74" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <h1 class="font-cinzel text-xl font-bold tracking-[0.14em] text-[#2c2418] leading-tight">ALBOR</h1>
+            <p class="font-cinzel text-[11px] tracking-wide text-[#8a6e3d]">Vista de jugador · Nahuel</p>
+          </div>
+        </div>
+
+        <!-- Botones de acción del jugador -->
+        <div class="flex items-center space-x-2">
+          <button class="btn-secondary" type="button">NUEVO</button>
+          <button class="btn-secondary" type="button">DUPLICAR</button>
+          <button class="btn-secondary" type="button">ARCHIVO ▾</button>
+          <button class="btn-secondary" type="button">COMPARTIR ▾</button>
+        </div>
+      </div>
+
+      <!-- Línea dorada divisoria de 2px -->
+      <div class="gold-line-2 w-full"></div>
+
+      <!-- Pestañas de navegación -->
+      <div class="px-8 py-2 bg-[#efe3c4]/40 flex items-center space-x-1 border-b border-[#e4d2a0]">
+        <button class="tab-btn active" type="button">FICHA</button>
+        <button class="tab-btn" type="button">TIRADAS</button>
+        <button class="tab-btn" type="button">OPCIONES</button>
+      </div>
+
+      <!-- Cuerpo: Estado vacío centrado -->
+      <div class="flex-1 flex flex-col items-center justify-center p-12 text-center">
+        <!-- Ilustración lineal discreta: un sol tras el horizonte -->
+        <div class="mb-5">
+          <svg class="w-28 h-16" viewBox="0 0 120 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Horizonte prolongado -->
+            <line x1="6" y1="52" x2="114" y2="52" stroke="#b88e44" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="22" y1="56" x2="98" y2="56" stroke="#e4d2a0" stroke-width="1" stroke-linecap="round"/>
+            <!-- Sol lineal sutil recortándose tras el horizonte -->
+            <path d="M 42 52 A 18 18 0 0 1 78 52" stroke="#b88e44" stroke-width="1.5" stroke-dasharray="2 2" fill="none"/>
+            <circle cx="60" cy="52" r="10" stroke="#b88e44" stroke-width="1.25" fill="none"/>
+            <!-- Rayos tenues -->
+            <line x1="60" y1="36" x2="60" y2="24" stroke="#b88e44" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="45" y1="41" x2="35" y2="30" stroke="#b88e44" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="75" y1="41" x2="85" y2="30" stroke="#b88e44" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <!-- Mensaje en sepia -->
+        <p class="font-cinzel text-[15px] tracking-[0.08em] text-[#8a6e3d] max-w-md leading-relaxed select-none">
+          El GM todavía no te asignó un personaje.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- VARIANTE 3: GM SIN PERSONAJES              -->
+  <!-- ========================================== -->
+  <section class="flex flex-col items-center">
+    <div class="w-[900px] mb-3 flex items-center justify-between">
+      <span class="font-cinzel text-xs uppercase tracking-widest text-[#8a6e3d] font-bold">Variante 3 · GM sin personajes</span>
+      <span class="font-cinzel text-xs text-[#8a6e3d]">900 × 700 px</span>
+    </div>
+
+    <div class="owlbear-popover">
+      <!-- Marca de agua superior -->
+      <div class="pt-3 pb-1 text-center w-full">
+        <div class="font-cinzel text-[11px] text-[#b88e44] tracking-[0.25em] lowercase select-none">
+          ~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~
+        </div>
+      </div>
+
+      <!-- Encabezado de la app: Vista del Director (GM) · Koru -->
+      <div class="px-8 pb-3 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+          <!-- Logo pequeño de Albor -->
+          <svg class="w-9 h-6" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="46" x2="90" y2="46" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+            <path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="#e08a2c" stroke="#8c6a28" stroke-width="1.5"/>
+            <line x1="50" y1="24" x2="50" y2="10" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="37" y1="28" x2="26" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="63" y1="28" x2="74" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <div>
+            <h1 class="font-cinzel text-xl font-bold tracking-[0.14em] text-[#2c2418] leading-tight">ALBOR</h1>
+            <p class="font-cinzel text-[11px] tracking-wide text-[#8a6e3d]">Vista del Director (GM) · Koru</p>
+          </div>
+        </div>
+
+        <!-- Botones de acción del GM -->
+        <div class="flex items-center space-x-2">
+          <button class="btn-secondary" type="button">NUEVO</button>
+          <button class="btn-secondary" type="button">DUPLICAR</button>
+          <button class="btn-secondary" type="button">ARCHIVO ▾</button>
+          <button class="btn-secondary" type="button">COMPARTIR ▾</button>
+          <button class="btn-danger ml-2" type="button">ELIMINAR</button>
+        </div>
+      </div>
+
+      <!-- Línea dorada divisoria de 2px -->
+      <div class="gold-line-2 w-full"></div>
+
+      <!-- Pestañas de navegación del GM -->
+      <div class="px-8 py-2 bg-[#efe3c4]/40 flex items-center space-x-1 border-b border-[#e4d2a0]">
+        <button class="tab-btn active" type="button">FICHA</button>
+        <button class="tab-btn" type="button">TIRADOR GM</button>
+        <button class="tab-btn" type="button">TIRADAS</button>
+        <button class="tab-btn" type="button">OPCIONES</button>
+      </div>
+
+      <!-- Cuerpo: Estado vacío centrado con acciones -->
+      <div class="flex-1 flex flex-col items-center justify-center p-12 text-center">
+        <!-- Sol lineal sobrio -->
+        <div class="mb-5">
+          <svg class="w-24 h-14" viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="46" x2="90" y2="46" stroke="#b88e44" stroke-width="1.75" stroke-linecap="round"/>
+            <path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="none" stroke="#b88e44" stroke-width="1.75"/>
+            <line x1="50" y1="24" x2="50" y2="10" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+            <line x1="37" y1="28" x2="26" y2="16" stroke="#b88e44" stroke-width="2" stroke-linecap="round"/>
+            <line x1="63" y1="28" x2="74" y2="16" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <!-- Mensaje estricto en Cinzel sepia con voseo -->
+        <p class="font-cinzel text-[16px] tracking-[0.08em] text-[#8a6e3d] mb-8 select-none">
+          Todavía no hay personajes. Creá uno o importá un JSON.
+        </p>
+
+        <!-- Dos botones centrados: NUEVO (primario) e IMPORTAR JSON (secundario) -->
+        <div class="flex items-center space-x-4">
+          <button class="btn-primary" type="button">NUEVO</button>
+          <button class="btn-secondary" type="button">IMPORTAR JSON</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

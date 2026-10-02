@@ -229,7 +229,14 @@ export function useRoster() {
       writeLocalState(next);
       return;
     }
-    await OBR.room.setMetadata({ [METADATA_KEY]: next });
+    try {
+      await OBR.room.setMetadata({ [METADATA_KEY]: next });
+    } catch (err) {
+      window.alert(
+        `No se pudo sincronizar con la sala.${err instanceof Error ? ` ${err.message}` : ""}`,
+      );
+      return;
+    }
     if (syncRef.current) writeLocalState(next);
     else writeMappedCharactersToLocal(next, playerSyncRef.current);
   }, []);

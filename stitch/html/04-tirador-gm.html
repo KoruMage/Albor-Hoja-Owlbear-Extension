@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ALBOR · Vista del Director (GM) · Tirador GM</title>
+<!-- Fonts: Cinzel & Cormorant Garamond -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary-container": "#b88e44",
+            "on-primary-fixed": "#271900",
+            "inverse-on-surface": "#f9efe6",
+            "secondary-fixed": "#ffdea8",
+            "secondary": "#795918",
+            "on-primary": "#ffffff",
+            "secondary-container": "#fdd184",
+            "primary-dark": "#8c6a28",
+            "on-error-container": "#93000a",
+            "surface-inverse": "#2a2724",
+            "success": "#3d7a52",
+            "on-tertiary-container": "#002e59",
+            "primary-light": "#e4d2a0",
+            "primary-fixed": "#ffdeab",
+            "on-secondary-container": "#785817",
+            "primary": "#b88e44",
+            "error": "#9a3b2a",
+            "on-surface-inverse": "#f7f1e4",
+            "surface-variant": "#eae1d8",
+            "on-background": "#1f1b15",
+            "surface-tint": "#7b5811",
+            "surface-container": "#f6ece3",
+            "on-surface": "#2c2418",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed": "#271900",
+            "on-tertiary": "#ffffff",
+            "outline": "#c4a15a",
+            "on-surface-variant": "#4f4538",
+            "inverse-surface": "#34302a",
+            "secondary-fixed-dim": "#ebc075",
+            "surface": "#fffdf8",
+            "surface-container-low": "#fcf2e9",
+            "on-secondary-fixed-variant": "#5e4200",
+            "on-primary-fixed-variant": "#5f4100",
+            "on-primary-container": "#3f2a00",
+            "tertiary-fixed-dim": "#a6c8fc",
+            "tertiary": "#3d608d",
+            "surface-dim": "#e2d9cf",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed": "#001c39",
+            "accent-sun": "#e08a2c",
+            "on-tertiary-fixed-variant": "#234874",
+            "background": "#f7f1e4",
+            "primary-fixed-dim": "#eebf70",
+            "on-error": "#ffffff",
+            "surface-container-highest": "#eae1d8",
+            "tertiary-fixed": "#d4e3ff",
+            "surface-container-high": "#f0e7dd",
+            "tertiary-container": "#7597c8",
+            "outline-variant": "#d2c4b3",
+            "surface-bright": "#fff8f3",
+            "inverse-primary": "#eebf70"
+          },
+          borderRadius: {
+            "DEFAULT": "0px",
+            "none": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "0px"
+          },
+          spacing: {
+            "space-md": "10px",
+            "margin": "16px",
+            "gutter": "10px",
+            "space-xs": "4px",
+            "space-xl": "16px",
+            "space-sm": "6px",
+            "space-lg": "14px"
+          },
+          fontFamily: {
+            "section-title": ["Cinzel", "serif"],
+            "display": ["Cinzel", "serif"],
+            "die-number": ["Cinzel", "serif"],
+            "input": ["Cormorant Garamond", "serif"],
+            "button": ["Cinzel", "serif"],
+            "body": ["Cormorant Garamond", "serif"],
+            "label": ["Cinzel", "serif"]
+          },
+          fontSize: {
+            "section-title": ["13px", { "letterSpacing": "0.14em", "fontWeight": "700" }],
+            "display": ["20px", { "letterSpacing": "0.12em", "fontWeight": "700" }],
+            "die-number": ["22px", { "fontWeight": "700" }],
+            "input": ["15px", { "fontWeight": "600" }],
+            "button": ["10px", { "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "body": ["14px", { "fontWeight": "500" }],
+            "label": ["11px", { "letterSpacing": "0.04em", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    /* Baseline metallic gradient specified in DESIGN.md */
+    .metallic-baseline {
+      background: linear-gradient(90deg, #e8d5a3 0%, #b88e44 35%, #7a5a22 65%, #d4b46a 100%);
+    }
+
+    /* Traditional printer crop marks */
+    .crop-mark-tl {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: 10px;
+      height: 10px;
+      border-top: 1.5px solid #8c6a28;
+      border-left: 1.5px solid #8c6a28;
+      pointer-events: none;
+    }
+    .crop-mark-br {
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 1.5px solid #8c6a28;
+      border-right: 1.5px solid #8c6a28;
+      pointer-events: none;
+    }
+
+    /* Custom subtle parchment scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f7f1e4;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #c4a15a;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #8c6a28;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 selection:bg-primary selection:text-white bg-background">
+<!-- Owlbear Rodeo Popover Canvas: 900px ancho x 700px alto con scroll interno si aplica -->
+<div class="w-[900px] h-[700px] bg-background text-on-surface border border-outline relative flex flex-col overflow-hidden">
+<!-- 1. Marca de agua superior editorial -->
+<div class="w-full text-center py-1 border-b border-outline-variant/40 bg-surface-container-low select-none">
+<span class="font-section-title text-[10px] uppercase text-primary-dark tracking-[0.3em] opacity-80">
+        ~ ~ ~ ALBOR ~ ~ JUEGO ~ DE ~ ROL ~ ~ ~
+      </span>
+</div>
+<!-- 2. Encabezado principal (Top Bar de Extensión) -->
+<header class="w-full px-space-lg py-2 flex items-center justify-between border-b-2 border-primary bg-background select-none">
+<!-- Izquierda: Identidad y Subtítulo -->
+<div class="flex items-center gap-3">
+<!-- Emblema de Sol Naciente Albor -->
+<div class="w-8 h-8 flex items-center justify-center relative flex-shrink-0">
+<svg class="w-8 h-4 fill-none" stroke="#b88e44" stroke-width="2" viewbox="0 0 48 24">
+<!-- Rayos -->
+<line stroke-linecap="square" x1="12" x2="16" y1="6" y2="10"></line>
+<line stroke-linecap="square" x1="24" x2="24" y1="2" y2="8"></line>
+<line stroke-linecap="square" x1="36" x2="32" y1="6" y2="10"></line>
+<!-- Semicírculo sol naciente -->
+<path d="M 14 20 A 10 10 0 0 1 34 20 Z" fill="#e08a2c" stroke="#8c6a28" stroke-width="1.5"></path>
+<!-- Línea de horizonte -->
+<line stroke="#8c6a28" stroke-width="2" x1="4" x2="44" y1="20" y2="20"></line>
+</svg>
+</div>
+<div>
+<div class="flex items-baseline gap-2">
+<h1 class="font-display text-display text-on-surface uppercase tracking-widest leading-none">ALBOR</h1>
+</div>
+<p class="font-body text-body italic text-on-surface-variant leading-none mt-0.5">
+            Vista del Director (GM) · <span class="font-label text-label text-primary-dark not-italic font-semibold">Koru</span>
+</p>
+</div>
+</div>
+<!-- Derecha: Acciones secundarias en Cinzel con borde dorado de 1px -->
+<div class="flex items-center gap-1.5">
+<button class="px-2.5 py-1 bg-surface border border-outline hover:border-primary text-on-surface hover:text-primary-dark font-button text-button transition-colors duration-150 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">add_circle</span>
+<span>NUEVO</span>
+</button>
+<button class="px-2.5 py-1 bg-surface border border-outline hover:border-primary text-on-surface hover:text-primary-dark font-button text-button transition-colors duration-150 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">content_copy</span>
+<span>DUPLICAR</span>
+</button>
+<button class="px-2.5 py-1 bg-surface border border-outline hover:border-primary text-on-surface hover:text-primary-dark font-button text-button transition-colors duration-150 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">folder</span>
+<span>ARCHIVO</span>
+<span class="material-symbols-outlined text-[11px]">arrow_drop_down</span>
+</button>
+<button class="px-2.5 py-1 bg-surface border border-outline hover:border-primary text-on-surface hover:text-primary-dark font-button text-button transition-colors duration-150 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">share</span>
+<span>COMPARTIR</span>
+<span class="material-symbols-outlined text-[11px]">arrow_drop_down</span>
+</button>
+</div>
+</header>
+<!-- 3. Barra de navegación / pestañas superiores -->
+<nav class="w-full px-space-lg flex items-center justify-between border-b border-outline bg-surface-container-high/60 select-none">
+<div class="flex items-end gap-1 -mb-[1px]"><button class="px-4 py-2 font-label text-label text-on-surface-variant hover:text-on-surface bg-surface-container border-t border-l border-r border-transparent hover:border-outline-variant transition-colors">Ficha</button><button class="px-4 py-2 font-button text-button bg-surface-inverse text-on-surface-inverse border-t-2 border-l border-r border-primary font-bold shadow-none flex items-center gap-1.5 z-10"><span class="material-symbols-outlined text-[14px] text-primary-light">casino</span><span>Tirador GM</span></button><button class="px-4 py-2 font-label text-label text-on-surface-variant hover:text-on-surface bg-surface-container border-t border-l border-r border-transparent hover:border-outline-variant transition-colors">Tiradas</button><button class="px-4 py-2 font-label text-label text-on-surface-variant hover:text-on-surface bg-surface-container border-t border-l border-r border-transparent hover:border-outline-variant transition-colors">Opciones</button></div>
+<!-- 4. Indicador de estado de sesión GM Owlbear Rodeo -->
+</nav>
+<!-- 5. Cuerpo Principal: Layout Asimétrico Editorial (Scrollable) -->
+<main class="flex-1 overflow-y-auto p-space-md grid grid-cols-12 gap-space-md bg-background">
+<!-- Columna Izquierda: Panel Principal del Tirador GM (7.5 cols / ~63%) -->
+<section class="col-span-8 flex flex-col gap-space-md">
+<!-- Tarjeta del Tirador Principal -->
+<div class="relative bg-surface border border-outline p-space-lg flex flex-col gap-space-md">
+<!-- Crop marks ornamentales -->
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<!-- Cabecera de Sección -->
+<div class="border-b border-outline/50 pb-2 flex items-baseline justify-between">
+<h2 class="font-section-title text-section-title text-primary-dark uppercase">
+              - TIRADOR DEL DIRECTOR -
+            </h2>
+<span class="font-body text-body italic text-on-surface-variant text-[13px]">
+              Tiradas libres para PNJ, trampas, daño o checks sin ficha · Dice+
+            </span>
+</div>
+<!-- Campo 'Quién tira': input editorial con línea base metálica sin caja -->
+<div class="flex flex-col gap-1">
+<label class="font-label text-label text-secondary uppercase font-bold tracking-wider">Quién tira</label>
+<div class="relative flex items-center">
+<input class="w-full bg-transparent border-0 px-0 py-1 font-input text-input text-on-surface focus:ring-0 focus:outline-none placeholder:text-on-surface-variant/40" placeholder="Koru" type="text" value="Lobo de ceniza"/>
+</div>
+<!-- Línea base metálica -->
+<div class="h-[2px] w-full metallic-baseline"></div>
+</div>
+<!-- Controles de Tirada: Fila armónica y compacta -->
+<div class="grid grid-cols-12 gap-3 pt-1">
+<!-- Cantidad de Dados (1-12) -->
+<div class="col-span-4 bg-surface-container-low border border-outline/70 p-2 flex flex-col justify-between">
+<span class="font-label text-[10px] text-secondary uppercase font-semibold">Cantidad</span>
+<div class="flex items-center justify-between mt-1">
+<button class="w-6 h-6 flex items-center justify-center bg-surface border border-outline hover:border-primary active:bg-surface-inverse active:text-on-surface-inverse font-button font-bold text-xs select-none">
+                  −
+                </button>
+<span class="font-display text-xl font-bold text-on-surface px-2">4</span>
+<button class="w-6 h-6 flex items-center justify-center bg-surface border border-outline hover:border-primary active:bg-surface-inverse active:text-on-surface-inverse font-button font-bold text-xs select-none">
+                  +
+                </button>
+</div>
+</div>
+<!-- Selector de Tipo de Dado -->
+<div class="col-span-8 bg-surface-container-low border border-outline/70 p-2 flex flex-col justify-between"><span class="font-label text-[10px] text-secondary uppercase font-semibold mb-1">Dado</span><div class="flex items-center"><select class="w-full bg-surface border border-outline px-2 py-1 font-button text-xs text-on-surface focus:outline-none focus:ring-0 focus:border-primary"><option value="d4">d4</option><option value="d6">d6</option><option selected="" value="d8">d8</option><option value="d10">d10</option><option value="d12">d12</option></select></div></div>
+</div>
+<!-- Selector de Dificultad y Banda Visual -->
+<div class="bg-surface-container-low border border-outline/70 p-2.5 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-label text-label text-secondary uppercase font-semibold">Dificultad Objetivo:</span>
+<div class="flex items-center gap-1">
+<button class="w-5 h-5 flex items-center justify-center bg-surface border border-outline hover:border-primary font-button text-xs select-none">
+                    −
+                  </button>
+<span class="font-die-number text-die-number text-on-surface px-1.5 leading-none">13</span>
+<span class="font-label text-label text-primary-dark font-bold">(C)</span>
+<button class="w-5 h-5 flex items-center justify-center bg-surface border border-outline hover:border-primary font-button text-xs select-none">
+                    +
+                  </button>
+</div>
+</div>
+<button class="font-label text-[10px] text-on-surface-variant hover:text-primary-dark underline decoration-outline underline-offset-2">
+                — (solo total / sin dif)
+              </button>
+</div>
+<!-- Banda de Dificultades Albor G-S -->
+<div class="grid grid-cols-8 gap-0.5 border-t border-outline/40 pt-1.5 text-center">
+<div class="py-0.5 bg-surface text-on-surface-variant text-[10px] font-label border border-transparent">G (5)</div>
+<div class="py-0.5 bg-surface text-on-surface-variant text-[10px] font-label border border-transparent">F (7)</div>
+<div class="py-0.5 bg-surface text-on-surface-variant text-[10px] font-label border border-transparent">E (9)</div>
+<div class="py-0.5 bg-surface text-on-surface-variant text-[10px] font-label border border-transparent">D (11)</div>
+<!-- C (13) Resaltada con contorno oro y fondo cálido -->
+<div class="py-0.5 bg-secondary-container text-on-secondary-container font-bold text-[10px] font-label border border-primary">
+                C (13)
+              </div>
+<div class="py-0.5 bg-surface text-on-surface-variant text-[10px] font-label border border-transparent">B (15)</div>
+<div class="py-0.5 bg-surface text-on-surface-variant text-[10px] font-label border border-transparent">A (17)</div>
+<div class="py-0.5 bg-surface text-on-surface-variant text-[10px] font-label border border-transparent">S (19)</div>
+</div>
+</div>
+<!-- Línea de Resumen y Botón Primario de Lanzamiento -->
+<div class="flex items-center justify-between pt-1 border-t border-outline/50">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-dark text-base">info</span>
+<p class="font-body text-body italic text-secondary text-base">
+                Vas a tirar <strong class="not-italic text-on-surface font-semibold font-label">4d8</strong> vs dificultad <strong class="not-italic text-on-surface font-semibold font-label">C (13)</strong>.
+              </p>
+</div>
+<!-- Botón de Tirada Primario: Carbón #2a2724, texto pergamino, borde oro -->
+<button class="px-5 py-2 bg-surface-inverse hover:bg-inverse-surface active:bg-black text-on-surface-inverse border-2 border-primary font-button text-[12px] uppercase tracking-wider font-bold shadow-none transition-transform active:scale-95 duration-100 flex items-center gap-2"><span class="material-symbols-outlined text-sm text-primary-light">casino</span><span>TIRAR</span></button>
+</div>
+<!-- ÁREA DE RESULTADO DE LA TIRADA (Éxito Extra + Crítico) -->
+<div class="mt-1 border-2 border-success bg-[#f4f7f2] p-space-md flex flex-col gap-space-sm relative">
+<!-- Cinta / Sello de Crítico Alcanzado -->
+<div class="flex items-center justify-between border-b border-success/30 pb-1.5">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 bg-success text-white text-[12px] font-bold">
+                  ✓
+                </span>
+<span class="font-section-title text-[12px] text-success uppercase">
+                  TIRADA RESUELTA · DICE+
+                </span>
+</div>
+<!-- Distintivo Heráldico de Crítico -->
+<div class="px-2.5 py-0.5 bg-primary-container text-on-primary font-label text-[10px] tracking-wider uppercase font-bold border border-primary-dark flex items-center gap-1 shadow-sm"><span class="material-symbols-outlined text-[13px]">military_tech</span><span>CRÍTICO</span></div>
+</div>
+<!-- Fichas de Dados Cuadradas con Borde Oro -->
+<div class="flex items-center justify-center gap-3 py-1">
+<!-- Dado 1: 8 -->
+<div class="w-12 h-12 bg-surface border-2 border-primary flex flex-col items-center justify-center relative shadow-sm">
+<span class="font-die-number text-die-number text-on-surface leading-none">8</span>
+<span class="font-label text-[8px] text-primary-dark font-semibold">d8</span>
+<div class="absolute -top-1 -right-1 w-2 h-2 bg-primary"></div>
+</div>
+<span class="font-display text-primary text-sm font-bold">+</span>
+<!-- Dado 2: 6 -->
+<div class="w-12 h-12 bg-surface border-2 border-primary flex flex-col items-center justify-center relative shadow-sm">
+<span class="font-die-number text-die-number text-on-surface leading-none">6</span>
+<span class="font-label text-[8px] text-primary-dark font-semibold">d8</span>
+<div class="absolute -top-1 -right-1 w-2 h-2 bg-primary"></div>
+</div>
+<span class="font-display text-primary text-sm font-bold">+</span>
+<!-- Dado 3: 4 -->
+<div class="w-12 h-12 bg-surface border-2 border-outline flex flex-col items-center justify-center relative shadow-sm">
+<span class="font-die-number text-die-number text-on-surface-variant leading-none">4</span>
+<span class="font-label text-[8px] text-on-surface-variant font-semibold">d8</span>
+</div>
+<span class="font-display text-primary text-sm font-bold">+</span>
+<!-- Dado 4: 8 -->
+<div class="w-12 h-12 bg-surface border-2 border-primary flex flex-col items-center justify-center relative shadow-sm">
+<span class="font-die-number text-die-number text-on-surface leading-none">8</span>
+<span class="font-label text-[8px] text-primary-dark font-semibold">d8</span>
+<div class="absolute -top-1 -right-1 w-2 h-2 bg-primary"></div>
+</div>
+</div>
+<!-- Línea de Resolución Matemática y Grado -->
+<div class="text-center py-1 bg-surface border border-success/40"><p class="font-section-title text-[12px] text-on-surface">8 + 6 + 4 + 8 = <span class="text-base text-primary-dark font-extrabold">26</span> vs 13 → <span class="text-success font-bold tracking-wider">Éxito extra · Crítico · Dice+</span></p></div>
+<!-- Leyenda de regla al pie -->
+<p class="font-body text-[12px] italic text-on-surface-variant text-center leading-tight">
+              * Regla de crítico: tres o más dados d6+ con al menos tres caras pares ≥ 6 (los dados 8, 6 y 8 cumplen la condición de maestría).
+            </p>
+</div>
+</div>
+</section>
+<!-- Columna Derecha: Referencia Rápida de Reglas GM (4 cols / ~37%) -->
+<aside class="col-span-4 flex flex-col gap-space-md">
+<div class="relative bg-surface border border-outline p-space-md flex flex-col gap-space-md h-full">
+<!-- Crop marks ornamentales -->
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<!-- Cabecera de la Referencia -->
+<div class="border-b border-outline/50 pb-1.5 flex items-center justify-between">
+<h3 class="font-section-title text-section-title text-primary-dark uppercase">
+              - REFERENCIA RÁPIDA -
+            </h3>
+<span class="material-symbols-outlined text-outline text-[16px]">menu_book</span>
+</div>
+<!-- 1. Bandas de Dificultad -->
+<div class="flex flex-col gap-1">
+<h4 class="font-label text-[10px] text-secondary uppercase font-bold tracking-wider border-b border-outline/30 pb-0.5">
+              Bandas de Dificultad
+            </h4>
+<div class="flex flex-col text-xs font-body divide-y divide-outline-variant/30"><div class="flex justify-between py-1"><span class="font-label text-[10px] text-on-surface-variant font-semibold">G (5)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-on-surface-variant font-semibold">F (7)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-on-surface-variant font-semibold">E (9)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-on-surface-variant font-semibold">D (11)</span></div><div class="flex justify-between py-1 px-1 bg-secondary-container/50 border-l-2 border-primary -mx-1 font-semibold"><span class="font-label text-[10px] text-on-surface font-bold">C (13)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-on-surface-variant font-semibold">B (15)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-on-surface-variant font-semibold">A (17)</span></div><div class="flex justify-between py-1"><span class="font-label text-[10px] text-on-surface-variant font-semibold">S (19)</span></div></div>
+</div>
+<!-- 2. Grados de Éxito -->
+<div class="flex flex-col gap-1 pt-1">
+<h4 class="font-label text-[10px] text-secondary uppercase font-bold tracking-wider border-b border-outline/30 pb-0.5">
+              Grados de Éxito
+            </h4>
+<div class="flex flex-col text-xs font-body gap-1 pt-0.5"><div class="flex items-center justify-between py-0.5 border-b border-outline-variant/20"><span class="font-label text-[10px] text-success font-bold">más de 5 por encima:</span><span class="text-success font-semibold italic">Éxito extra</span></div><div class="flex items-center justify-between py-0.5 border-b border-outline-variant/20"><span class="font-label text-[10px] text-on-surface font-bold">de 0 a 5 por encima:</span><span class="text-on-surface italic">Éxito</span></div><div class="flex items-center justify-between py-0.5 border-b border-outline-variant/20"><span class="font-label text-[10px] text-secondary font-bold">de 1 a 2 por debajo:</span><span class="text-secondary italic">Éxito limitado</span></div><div class="flex items-center justify-between py-0.5"><span class="font-label text-[10px] text-error font-bold">peor:</span><span class="text-error font-semibold italic">Fracaso</span></div></div>
+</div>
+<!-- 3. Regla de Crítico -->
+<div class="bg-surface-container-low border border-outline/60 p-2 mt-auto">
+<div class="flex items-center gap-1.5 mb-1">
+<span class="material-symbols-outlined text-primary-dark text-sm">bookmark</span>
+<span class="font-label text-[10px] text-primary-dark uppercase font-bold">Regla de Crítico</span>
+</div>
+<p class="font-body text-[12px] italic text-on-surface leading-tight">
+              Tres o más dados d6 o mayores con al menos tres caras pares ≥ 6. Otorga impacto pleno e iniciativa narrativa inmediata.
+            </p>
+</div>
+</div>
+</aside>
+</main>
+<!-- Barra de Estado Inferior / Docked Popover Footer -->
+</div>
+</body></html>

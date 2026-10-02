@@ -38,6 +38,11 @@ export interface Talento {
   descripcion: string;
 }
 
+export interface Arma extends Talento {
+  stat: StatKey;
+  dado: DieSize;
+}
+
 export const PAGE2_COUNTS = {
   lazos: 3,
   etiquetas: 4,
@@ -74,7 +79,7 @@ export interface AlborCharacter {
   equipo: string[];
   dominio: string[];
   maestrias: Talento[];
-  armas: Talento[];
+  armas: Arma[];
 }
 
 export interface DiceRollBroadcast {
@@ -176,12 +181,28 @@ export function normalizeTalento(raw: Partial<Talento> | undefined): Talento {
   };
 }
 
+function isStatKey(value: unknown): value is StatKey {
+  return value === "vig" || value === "agi" || value === "apt" || value === "vol";
+}
+
+export function normalizeArma(raw: Partial<Arma> | undefined): Arma {
+  return {
+    ...normalizeTalento(raw),
+    stat: isStatKey(raw?.stat) ? raw.stat : "agi",
+    dado: clampDie(asNumber(raw?.dado, 6)),
+  };
+}
+
 function emptyTalentos(count: number): Talento[] {
   return Array.from({ length: count }, () => ({
     id: newId(),
     nombre: "",
     descripcion: "",
   }));
+}
+
+function emptyArmas(count: number): Arma[] {
+  return Array.from({ length: count }, () => normalizeArma(undefined));
 }
 
 function emptyLines(count: number): string[] {
@@ -192,6 +213,13 @@ function padTalentos(raw: unknown, count: number): Talento[] {
   const list = Array.isArray(raw) ? raw.map((t) => normalizeTalento(t as Partial<Talento>)) : [];
   const padded = [...list];
   while (padded.length < count) padded.push({ id: newId(), nombre: "", descripcion: "" });
+  return padded.slice(0, Math.max(count, list.length));
+}
+
+function padArmas(raw: unknown, count: number): Arma[] {
+  const list = Array.isArray(raw) ? raw.map((t) => normalizeArma(t as Partial<Arma>)) : [];
+  const padded = [...list];
+  while (padded.length < count) padded.push(normalizeArma(undefined));
   return padded.slice(0, Math.max(count, list.length));
 }
 
@@ -238,7 +266,7 @@ export function makeCharacter(): AlborCharacter {
     equipo: emptyLines(PAGE2_COUNTS.equipo),
     dominio: emptyLines(PAGE2_COUNTS.dominio),
     maestrias: emptyTalentos(PAGE2_COUNTS.maestrias),
-    armas: emptyTalentos(PAGE2_COUNTS.armas),
+    armas: emptyArmas(PAGE2_COUNTS.armas),
   };
 }
 
@@ -293,7 +321,7 @@ export function normalizeCharacter(raw: Partial<AlborCharacter> | undefined): Al
     equipo: padLines(raw?.equipo, PAGE2_COUNTS.equipo),
     dominio: padLines(raw?.dominio, PAGE2_COUNTS.dominio),
     maestrias: padTalentos(raw?.maestrias, PAGE2_COUNTS.maestrias),
-    armas: padTalentos(raw?.armas, PAGE2_COUNTS.armas),
+    armas: padArmas(raw?.armas, PAGE2_COUNTS.armas),
   };
 }
 
@@ -317,6 +345,15 @@ export function makeDiceRollLogEntry(
 
 export function formatFaceList(faces: number[]): string {
   return faces.join(" + ");
+}
+
+export const DIFFICULTY_MIN = 1;
+export const DIFFICULTY_MAX = 30;
+export const DIFFICULTY_DEFAULT = 9;
+
+export function formatDifficulty(target: number): string {
+  const band = BANDS.find((b) => b.target === target);
+  return band ? `${band.letter}(${target})` : String(target);
 }
 
 export function interpretOutcome(total: number, target: number): Outcome {

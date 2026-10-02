@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280, initial-scale=1.0">
+  <title>Iara Solís · Vista web de solo lectura · Albor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f7f1e4;
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(184, 142, 68, 0.10) 0%, transparent 45%),
+        radial-gradient(circle at 90% 90%, rgba(184, 142, 68, 0.08) 0%, transparent 40%);
+      color: #2c2418;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+    .font-cinzel {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+    }
+    .font-cormorant {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+    /* Estilo de línea de formulario impreso Albor */
+    .field-line {
+      border-bottom: 2px solid transparent;
+      border-image: linear-gradient(to right, #e8d5a3, #b88e44 35%, #7a5a22 75%, #d4b46a) 1;
+    }
+    .field-line-subtle {
+      border-bottom: 1px solid #d4b46a;
+    }
+    /* Escuadras de imprenta */
+    .corner-bracket-tl {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 10px;
+      height: 10px;
+      border-top: 1.5px solid #b88e44;
+      border-left: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    .corner-bracket-br {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 1.5px solid #b88e44;
+      border-right: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    /* Muesca vertical para listas impresas */
+    .list-row-line {
+      position: relative;
+      border-bottom: 1.5px solid #b88e44;
+    }
+    .list-row-line::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      bottom: -1px;
+      width: 2px;
+      height: 8px;
+      background-color: #b88e44;
+    }
+    /* Estandarte trapezoidal para estadísticas */
+    .stat-banner {
+      clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+    }
+    /* Pestaña dorada con radio suave solo arriba */
+    .stat-tab {
+      border-radius: 3px 3px 0 0;
+    }
+  </style>
+</head>
+<body class="min-h-screen py-10 px-4 flex flex-col items-center">
+
+  <!-- ========================================== -->
+  <!-- BARRA DE ACCIONES Y ENCABEZADO WEB (960px) -->
+  <!-- ========================================== -->
+  <header class="w-full max-w-[960px] mb-8">
+    <!-- Marca de agua editorial -->
+    <div class="text-center text-[11px] font-cinzel text-[#8c6a28] tracking-[0.28em] uppercase select-none opacity-85 mb-3">
+      ~ ~ ~ &nbsp; albor &nbsp; ~ ~ &nbsp; juego &nbsp; ~ &nbsp; de &nbsp; ~ &nbsp; rol &nbsp; ~ ~ ~
+    </div>
+
+    <div class="bg-[#fffdf8] border border-[#b88e44] p-5 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <!-- Sol naciente Albor SVG -->
+        <div class="w-12 h-8 flex-shrink-0 flex items-center justify-center">
+          <svg viewBox="0 0 100 60" class="w-12 h-7" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <line x1="8" y1="46" x2="92" y2="46" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M 32 46 A 18 18 0 0 1 68 46 Z" fill="#e08a2c" stroke="#8c6a28" stroke-width="1.5"/>
+            <path d="M 38 46 A 12 12 0 0 1 62 46 Z" fill="#f5ab35"/>
+            <line x1="50" y1="24" x2="50" y2="9" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="36" y1="28" x2="25" y2="15" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="64" y1="28" x2="75" y2="15" stroke="#b88e44" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="50" cy="5" r="1.5" fill="#b88e44"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-2xl font-cinzel font-bold text-[#2c2418] tracking-wider leading-none">
+            IARA SOLÍS
+          </h1>
+          <p class="text-xs font-cinzel uppercase text-[#8a6e3d] tracking-widest mt-1">
+            Vista web de solo lectura · Albor v0.4
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Abrir JSON -->
+        <button class="px-4 py-2 bg-transparent border border-[#b88e44] text-[#8c6a28] font-cinzel font-bold text-[11px] uppercase tracking-wider hover:bg-[#efe3c4] active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
+          <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+          </svg>
+          Abrir JSON
+        </button>
+        <!-- Exportar PDF -->
+        <button class="px-4 py-2 bg-[#2a2724] border border-[#b88e44] text-[#f7f1e4] font-cinzel font-bold text-[11px] uppercase tracking-wider hover:bg-[#3d3834] active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer">
+          <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+          Exportar PDF
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- HOJA 1: IDENTIDAD, ESTADÍSTICAS Y RECURSOS -->
+  <!-- ========================================== -->
+  <main class="w-full max-w-[960px] bg-[#fffdf8] border border-[#e4d2a0] p-3 shadow-md mb-12 relative">
+    <!-- Doble filete interior de pergamino y oro -->
+    <div class="border border-[#b88e44] p-8 bg-[#fffdf8] relative">
+      <div class="corner-bracket-tl"></div>
+      <div class="corner-bracket-br"></div>
+
+      <!-- Marca de agua en hoja -->
+      <div class="text-center text-[10px] font-cinzel text-[#8c6a28] tracking-[0.22em] uppercase select-none opacity-70 mb-5">
+        ~ ~ ~ &nbsp; albor &nbsp; ~ ~ &nbsp; hoja &nbsp; de &nbsp; personaje &nbsp; ~ &nbsp; página &nbsp; i &nbsp; ~ ~ ~
+      </div>
+
+      <!-- IDENTIDAD: Fila superior (Nombre y Concepto) -->
+      <div class="grid grid-cols-12 gap-6 mb-6">
+        <div class="col-span-5">
+          <div class="text-[10px] font-cinzel uppercase text-[#8a6e3d] tracking-widest mb-0.5">Nombre del personaje</div>
+          <div class="field-line pb-1 text-2xl font-cinzel font-bold text-[#2c2418]">
+            Iara Solís
+          </div>
+        </div>
+        <div class="col-span-7">
+          <div class="text-[10px] font-cinzel uppercase text-[#8a6e3d] tracking-widest mb-0.5">Concepto del personaje</div>
+          <div class="field-line pb-1 text-xl font-cormorant italic font-semibold text-[#2c2418]">
+            Cartógrafa que persigue el primer amanecer
+          </div>
+        </div>
+      </div>
+
+      <!-- IDENTIDAD: Fila inferior (Linaje, Ocupación, Rol, Nivel, Tamaño) -->
+      <div class="grid grid-cols-10 gap-4 mb-7">
+        <div class="col-span-2">
+          <div class="text-[9px] font-cinzel uppercase text-[#8a6e3d] tracking-wider mb-0.5">Linaje</div>
+          <div class="field-line pb-1 text-[16px] font-cormorant font-semibold text-[#2c2418]">
+            Humana del Delta
+          </div>
+        </div>
+        <div class="col-span-3">
+          <div class="text-[9px] font-cinzel uppercase text-[#8a6e3d] tracking-wider mb-0.5">Ocupación</div>
+          <div class="field-line pb-1 text-[16px] font-cormorant font-semibold text-[#2c2418]">
+            Gremio Cartógrafos
+          </div>
+        </div>
+        <div class="col-span-2">
+          <div class="text-[9px] font-cinzel uppercase text-[#8a6e3d] tracking-wider mb-0.5">Rol</div>
+          <div class="field-line pb-1 text-[16px] font-cormorant font-semibold text-[#2c2418]">
+            Exploradora
+          </div>
+        </div>
+        <div class="col-span-1">
+          <div class="text-[9px] font-cinzel uppercase text-[#8a6e3d] tracking-wider mb-0.5 text-center">Nivel</div>
+          <div class="field-line pb-1 text-[17px] font-cinzel font-bold text-[#2c2418] text-center">
+            2
+          </div>
+        </div>
+        <div class="col-span-2">
+          <div class="text-[9px] font-cinzel uppercase text-[#8a6e3d] tracking-wider mb-0.5 text-center">Tamaño</div>
+          <div class="field-line pb-1 text-[16px] font-cormorant font-semibold text-[#2c2418] text-center">
+            1 (Mediano)
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- BANDA CARBÓN DE ESTADÍSTICAS -->
+      <!-- ========================================== -->
+      <div class="bg-[#2a2724] border-2 border-[#b88e44] p-3 mb-8">
+        <div class="grid grid-cols-4 gap-3">
+          <!-- VIGOR -->
+          <div class="flex flex-col items-center">
+            <div class="w-full stat-tab bg-gradient-to-r from-[#d4b05a] to-[#b88e44] text-[#ffffff] px-2 py-1 flex items-center justify-between shadow-sm">
+              <span class="text-[12px] font-cinzel font-bold tracking-wider">VIGOR</span>
+              <span class="text-[18px] font-cinzel font-bold leading-none">2</span>
+            </div>
+            <div class="w-[85%] bg-[#efe3c4] border-x border-b border-[#b88e44] py-1 text-center stat-banner">
+              <span class="block text-[8px] font-cinzel uppercase tracking-widest text-[#8a6e3d]">dado base</span>
+              <span class="text-[15px] font-cinzel font-bold text-[#2c2418]">d6</span>
+            </div>
+          </div>
+
+          <!-- AGILIDAD -->
+          <div class="flex flex-col items-center">
+            <div class="w-full stat-tab bg-gradient-to-r from-[#d4b05a] to-[#b88e44] text-[#ffffff] px-2 py-1 flex items-center justify-between shadow-sm">
+              <span class="text-[12px] font-cinzel font-bold tracking-wider">AGILIDAD</span>
+              <span class="text-[18px] font-cinzel font-bold leading-none">3</span>
+            </div>
+            <div class="w-[85%] bg-[#efe3c4] border-x border-b border-[#b88e44] py-1 text-center stat-banner">
+              <span class="block text-[8px] font-cinzel uppercase tracking-widest text-[#8a6e3d]">dado base</span>
+              <span class="text-[15px] font-cinzel font-bold text-[#2c2418]">d8</span>
+            </div>
+          </div>
+
+          <!-- APTITUD -->
+          <div class="flex flex-col items-center">
+            <div class="w-full stat-tab bg-gradient-to-r from-[#d4b05a] to-[#b88e44] text-[#ffffff] px-2 py-1 flex items-center justify-between shadow-sm">
+              <span class="text-[12px] font-cinzel font-bold tracking-wider">APTITUD</span>
+              <span class="text-[18px] font-cinzel font-bold leading-none">3</span>
+            </div>
+            <div class="w-[85%] bg-[#efe3c4] border-x border-b border-[#b88e44] py-1 text-center stat-banner">
+              <span class="block text-[8px] font-cinzel uppercase tracking-widest text-[#8a6e3d]">dado base</span>
+              <span class="text-[15px] font-cinzel font-bold text-[#2c2418]">d6</span>
+            </div>
+          </div>
+
+          <!-- VOLUNTAD -->
+          <div class="flex flex-col items-center">
+            <div class="w-full stat-tab bg-gradient-to-r from-[#d4b05a] to-[#b88e44] text-[#ffffff] px-2 py-1 flex items-center justify-between shadow-sm">
+              <span class="text-[12px] font-cinzel font-bold tracking-wider">VOLUNTAD</span>
+              <span class="text-[18px] font-cinzel font-bold leading-none">2</span>
+            </div>
+            <div class="w-[85%] bg-[#efe3c4] border-x border-b border-[#b88e44] py-1 text-center stat-banner">
+              <span class="block text-[8px] font-cinzel uppercase tracking-widest text-[#8a6e3d]">dado base</span>
+              <span class="text-[15px] font-cinzel font-bold text-[#2c2418]">d4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- CAJAS DE RECURSOS -->
+      <!-- ========================================== -->
+      <div class="grid grid-cols-7 gap-3 mb-8">
+        <!-- Determinación (con reserva) -->
+        <div class="col-span-1 bg-[#fffdf8] border border-[#b88e44] p-2 text-center relative flex flex-col justify-between">
+          <div class="text-[9px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider mb-1">Determinación</div>
+          <div class="flex items-center justify-center gap-1 my-1">
+            <span class="text-xl font-cinzel font-bold text-[#2c2418]">8</span>
+            <span class="text-sm font-cinzel text-[#8c6a28]">/</span>
+            <span class="text-sm font-cinzel text-[#8a6e3d]">8</span>
+          </div>
+          <div class="text-[9px] font-cormorant font-semibold text-[#8a6e3d] border-t border-[#e4d2a0] pt-1">
+            Reserva <span class="font-bold text-[#2c2418]">16</span>
+          </div>
+        </div>
+
+        <!-- Chispa (con reserva) -->
+        <div class="col-span-1 bg-[#fffdf8] border border-[#b88e44] p-2 text-center relative flex flex-col justify-between">
+          <div class="text-[9px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider mb-1">Chispa</div>
+          <div class="flex items-center justify-center gap-1 my-1">
+            <span class="text-xl font-cinzel font-bold text-[#2c2418]">10</span>
+            <span class="text-sm font-cinzel text-[#8c6a28]">/</span>
+            <span class="text-sm font-cinzel text-[#8a6e3d]">10</span>
+          </div>
+          <div class="text-[9px] font-cormorant font-semibold text-[#8a6e3d] border-t border-[#e4d2a0] pt-1">
+            Reserva <span class="font-bold text-[#2c2418]">20</span>
+          </div>
+        </div>
+
+        <!-- Suerte -->
+        <div class="col-span-1 bg-[#fffdf8] border border-[#b88e44] p-2 text-center relative flex flex-col justify-between">
+          <div class="text-[9px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider mb-1">Suerte</div>
+          <div class="flex items-center justify-center gap-1 my-1">
+            <span class="text-xl font-cinzel font-bold text-[#2c2418]">7</span>
+            <span class="text-sm font-cinzel text-[#8c6a28]">/</span>
+            <span class="text-sm font-cinzel text-[#8a6e3d]">10</span>
+          </div>
+          <div class="text-[9px] font-cormorant italic text-[#8a6e3d] border-t border-[#e4d2a0] pt-1">
+            Actual / Máx
+          </div>
+        </div>
+
+        <!-- Heridas -->
+        <div class="col-span-1 bg-[#fffdf8] border border-[#b88e44] p-2 text-center relative flex flex-col justify-between">
+          <div class="text-[9px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider mb-1">Heridas</div>
+          <div class="flex items-center justify-center gap-1 my-1">
+            <span class="text-xl font-cinzel font-bold text-[#2c2418]">0</span>
+            <span class="text-sm font-cinzel text-[#8c6a28]">/</span>
+            <span class="text-sm font-cinzel text-[#8a6e3d]">1</span>
+          </div>
+          <div class="text-[9px] font-cormorant italic text-[#8a6e3d] border-t border-[#e4d2a0] pt-1">
+            Graves
+          </div>
+        </div>
+
+        <!-- Movimiento -->
+        <div class="col-span-1 bg-[#fffdf8] border border-[#b88e44] p-2 text-center relative flex flex-col justify-between">
+          <div class="text-[9px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider mb-1">Movimiento</div>
+          <div class="my-1">
+            <span class="text-2xl font-cinzel font-bold text-[#2c2418]">6</span>
+          </div>
+          <div class="text-[9px] font-cormorant italic text-[#8a6e3d] border-t border-[#e4d2a0] pt-1">
+            Metros / T
+          </div>
+        </div>
+
+        <!-- Adrenalina (+VIG) -->
+        <div class="col-span-1 bg-[#fffdf8] border border-[#b88e44] p-2 text-center relative flex flex-col justify-between">
+          <div class="text-[9px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider mb-1">Adrenalina</div>
+          <div class="my-1">
+            <span class="text-base font-cinzel font-bold text-[#2c2418]">1d4+2</span>
+          </div>
+          <div class="text-[9px] font-cormorant font-semibold text-[#8a6e3d] border-t border-[#e4d2a0] pt-1">
+            (+VIG)
+          </div>
+        </div>
+
+        <!-- DP (Dados de Proeza) -->
+        <div class="col-span-1 bg-[#fffdf8] border border-[#b88e44] p-2 text-center relative flex flex-col justify-between">
+          <div class="text-[9px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider mb-1">DP</div>
+          <div class="my-1">
+            <span class="text-2xl font-cinzel font-bold text-[#2c2418]">1</span>
+          </div>
+          <div class="text-[9px] font-cormorant italic text-[#8a6e3d] border-t border-[#e4d2a0] pt-1">
+            Proeza
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- TALENTOS Y NOTAS -->
+      <!-- ========================================== -->
+      <div class="grid grid-cols-12 gap-8">
+        <!-- TALENTOS -->
+        <div class="col-span-6">
+          <div class="flex items-center justify-between border-b border-[#b88e44] pb-1 mb-4">
+            <span class="text-[12px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider">- Talentos -</span>
+            <span class="text-[10px] font-cinzel text-[#8a6e3d] uppercase tracking-widest">Efecto / Requisito</span>
+          </div>
+          <div class="space-y-4">
+            <div class="field-line pb-1.5">
+              <div class="flex items-baseline justify-between">
+                <span class="text-[16px] font-cinzel font-bold text-[#2c2418]">Ojo de halcón</span>
+                <span class="text-[11px] font-cinzel text-[#8a6e3d]">Pasivo</span>
+              </div>
+              <p class="text-[14px] font-cormorant text-[#2c2418] leading-snug mt-0.5">
+                +1 escalón de dado en tiradas de observación o puntería a larga distancia. Ignorás penalizaciones por bruma leve.
+              </p>
+            </div>
+
+            <div class="field-line pb-1.5">
+              <div class="flex items-baseline justify-between">
+                <span class="text-[16px] font-cinzel font-bold text-[#2c2418]">Mano firme</span>
+                <span class="text-[11px] font-cinzel text-[#8a6e3d]">Reacción</span>
+              </div>
+              <p class="text-[14px] font-cormorant text-[#2c2418] leading-snug mt-0.5">
+                Una vez por descanso podés relanzar el dado menor de una tirada de Agilidad antes de resolver el resultado.
+              </p>
+            </div>
+
+            <!-- Líneas libres para anotaciones futuras -->
+            <div class="field-line pb-4 opacity-50"></div>
+            <div class="field-line pb-4 opacity-50"></div>
+          </div>
+        </div>
+
+        <!-- NOTAS -->
+        <div class="col-span-6">
+          <div class="flex items-center justify-between border-b border-[#b88e44] pb-1 mb-4">
+            <span class="text-[12px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider">- Notas -</span>
+            <span class="text-[10px] font-cinzel text-[#8a6e3d] uppercase tracking-widest">Apuntes de viaje</span>
+          </div>
+          <div class="space-y-3">
+            <p class="field-line pb-1 text-[15px] font-cormorant italic text-[#2c2418]">
+              "El delta no se cartografía con tinta que no seque rápido, ni con miedo a las crecidas de medianoche."
+            </p>
+            <p class="field-line pb-1 text-[15px] font-cormorant text-[#2c2418]">
+              Tengo pendiente entregar la carta náutica de las Tres Bocas al maestre de la lonja antes del novilunio.
+            </p>
+            <div class="field-line pb-4 opacity-50"></div>
+            <div class="field-line pb-4 opacity-50"></div>
+            <div class="field-line pb-4 opacity-50"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- HOJA 2: LAZOS, EQUIPO, MAESTRÍAS Y ARMAS -->
+  <!-- ========================================== -->
+  <main class="w-full max-w-[960px] bg-[#fffdf8] border border-[#e4d2a0] p-3 shadow-md mb-12 relative">
+    <div class="border border-[#b88e44] p-8 bg-[#fffdf8] relative">
+      <div class="corner-bracket-tl"></div>
+      <div class="corner-bracket-br"></div>
+
+      <!-- Marca de agua en hoja -->
+      <div class="text-center text-[10px] font-cinzel text-[#8c6a28] tracking-[0.22em] uppercase select-none opacity-70 mb-5">
+        ~ ~ ~ &nbsp; albor &nbsp; ~ ~ &nbsp; hoja &nbsp; de &nbsp; personaje &nbsp; ~ &nbsp; página &nbsp; ii &nbsp; ~ ~ ~
+      </div>
+
+      <!-- Nombre del personaje centrado como en pantalla 8 -->
+      <div class="text-center mb-6">
+        <span class="text-[10px] font-cinzel uppercase text-[#8a6e3d] tracking-widest block">Nombre del personaje</span>
+        <span class="text-xl font-cinzel font-bold text-[#2c2418] border-b border-[#b88e44] px-10 pb-0.5 inline-block">
+          Iara Solís
+        </span>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- LAZOS (3 filas completas) -->
+      <!-- ========================================== -->
+      <div class="mb-7">
+        <div class="flex items-center justify-between border-b border-[#b88e44] pb-1 mb-3">
+          <span class="text-[12px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider">- Lazos -</span>
+          <span class="text-[10px] font-cinzel text-[#8a6e3d] uppercase tracking-widest">Notas</span>
+        </div>
+        <div class="space-y-2">
+          <!-- Fila 1 -->
+          <div class="list-row-line pb-1 flex items-baseline gap-4">
+            <span class="w-44 text-[15px] font-cinzel font-bold text-[#2c2418] flex-shrink-0">Tío Ernesto</span>
+            <span class="text-[15px] font-cormorant italic text-[#2c2418]">Me enseñó a leer las estrellas y a no temerle a las corrientes del Delta.</span>
+          </div>
+          <!-- Fila 2 -->
+          <div class="list-row-line pb-1 flex items-baseline gap-4">
+            <span class="w-44 text-[15px] font-cinzel font-bold text-[#2c2418] flex-shrink-0">Mateo del Faro</span>
+            <span class="text-[15px] font-cormorant italic text-[#2c2418]">Guarda mis mapas en secreto frente a las patrullas del gremio.</span>
+          </div>
+          <!-- Fila 3 -->
+          <div class="list-row-line pb-1 flex items-baseline gap-4">
+            <span class="w-44 text-[15px] font-cinzel font-bold text-[#2c2418] flex-shrink-0">Sombra de Juncal</span>
+            <span class="text-[15px] font-cormorant italic text-[#2c2418]">Espía ribereña que me debe dos favores y un barco.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- GRID DE DOS COLUMNAS: (ETIQUETAS + DOMINIO) / (EQUIPO) -->
+      <!-- ========================================== -->
+      <div class="grid grid-cols-12 gap-8 mb-7">
+        <!-- Columna Izquierda: ETIQUETAS (2x2) y DOMINIO (6 líneas) -->
+        <div class="col-span-6 space-y-6">
+          <!-- - ETIQUETAS - (2x2) -->
+          <div>
+            <div class="border-b border-[#b88e44] pb-1 mb-3">
+              <span class="text-[12px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider">- Etiquetas -</span>
+            </div>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+              <div class="list-row-line pb-1 text-[15px] font-cormorant font-semibold text-[#2c2418]">
+                <span class="text-[11px] font-cinzel text-[#8a6e3d] mr-1.5">1:</span> Curiosa
+              </div>
+              <div class="list-row-line pb-1 text-[15px] font-cormorant font-semibold text-[#2c2418]">
+                <span class="text-[11px] font-cinzel text-[#8a6e3d] mr-1.5">2:</span> Terca
+              </div>
+              <div class="list-row-line pb-1 text-[15px] font-cormorant font-semibold text-[#2c2418]">
+                <span class="text-[11px] font-cinzel text-[#8a6e3d] mr-1.5">3:</span> Nadadora
+              </div>
+              <div class="list-row-line pb-1 text-[15px] font-cormorant italic text-[#8a6e3d]">
+                <span class="text-[11px] font-cinzel text-[#8a6e3d] mr-1.5">4:</span> (vacío)
+              </div>
+            </div>
+          </div>
+
+          <!-- - DOMINIO - (6 líneas) -->
+          <div>
+            <div class="border-b border-[#b88e44] pb-1 mb-3">
+              <span class="text-[12px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider">- Dominio -</span>
+            </div>
+            <div class="space-y-2">
+              <div class="list-row-line pb-1 text-[15px] font-cormorant text-[#2c2418]">
+                <span class="text-[11px] font-cinzel text-[#8a6e3d] mr-2">1:</span> Cartografía fluvial de las islas bajas
+              </div>
+              <div class="list-row-line pb-1 text-[15px] font-cormorant text-[#2c2418]">
+                <span class="text-[11px] font-cinzel text-[#8a6e3d] mr-2">2:</span> Navegación nocturna a remo y vela
+              </div>
+              <div class="list-row-line pb-1 text-[15px] font-cormorant text-[#2c2418]">
+                <span class="text-[11px] font-cinzel text-[#8a6e3d] mr-2">3:</span> Lectura de mareas y bancos de arena
+              </div>
+              <div class="list-row-line pb-1 text-[15px] font-cormorant text-[#2c2418]">
+                <span class="text-[11px] font-cinzel text-[#8a6e3d] mr-2">4:</span> Trato con contrabandistas del Delta
+              </div>
+              <div class="list-row-line pb-1 text-[15px] font-cormorant text-[#8a6e3d] italic opacity-60">
+                <span class="text-[11px] font-cinzel text-[#8a6e3d] mr-2">5:</span> (línea libre)
+              </div>
+              <div class="list-row-line pb-1 text-[15px] font-cormorant text-[#8a6e3d] italic opacity-60">
+                <span class="text-[11px] font-cinzel text-[#8a6e3d] mr-2">6:</span> (línea libre)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha: EQUIPO (11 líneas) -->
+        <div class="col-span-6">
+          <div class="border-b border-[#b88e44] pb-1 mb-3">
+            <span class="text-[12px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider">- Equipo -</span>
+          </div>
+          <div class="space-y-1.5">
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#2c2418]">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">1:</span> Brújula de bronce tallada
+            </div>
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#2c2418]">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">2:</span> Cuerda de cáñamo 15 m con gancho
+            </div>
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#2c2418]">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">3:</span> Estuche de cuero con tinta sepia y plumas
+            </div>
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#2c2418]">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">4:</span> Cuaderno de pergamino virgen
+            </div>
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#2c2418]">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">5:</span> Farol sordo y frasco de aceite
+            </div>
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#2c2418]">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">6:</span> Raciones de viaje secas (4 días)
+            </div>
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#2c2418]">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">7:</span> Cantimplora de peltre con agua dulce
+            </div>
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#2c2418]">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">8:</span> Pedernal, eslabón y yesca en lata
+            </div>
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#2c2418]">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">9:</span> Manto impermeable encerado
+            </div>
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#2c2418]">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">10:</span> Muda de ropa ligera de marinera
+            </div>
+            <div class="list-row-line pb-0.5 text-[14px] font-cormorant text-[#8a6e3d] italic opacity-60">
+              <span class="text-[10px] font-cinzel text-[#8a6e3d] mr-2">11:</span> (vacío para anotar nuevo equipo)
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- MAESTRÍAS (6 filas) -->
+      <!-- ========================================== -->
+      <div class="mb-7">
+        <div class="flex items-center justify-between border-b border-[#b88e44] pb-1 mb-3">
+          <span class="text-[12px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider">- Maestrías -</span>
+          <span class="text-[10px] font-cinzel text-[#8a6e3d] uppercase tracking-widest">Descripción</span>
+        </div>
+        <div class="space-y-2">
+          <!-- Fila 1 -->
+          <div class="list-row-line pb-1 flex items-baseline gap-4">
+            <span class="w-48 text-[15px] font-cinzel font-bold text-[#2c2418] flex-shrink-0">Trazado Fiel</span>
+            <span class="text-[15px] font-cormorant text-[#2c2418]">Reduce la dificultad de orientarse en territorio desconocido en un escalón.</span>
+          </div>
+          <!-- Fila 2 -->
+          <div class="list-row-line pb-1 flex items-baseline gap-4">
+            <span class="w-48 text-[15px] font-cinzel font-bold text-[#2c2418] flex-shrink-0">Paso Silencioso del Agua</span>
+            <span class="text-[15px] font-cormorant text-[#2c2418]">Permite avanzar sin emitir sonido a lo largo de marismas o riberas.</span>
+          </div>
+          <!-- Fila 3 -->
+          <div class="list-row-line pb-1 flex items-baseline gap-4">
+            <span class="w-48 text-[15px] font-cinzel font-bold text-[#2c2418] flex-shrink-0">Ojo de Vigía</span>
+            <span class="text-[15px] font-cormorant text-[#2c2418]">+1 a Tiradas de percepción visual bajo niebla o luz tenue.</span>
+          </div>
+          <!-- Fila 4 -->
+          <div class="list-row-line pb-1 flex items-baseline gap-4">
+            <span class="w-48 text-[15px] font-cinzel font-bold text-[#2c2418] flex-shrink-0">Nudo Corredizo</span>
+            <span class="text-[15px] font-cormorant text-[#2c2418]">Ata y asegura amarras o prisioneros con rapidez inusitada.</span>
+          </div>
+          <!-- Fila 5 (libre) -->
+          <div class="list-row-line pb-1 flex items-baseline gap-4 opacity-50">
+            <span class="w-48 text-[15px] font-cinzel font-bold text-[#8a6e3d] flex-shrink-0 italic">(sin asignar)</span>
+            <span class="text-[15px] font-cormorant italic text-[#8a6e3d]">Línea libre para maestría desbloqueada</span>
+          </div>
+          <!-- Fila 6 (libre) -->
+          <div class="list-row-line pb-1 flex items-baseline gap-4 opacity-50">
+            <span class="w-48 text-[15px] font-cinzel font-bold text-[#8a6e3d] flex-shrink-0 italic">(sin asignar)</span>
+            <span class="text-[15px] font-cormorant italic text-[#8a6e3d]">Línea libre para maestría desbloqueada</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- ARMAS Y ARMADURA (5 filas - Modo lectura sin botón tirar) -->
+      <!-- ========================================== -->
+      <div class="mb-8">
+        <div class="flex items-center justify-between border-b border-[#b88e44] pb-1 mb-3">
+          <span class="text-[12px] font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider">- Armas y Armadura -</span>
+          <span class="text-[10px] font-cinzel text-[#8a6e3d] uppercase tracking-widest">stat × dado + momentum</span>
+        </div>
+        <div class="space-y-3">
+          <!-- Arma 1: Daga curva del Delta -->
+          <div class="border border-[#b88e44] p-3 bg-[#fffdf8] relative">
+            <div class="flex items-baseline justify-between mb-1">
+              <span class="text-[16px] font-cinzel font-bold text-[#2c2418]">Daga curva del Delta</span>
+              <span class="text-[14px] font-cormorant italic text-[#8a6e3d]">ligera, arrojadiza, acero oxidado veloz</span>
+            </div>
+            <div class="flex items-center gap-4 text-xs font-cinzel text-[#8a6e3d] border-t border-[#e4d2a0] pt-1.5">
+              <span>STAT: <strong class="text-[#2c2418]">AGI (3)</strong></span>
+              <span>·</span>
+              <span>DADO: <strong class="text-[#2c2418]">d6</strong></span>
+              <span>·</span>
+              <span>MOMENTUM: <strong class="text-[#2c2418]">0</strong></span>
+              <span>·</span>
+              <span class="text-[#8c6a28] font-bold">AGI 3 × d6 → 3d6</span>
+            </div>
+          </div>
+
+          <!-- Arma 2: Arco corto de caña -->
+          <div class="border border-[#b88e44] p-3 bg-[#fffdf8] relative">
+            <div class="flex items-baseline justify-between mb-1">
+              <span class="text-[16px] font-cinzel font-bold text-[#2c2418]">Arco corto de caña</span>
+              <span class="text-[14px] font-cormorant italic text-[#8a6e3d]">alcance medio, tensado rápido</span>
+            </div>
+            <div class="flex items-center gap-4 text-xs font-cinzel text-[#8a6e3d] border-t border-[#e4d2a0] pt-1.5">
+              <span>STAT: <strong class="text-[#2c2418]">AGI (3)</strong></span>
+              <span>·</span>
+              <span>DADO: <strong class="text-[#2c2418]">d6</strong></span>
+              <span>·</span>
+              <span>MOMENTUM: <strong class="text-[#2c2418]">1</strong></span>
+              <span>·</span>
+              <span class="text-[#8c6a28] font-bold">AGI 3 × d6 + 1 → 3d6 (+1)</span>
+            </div>
+          </div>
+
+          <!-- Arma 3: Pebetero de humo cegador -->
+          <div class="border border-[#b88e44] p-3 bg-[#fffdf8] relative">
+            <div class="flex items-baseline justify-between mb-1">
+              <span class="text-[16px] font-cinzel font-bold text-[#2c2418]">Pebetero de humo cegador</span>
+              <span class="text-[14px] font-cormorant italic text-[#8a6e3d]">consumible, área corta</span>
+            </div>
+            <div class="flex items-center gap-4 text-xs font-cinzel text-[#8a6e3d] border-t border-[#e4d2a0] pt-1.5">
+              <span>STAT: <strong class="text-[#2c2418]">APT (3)</strong></span>
+              <span>·</span>
+              <span>DADO: <strong class="text-[#2c2418]">d4</strong></span>
+              <span>·</span>
+              <span>MOMENTUM: <strong class="text-[#2c2418]">0</strong></span>
+              <span>·</span>
+              <span class="text-[#8c6a28] font-bold">APT 3 × d4 → 3d4</span>
+            </div>
+          </div>
+
+          <!-- Arma 4 (libre) -->
+          <div class="border border-[#e4d2a0] p-2.5 bg-[#fffdf8] relative opacity-60">
+            <div class="flex items-baseline justify-between">
+              <span class="text-[15px] font-cinzel italic text-[#8a6e3d]">(arma sin asignar)</span>
+              <span class="text-[14px] font-cormorant italic text-[#8a6e3d]">espacio para arma de reserva</span>
+            </div>
+          </div>
+
+          <!-- Arma 5 (libre) -->
+          <div class="border border-[#e4d2a0] p-2.5 bg-[#fffdf8] relative opacity-60">
+            <div class="flex items-baseline justify-between">
+              <span class="text-[15px] font-cinzel italic text-[#8a6e3d]">(arma sin asignar)</span>
+              <span class="text-[14px] font-cormorant italic text-[#8a6e3d]">espacio para armadura o escudo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PIE DE HOJA ALBOR -->
+      <footer class="border-t border-[#b88e44] pt-4 mt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-[#8a6e3d] font-cormorant">
+        <div class="flex items-center gap-2 mb-2 sm:mb-0">
+          <span class="font-cinzel font-bold text-[#8c6a28] uppercase tracking-wider text-[11px]">albor</span>
+          <span>·</span>
+          <span class="font-cinzel text-[10px] tracking-widest text-[#2c2418]">Albor v0.4 — 2026</span>
+        </div>
+        <div class="italic text-[13px] text-right">
+          Albor es un juego de rol, fantasía y exploración creado por Augusto Marini. Todos los derechos reservados.
+        </div>
+      </footer>
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- SECCIÓN VARIANTE: ESTADO DE ERROR (ENLACE VACÍO) -->
+  <!-- ========================================== -->
+  <aside class="w-full max-w-[960px] mt-6 pt-8 border-t-2 border-dashed border-[#b88e44]/40">
+    <div class="text-center mb-3">
+      <span class="text-[10px] font-cinzel uppercase tracking-[0.2em] text-[#8a6e3d]">
+        Variante de vista previa: Estado cuando no se encuentra ficha
+      </span>
+    </div>
+
+    <div class="bg-[#fffdf8] border-2 border-[#9a3b2a] p-8 shadow-sm text-center relative">
+      <div class="w-12 h-12 mx-auto mb-3 text-[#9a3b2a] flex items-center justify-center">
+        <!-- Ícono pergamino roto / advertencia en sepia-óxido -->
+        <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+      </div>
+
+      <h2 class="text-xl font-cinzel font-bold text-[#9a3b2a] tracking-wide mb-2">
+        No hay ficha en este enlace.
+      </h2>
+      <p class="text-base font-cormorant text-[#2c2418] max-w-md mx-auto mb-6">
+        No pudimos encontrar datos para este identificador o el archivo fue desvinculado. Importá un archivo JSON para cargar y visualizar tu personaje.
+      </p>
+
+      <button class="px-6 py-2.5 bg-[#2a2724] border-2 border-[#b88e44] text-[#f7f1e4] font-cinzel font-bold text-[12px] uppercase tracking-wider hover:bg-[#3d3834] active:scale-95 transition-all inline-flex items-center gap-2 cursor-pointer shadow-sm">
+        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
+        </svg>
+        Abrir JSON
+      </button>
+    </div>
+  </aside>
+
+</body>
+</html>

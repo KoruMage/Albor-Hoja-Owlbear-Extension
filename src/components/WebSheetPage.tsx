@@ -19,35 +19,42 @@ export function WebSheetPage() {
     [character?.nombre],
   );
 
+  const openJson = () => fileRef.current?.click();
+
   return (
     <div className="standalone standalone--web">
-      <header className="header">
-        <div>
-          <p className="wordmark">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</p>
-          <h1>{title}</h1>
-          <p className="muted">Vista web de solo lectura</p>
+      <header className="web-header">
+        <p className="wordmark">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</p>
+        <div className="web-header__card">
+          <div>
+            <h1 className="web-header__title">{title}</h1>
+            <p className="web-header__subtitle">Vista web de solo lectura</p>
+          </div>
+          <div className="web-header__actions">
+            <button type="button" onClick={openJson}>
+              Abrir JSON
+            </button>
+            <button
+              type="button"
+              className="btn-primary"
+              disabled={!character}
+              onClick={() => {
+                if (!character) return;
+                void fillAlborPdf(character)
+                  .then((bytes) =>
+                    downloadBytes(`${slug(character.nombre)}.pdf`, bytes, "application/pdf"),
+                  )
+                  .catch((err: unknown) => {
+                    window.alert(
+                      err instanceof Error ? err.message : "No se pudo exportar el PDF.",
+                    );
+                  });
+              }}
+            >
+              Exportar PDF
+            </button>
+          </div>
         </div>
-        <button type="button" onClick={() => fileRef.current?.click()}>
-          Abrir JSON
-        </button>
-        <button
-          type="button"
-          disabled={!character}
-          onClick={() => {
-            if (!character) return;
-            void fillAlborPdf(character)
-              .then((bytes) =>
-                downloadBytes(`${slug(character.nombre)}.pdf`, bytes, "application/pdf"),
-              )
-              .catch((err: unknown) => {
-                window.alert(
-                  err instanceof Error ? err.message : "No se pudo exportar el PDF.",
-                );
-              });
-          }}
-        >
-          Exportar PDF
-        </button>
         <input
           ref={fileRef}
           type="file"
@@ -67,7 +74,14 @@ export function WebSheetPage() {
           }}
         />
       </header>
-      {error && <p className="web-sheet__error">{error}</p>}
+      {error && (
+        <div className="web-error" role="alert">
+          <p className="web-error__message">{error}</p>
+          <button type="button" className="btn-primary" onClick={openJson}>
+            Abrir JSON
+          </button>
+        </div>
+      )}
       {character && (
         <CharacterSheet character={character} readOnly dicePlusEnabled={false} />
       )}

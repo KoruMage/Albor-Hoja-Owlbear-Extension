@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Albor - Hoja de Personaje (Extensión Owlbear Rodeo)</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Cinzel & Cormorant Garamond -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "accent-sun": "#e08a2c",
+            "on-background": "#1f1b15",
+            "primary": "#b88e44",
+            "inverse-primary": "#eebf70",
+            "on-primary-fixed-variant": "#5f4100",
+            "success": "#3d7a52",
+            "surface-container-low": "#fcf2e9",
+            "on-primary": "#ffffff",
+            "surface-container": "#f6ece3",
+            "inverse-surface": "#34302a",
+            "secondary": "#795918",
+            "on-tertiary-container": "#002e59",
+            "on-primary-fixed": "#271900",
+            "background": "#f7f1e4",
+            "surface-dim": "#e2d9cf",
+            "on-secondary-fixed-variant": "#5e4200",
+            "primary-dark": "#8c6a28",
+            "surface-bright": "#fff8f3",
+            "on-tertiary": "#ffffff",
+            "on-surface": "#1f1b15",
+            "on-error-container": "#93000a",
+            "on-error": "#ffffff",
+            "inverse-on-surface": "#f9efe6",
+            "surface-tint": "#7b5811",
+            "on-tertiary-fixed": "#001c39",
+            "on-secondary": "#ffffff",
+            "tertiary-fixed-dim": "#a6c8fc",
+            "on-secondary-fixed": "#271900",
+            "error": "#9a3b2a",
+            "outline": "#c4a15a",
+            "on-secondary-container": "#785817",
+            "error-container": "#ffdad6",
+            "surface-container-highest": "#eae1d8",
+            "outline-variant": "#d2c4b3",
+            "tertiary-fixed": "#d4e3ff",
+            "on-tertiary-fixed-variant": "#234874",
+            "tertiary": "#3d608d",
+            "surface-container-high": "#f0e7dd",
+            "surface": "#fffdf8",
+            "on-surface-inverse": "#f7f1e4",
+            "on-surface-variant": "#4f4538",
+            "secondary-fixed": "#ffdea8",
+            "surface-variant": "#eae1d8",
+            "surface-inverse": "#2a2724",
+            "primary-light": "#e4d2a0",
+            "on-primary-container": "#3f2a00",
+            "primary-fixed-dim": "#eebf70",
+            "primary-container": "#b88e44",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed-dim": "#ebc075",
+            "primary-fixed": "#ffdeab",
+            "tertiary-container": "#7597c8",
+            "secondary-container": "#fdd184"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "16px",
+            "gutter": "10px",
+            "space-sm": "6px",
+            "space-xs": "4px",
+            "space-lg": "14px",
+            "margin": "16px",
+            "space-md": "10px"
+          },
+          "fontFamily": {
+            "button": ["Cinzel", "serif"],
+            "display": ["Cinzel", "serif"],
+            "section-title": ["Cinzel", "serif"],
+            "label": ["Cinzel", "serif"],
+            "input": ["Cormorant Garamond", "serif"],
+            "body": ["Cormorant Garamond", "serif"],
+            "die-number": ["Cinzel", "serif"]
+          },
+          "fontSize": {
+            "button": ["10px", { "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "display": ["20px", { "letterSpacing": "0.12em", "fontWeight": "700" }],
+            "section-title": ["13px", { "letterSpacing": "0.14em", "fontWeight": "700" }],
+            "label": ["11px", { "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "input": ["15px", { "fontWeight": "600" }],
+            "body": ["14px", { "fontWeight": "500" }],
+            "die-number": ["22px", { "fontWeight": "700" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    /* Estilos de imprenta artesanal y fileteado dorado */
+    .metallic-baseline {
+      background: linear-gradient(90deg, #e8d5a3 0%, #b88e44 35%, #7a5a22 65%, #d4b46a 100%);
+      height: 1.5px;
+    }
+    .gold-fillet-double {
+      border: 1px solid #b88e44;
+      outline: 1px solid #c4a15a;
+      outline-offset: -4px;
+    }
+    .crop-mark-tl {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 10px;
+      height: 10px;
+      border-top: 1.5px solid #b88e44;
+      border-left: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    .crop-mark-br {
+      position: absolute;
+      bottom: 3px;
+      right: 3px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 1.5px solid #b88e44;
+      border-right: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    .crop-mark-tr {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 10px;
+      height: 10px;
+      border-top: 1.5px solid #b88e44;
+      border-right: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    .crop-mark-bl {
+      position: absolute;
+      bottom: 3px;
+      left: 3px;
+      width: 10px;
+      height: 10px;
+      border-bottom: 1.5px solid #b88e44;
+      border-left: 1.5px solid #b88e44;
+      pointer-events: none;
+    }
+    .btn-charcoal {
+      background-color: #2a2724;
+      color: #f7f1e4;
+      border: 1px solid #b88e44;
+      transition: all 0.15s ease;
+    }
+    .btn-charcoal:hover {
+      background-color: #34302a;
+      color: #ffdeab;
+      border-color: #eebf70;
+    }
+    .btn-ghost-gold {
+      background-color: transparent;
+      color: #795918;
+      border: 1px solid #b88e44;
+      transition: all 0.15s ease;
+    }
+    .btn-ghost-gold:hover {
+      background-color: #fcf2e9;
+      color: #271900;
+    }
+    .btn-danger-outline {
+      background-color: transparent;
+      color: #9a3b2a;
+      border: 1px solid #9a3b2a;
+      transition: all 0.15s ease;
+    }
+    .btn-danger-outline:hover {
+      background-color: #ffdad6;
+      border-color: #9a3b2a;
+    }
+    .btn-danger-solid {
+      background-color: #9a3b2a;
+      color: #fffdf8;
+      border: 1px solid #75281a;
+      transition: all 0.15s ease;
+    }
+    .btn-danger-solid:hover {
+      background-color: #842f20;
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body class="bg-[#1f1b15] text-on-surface antialiased min-h-screen py-10 px-4 flex flex-col items-center justify-start font-body selection:bg-primary-light selection:text-surface-inverse">
+<!-- ========================================== -->
+<!-- BARRA DE CONTROL DEL PROTOTIPO (INTERACTIVA) -->
+<!-- ========================================== -->
+<header class="w-full max-w-[900px] mb-4 flex flex-col sm:flex-row items-center justify-between bg-surface-inverse px-space-lg py-space-sm border border-outline shadow-md gap-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-xl">palette</span>
+<span class="font-label text-label text-inverse-primary tracking-widest uppercase">Owlbear Rodeo 2.0 · Extensión Albor</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label text-[10px] text-surface-container-highest uppercase tracking-wider mr-2">Simular Diálogo:</span>
+<button class="px-3 py-1 font-button text-button uppercase transition-colors bg-primary text-surface-inverse font-bold" id="btn-tab-discard" onclick="switchModal('discard')">1. Descartar</button>
+<button class="px-3 py-1 font-button text-button uppercase transition-colors bg-inverse-surface text-primary-light hover:text-white" id="btn-tab-delete" onclick="switchModal('delete')">2. Borrar</button>
+<button class="px-3 py-1 font-button text-button uppercase transition-colors bg-inverse-surface text-primary-light hover:text-white" id="btn-tab-error" onclick="switchModal('error')">3. Error JSON</button>
+</div>
+</header>
+<!-- ================================================================= -->
+<!-- CONTENEDOR POPOVER DE 900x700 PX (EXTENSIÓN ALBOR EN OWLBEAR)     -->
+<!-- ================================================================= -->
+<main class="w-[900px] h-[700px] relative bg-background border-2 border-outline overflow-hidden flex flex-col shadow-2xl select-none">
+<!-- MARCA DE AGUA CENTRADA SUPERIOR -->
+<div class="w-full text-center py-1 bg-surface-container-low border-b border-outline-variant/60 flex items-center justify-center">
+<p class="font-label text-[10px] tracking-[0.28em] text-secondary/70 uppercase">
+        ~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~
+      </p>
+</div>
+<!-- COMPONENTE COMPARTIDO: TopNavBar -->
+<div class="w-full border-b border-outline dark:border-primary-dark bg-background">
+<div class="w-full px-space-lg py-space-sm flex items-center justify-between">
+<!-- Logo e Identidad -->
+<div class="flex items-center gap-3">
+<img alt="Sol Naciente Albor" class="h-8 w-auto object-contain border border-primary/30 p-0.5 bg-surface" src="https://lh3.googleusercontent.com/aida/AEtjO1UgJlE_0JNeKGx4tNPQcavIE6_Leyp_gZEgrz6RMR8sIjvhqrOKZ3WiV3efpn8bbvE_h2d_2h8zZlvKvaMzomf_ud6rh8IrB50tmP63uJc9bOvsLnEgarhRgkoBUhsnPD9mWDNmB8ZDlxclpLEnsu-vnQmjYHR1WA_S0D0NrfXXMPAcQSRqkaGh-TyIL7q4wR7_8yxtRlbl8N3ZRyRrwF4xEJqsKrWrokKTO6MIdC9xPE3INl0FBSG-Vwg"/>
+<div class="flex flex-col">
+<div class="flex items-baseline gap-2">
+<span class="font-display text-display text-on-surface uppercase tracking-widest leading-none">ALBOR</span>
+<span class="text-[10px] font-label text-primary font-bold">v0.4.2</span>
+</div>
+<span class="font-body text-xs text-on-surface-variant tracking-normal italic mt-0.5">Vista de jugador · Nahuel</span>
+</div>
+</div>
+<!-- Navigation Links (Ficha, Tiradas, Opciones) -->
+<nav class="flex items-center space-x-1">
+<a class="bg-surface-inverse text-primary-light border-b-2 border-primary font-bold px-3 py-1 font-label text-label cursor-pointer transition-colors duration-150" href="#">Ficha</a>
+<a class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container px-3 py-1 font-label text-label cursor-pointer transition-colors duration-150" href="#">Tiradas</a>
+<a class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container px-3 py-1 font-label text-label cursor-pointer transition-colors duration-150" href="#">Opciones</a>
+</nav>
+<!-- Trailing Actions (Nuevo, Duplicar, folder, share) -->
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 bg-surface-inverse text-primary-light font-button text-button uppercase hover:bg-inverse-surface border border-primary/40 active:scale-95 transition-all">Nuevo</button>
+<button class="px-2.5 py-1 bg-surface text-secondary font-button text-button uppercase hover:bg-surface-container border border-outline active:scale-95 transition-all">Duplicar</button>
+<div class="h-4 w-[1px] bg-outline mx-1"></div>
+<button class="p-1 hover:bg-surface-container text-secondary transition-colors" title="Cargar Archivo">
+<span class="material-symbols-outlined text-[18px]">folder</span>
+</button>
+<button class="p-1 hover:bg-surface-container text-secondary transition-colors" title="Compartir Ficha">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- CONTENIDO DE FONDO: FICHA DE IARA SOLÍS                  -->
+<!-- ======================================================== -->
+<div class="flex-1 p-space-md grid grid-cols-12 gap-3 overflow-hidden bg-background">
+<!-- Columna Izquierda: Identidad y Rasgos -->
+<section class="col-span-4 flex flex-col gap-3">
+<!-- Bloque Personaje -->
+<div class="bg-surface p-3 border border-outline relative">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-tr"></div>
+<div class="crop-mark-bl"></div>
+<div class="crop-mark-br"></div>
+<div class="mb-2">
+<span class="font-label text-[10px] text-secondary block uppercase tracking-wider">Nombre del personaje</span>
+<div class="font-display text-lg font-bold text-on-surface leading-tight">Iara Solís</div>
+<div class="metallic-baseline mt-1 mb-2"></div>
+</div>
+<div class="grid grid-cols-2 gap-2 text-xs">
+<div>
+<span class="font-label text-[9px] text-on-surface-variant block uppercase">Arquetipo</span>
+<span class="font-body text-input font-bold text-on-surface">Exploradora</span>
+</div>
+<div>
+<span class="font-label text-[9px] text-on-surface-variant block uppercase">Origen</span>
+<span class="font-body text-input font-bold text-on-surface">Estepas del Sur</span>
+</div>
+<div>
+<span class="font-label text-[9px] text-on-surface-variant block uppercase">Nivel</span>
+<span class="font-display text-sm font-bold text-primary-dark">3</span>
+</div>
+<div>
+<span class="font-label text-[9px] text-on-surface-variant block uppercase">Solsticio</span>
+<span class="font-body text-input text-on-surface">Primavera</span>
+</div>
+</div>
+</div>
+<!-- Vitalidad & Aliento -->
+<div class="bg-surface p-3 border border-outline flex flex-col gap-2">
+<div class="flex justify-between items-center border-b border-outline-variant pb-1">
+<span class="font-section-title text-section-title text-secondary uppercase">Signos Vitales</span>
+<span class="font-label text-[10px] text-on-surface-variant">HERIDAS: 1 / 4</span>
+</div>
+<div class="grid grid-cols-2 gap-2 pt-1">
+<div class="bg-surface-container-low p-2 border border-outline/50 text-center">
+<span class="font-label text-[10px] text-on-surface-variant block uppercase">Vigor Actual</span>
+<span class="font-die-number text-die-number text-on-surface font-bold">14</span>
+<span class="font-label text-[9px] text-secondary">/ 18 Máx</span>
+</div>
+<div class="bg-surface-container-low p-2 border border-outline/50 text-center">
+<span class="font-label text-[10px] text-on-surface-variant block uppercase">Aliento</span>
+<span class="font-die-number text-die-number text-tertiary font-bold">5</span>
+<span class="font-label text-[9px] text-secondary">/ 6 Puntos</span>
+</div>
+</div>
+</div>
+<!-- Atributos -->
+<div class="bg-surface p-3 border border-outline flex-1">
+<span class="font-section-title text-section-title text-secondary uppercase block mb-2">Atributos Base</span>
+<div class="space-y-1.5 text-xs">
+<div class="flex justify-between items-center py-1 border-b border-outline-variant/40">
+<span class="font-label text-label uppercase">Fuerza</span>
+<span class="font-display font-bold text-on-surface bg-surface-container px-2 py-0.5 border border-outline/40">+2 (d8)</span>
+</div>
+<div class="flex justify-between items-center py-1 border-b border-outline-variant/40">
+<span class="font-label text-label uppercase">Agilidad</span>
+<span class="font-display font-bold text-on-surface bg-surface-container px-2 py-0.5 border border-outline/40">+3 (d10)</span>
+</div>
+<div class="flex justify-between items-center py-1 border-b border-outline-variant/40">
+<span class="font-label text-label uppercase">Intelecto</span>
+<span class="font-display font-bold text-on-surface bg-surface-container px-2 py-0.5 border border-outline/40">+1 (d6)</span>
+</div>
+<div class="flex justify-between items-center py-1">
+<span class="font-label text-label uppercase">Presencia</span>
+<span class="font-display font-bold text-on-surface bg-surface-container px-2 py-0.5 border border-outline/40">+0 (d6)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Columna Central y Derecha: Talentos, Armamento y Notas -->
+<section class="col-span-8 flex flex-col gap-3">
+<div class="bg-surface p-3 border border-outline relative">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-tr"></div>
+<div class="flex justify-between items-center mb-2">
+<span class="font-section-title text-section-title text-secondary uppercase">Maestrías y Talentos de Campo</span>
+<span class="font-label text-[10px] text-accent-sun font-bold">Rango II Activo</span>
+</div>
+<div class="space-y-2">
+<div class="p-2 border-b-2 border-primary relative pr-3 bg-surface-container-low/40">
+<div class="flex justify-between items-center">
+<span class="font-label text-xs font-bold text-on-surface">Paso Inaudible de la Estepa</span>
+<span class="font-label text-[10px] text-primary">Iniciativa / Sigilo</span>
+</div>
+<p class="font-body text-xs text-on-surface-variant italic mt-0.5">Podés gastar 1 punto de Aliento para volver a tirar un dado de Agilidad en pruebas de emboscada o rastreo.</p>
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-[2px] h-[10px] bg-primary"></div>
+</div>
+<div class="p-2 border-b-2 border-primary relative pr-3 bg-surface-container-low/40">
+<div class="flex justify-between items-center">
+<span class="font-label text-xs font-bold text-on-surface">Tiro Certero a Larga Distancia</span>
+<span class="font-label text-[10px] text-primary">Ataque Rango</span>
+</div>
+<p class="font-body text-xs text-on-surface-variant italic mt-0.5">Ignorás la penalización de cobertura ligera al disparar con tu arco compuesto de tejón.</p>
+<div class="absolute right-0 top-1/2 -translate-y-1/2 w-[2px] h-[10px] bg-primary"></div>
+</div>
+</div>
+</div>
+<!-- Inventario & Cargas -->
+<div class="grid grid-cols-2 gap-3 flex-1">
+<div class="bg-surface p-3 border border-outline flex flex-col">
+<span class="font-section-title text-section-title text-secondary uppercase mb-2">Armamento Equipado</span>
+<ul class="text-xs space-y-2 font-body flex-1">
+<li class="flex justify-between items-center border-b border-outline-variant/30 pb-1">
+<span class="font-semibold text-on-surface">Arco de Fresno Reforzado</span>
+<span class="font-label text-[10px] text-primary-dark">1d8+3 [Perforante]</span>
+</li>
+<li class="flex justify-between items-center border-b border-outline-variant/30 pb-1">
+<span class="font-semibold text-on-surface">Daga de Trinchera de Bronce</span>
+<span class="font-label text-[10px] text-primary-dark">1d4+2 [Ligera]</span>
+</li>
+<li class="flex justify-between items-center pb-1">
+<span class="font-semibold text-on-surface">Carcaj de Saetas (x18)</span>
+<span class="font-label text-[10px] text-on-surface-variant">2 espacios</span>
+</li>
+</ul>
+</div>
+<div class="bg-surface p-3 border border-outline flex flex-col">
+<span class="font-section-title text-section-title text-secondary uppercase mb-2">Vínculos y Promesas</span>
+<div class="text-xs font-body text-on-surface-variant space-y-2 leading-relaxed">
+<p>• <strong class="text-on-surface font-label text-[11px]">Deuda con Donato:</strong> Le prometí recuperar el relicario solar de su familia antes del invierno austral.</p>
+<p>• <strong class="text-on-surface font-label text-[11px]">Temor al Vacío:</strong> Reacciona con desconfianza ante hechiceros de las ciénagas profundas.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Barra de Estado Inferior -->
+<footer class="bg-surface-container-high px-space-md py-1 border-t border-outline flex justify-between items-center text-[10px] font-label text-on-surface-variant">
+<span>PERSONAJE: IARA SOLÍS · ESTADO: EN SESIÓN</span>
+<span class="flex items-center gap-1">
+<span class="inline-block w-2 h-2 rounded-full bg-success"></span>
+        SINCRONIZADO CON OWLBEAR ROOM #4092
+      </span>
+</footer>
+<!-- ================================================================= -->
+<!-- VELO DE CARBÓN AL 60% (#2a2724 con opacidad 60%)                  -->
+<!-- ================================================================= -->
+<div class="absolute inset-0 bg-[#2a2724]/60 backdrop-blur-none z-30 flex items-center justify-center p-6">
+<!-- ============================================================= -->
+<!-- DIÁLOGO 1: CONFIRMACIÓN DE DESCARTE (ACTIVO POR DEFECTO)     -->
+<!-- ============================================================= -->
+<div class="modal-card w-full max-w-[480px] bg-surface gold-fillet-double p-space-xl relative shadow-none select-text" id="modal-discard">
+<!-- Escuadras ornamentales de 10x10 px (1.5px trazo oro) -->
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-tr"></div>
+<div class="crop-mark-bl"></div>
+<div class="crop-mark-br"></div>
+<!-- Encabezado del diálogo con glifo de imprenta -->
+<div class="flex items-start gap-3 mb-2">
+<div class="w-7 h-7 flex-shrink-0 flex items-center justify-center border border-outline bg-surface-container-low text-secondary mt-0.5">
+<span class="material-symbols-outlined text-lg">history_edu</span>
+</div>
+<div>
+<span class="font-label text-[9px] text-secondary tracking-widest uppercase block">Revisión de Ficha</span>
+<h2 class="font-section-title text-[13px] text-on-surface tracking-[0.14em] uppercase font-bold leading-snug">
+              HAY CAMBIOS SIN GUARDAR. ¿DESCARTARLOS?
+            </h2>
+</div>
+</div>
+<div class="metallic-baseline my-2.5"></div>
+<!-- Texto explicativo con voseo rioplatense -->
+<p class="font-body text-body text-on-surface leading-relaxed mb-space-lg">
+          Tenés modificaciones recientes en la ficha de <strong class="font-bold text-on-surface">Iara Solís</strong> que no se guardaron. Si salís o cambiás de personaje ahora, se van a perder.
+        </p>
+<!-- Botones de Acción -->
+<div class="flex items-center justify-end gap-3 pt-2">
+<button class="btn-ghost-gold px-4 py-2 font-button text-button uppercase tracking-wider" onclick="alert('Acción Cancelada: permanencés en la ficha')">
+            CANCELAR
+          </button>
+<button class="btn-danger-outline px-4 py-2 font-button text-button uppercase tracking-wider font-bold" onclick="alert('Cambios descartados exitosamente')">
+            DESCARTAR
+          </button>
+</div>
+</div>
+<!-- ============================================================= -->
+<!-- DIÁLOGO 2: ACCIÓN DESTRUCTIVA (ELIMINAR)                       -->
+<!-- ============================================================= -->
+<div class="modal-card hidden w-full max-w-[480px] bg-surface gold-fillet-double p-space-xl relative shadow-none select-text" id="modal-delete">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-tr"></div>
+<div class="crop-mark-bl"></div>
+<div class="crop-mark-br"></div>
+<div class="flex items-start gap-3 mb-2">
+<div class="w-7 h-7 flex-shrink-0 flex items-center justify-center border border-error bg-[#ffdad6]/40 text-error mt-0.5">
+<span class="material-symbols-outlined text-lg">delete_forever</span>
+</div>
+<div>
+<span class="font-label text-[9px] text-error tracking-widest uppercase block">Peligro Permanente</span>
+<h2 class="font-section-title text-[13px] text-error tracking-[0.14em] uppercase font-bold leading-snug">
+              ¿BORRAR A IARA SOLÍS?
+            </h2>
+</div>
+</div>
+<div class="metallic-baseline my-2.5"></div>
+<p class="font-body text-body text-on-surface leading-relaxed mb-space-lg">
+          Esta acción eliminará definitivamente la ficha y todas sus tiradas asociadas en la mesa de Owlbear Rodeo. No vas a poder deshacer este paso.
+        </p>
+<div class="flex items-center justify-end gap-3 pt-2">
+<button class="btn-ghost-gold px-4 py-2 font-button text-button uppercase tracking-wider" onclick="switchModal('discard')">
+            CANCELAR
+          </button>
+<button class="btn-danger-solid px-4 py-2 font-button text-button uppercase tracking-wider font-bold" onclick="alert('Ficha de Iara Solís borrada definitivamente')">
+            ELIMINAR
+          </button>
+</div>
+</div>
+<!-- ============================================================= -->
+<!-- DIÁLOGO 3: ERROR AL IMPORTAR ARCHIVO                          -->
+<!-- ============================================================= -->
+<div class="modal-card hidden w-full max-w-[480px] bg-surface gold-fillet-double p-space-xl relative shadow-none select-text" id="modal-error">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-tr"></div>
+<div class="crop-mark-bl"></div>
+<div class="crop-mark-br"></div>
+<div class="flex items-start gap-3 mb-2">
+<div class="w-7 h-7 flex-shrink-0 flex items-center justify-center border border-primary bg-surface-container text-accent-sun mt-0.5">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">wb_twilight</span>
+</div>
+<div>
+<span class="font-label text-[9px] text-secondary tracking-widest uppercase block">Fallo de Importación</span>
+<h2 class="font-section-title text-[13px] text-on-surface tracking-[0.14em] uppercase font-bold leading-snug">
+              NO SE PUDO IMPORTAR ESE ARCHIVO
+            </h2>
+</div>
+</div>
+<div class="metallic-baseline my-2.5"></div>
+<p class="font-body text-body text-on-surface leading-relaxed mb-space-lg">
+          El archivo seleccionado no tiene el formato JSON válido de Albor v0.4 o está dañado. Verificá que sea una ficha exportada correctamente e intentá de nuevo.
+        </p>
+<div class="flex items-center justify-end gap-3 pt-2">
+<button class="btn-charcoal px-5 py-2 font-button text-button uppercase tracking-wider font-bold" onclick="switchModal('discard')">
+            ENTENDIDO
+          </button>
+</div>
+</div>
+</div>
+</main>
+<!-- ================================================================= -->
+<!-- SECCIÓN INFERIOR: COMPARATIVA DETALLADA DE LOS 3 MODALES          -->
+<!-- Referencia de diseño de imprenta editorial de Albor               -->
+<!-- ================================================================= -->
+<section class="w-full max-w-[900px] mt-10">
+<div class="flex items-center gap-3 mb-4 border-b border-outline pb-2">
+<span class="material-symbols-outlined text-primary">auto_stories</span>
+<h3 class="font-section-title text-section-title text-on-surface-inverse uppercase tracking-widest">
+        Catálogo de Especificación Editorial · Los 3 Diálogos Modales
+      </h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<!-- Ficha 1: Confirmación de Descarte -->
+<div class="bg-surface gold-fillet-double p-space-md relative flex flex-col justify-between border border-outline">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<div>
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1 mb-2">
+<span class="font-label text-[9px] text-secondary font-bold uppercase">Modal 01 · Alerta</span>
+<span class="font-label text-[9px] text-on-surface-variant">Voseo Rioplatense</span>
+</div>
+<h4 class="font-section-title text-[11px] text-on-surface uppercase font-bold leading-snug mb-2">
+            HAY CAMBIOS SIN GUARDAR. ¿DESCARTARLOS?
+          </h4>
+<div class="metallic-baseline mb-2"></div>
+<p class="font-body text-xs text-on-surface-variant leading-relaxed">
+            Tenés modificaciones recientes en la ficha de Iara Solís que no se guardaron. Si salís o cambiás de personaje ahora, se van a perder.
+          </p>
+</div>
+<div class="flex items-center justify-end gap-2 pt-4 mt-3 border-t border-outline-variant/40">
+<span class="btn-ghost-gold px-2.5 py-1 font-button text-[9px] uppercase">CANCELAR</span>
+<span class="btn-danger-outline px-2.5 py-1 font-button text-[9px] uppercase font-bold">DESCARTAR</span>
+</div>
+</div>
+<!-- Ficha 2: Destructivo -->
+<div class="bg-surface gold-fillet-double p-space-md relative flex flex-col justify-between border border-outline">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<div>
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1 mb-2">
+<span class="font-label text-[9px] text-error font-bold uppercase">Modal 02 · Crítico</span>
+<span class="font-label text-[9px] text-on-surface-variant">Destructivo</span>
+</div>
+<h4 class="font-section-title text-[11px] text-error uppercase font-bold leading-snug mb-2">
+            ¿BORRAR A IARA SOLÍS?
+          </h4>
+<div class="metallic-baseline mb-2"></div>
+<p class="font-body text-xs text-on-surface-variant leading-relaxed">
+            Esta acción eliminará definitivamente la ficha y todas sus tiradas asociadas en la mesa de Owlbear Rodeo. No vas a poder deshacer este paso.
+          </p>
+</div>
+<div class="flex items-center justify-end gap-2 pt-4 mt-3 border-t border-outline-variant/40">
+<span class="btn-ghost-gold px-2.5 py-1 font-button text-[9px] uppercase">CANCELAR</span>
+<span class="btn-danger-solid px-2.5 py-1 font-button text-[9px] uppercase font-bold">ELIMINAR</span>
+</div>
+</div>
+<!-- Ficha 3: Error de Importación -->
+<div class="bg-surface gold-fillet-double p-space-md relative flex flex-col justify-between border border-outline">
+<div class="crop-mark-tl"></div>
+<div class="crop-mark-br"></div>
+<div>
+<div class="flex items-center justify-between border-b border-outline-variant/60 pb-1 mb-2">
+<span class="font-label text-[9px] text-secondary font-bold uppercase">Modal 03 · Sistema</span>
+<span class="font-label text-[9px] text-on-surface-variant">Validación</span>
+</div>
+<h4 class="font-section-title text-[11px] text-on-surface uppercase font-bold leading-snug mb-2">
+            NO SE PUDO IMPORTAR ESE ARCHIVO
+          </h4>
+<div class="metallic-baseline mb-2"></div>
+<p class="font-body text-xs text-on-surface-variant leading-relaxed">
+            El archivo seleccionado no tiene el formato JSON válido de Albor v0.4 o está dañado. Verificá que sea una ficha exportada correctamente e intentá de nuevo.
+          </p>
+</div>
+<div class="flex items-center justify-end gap-2 pt-4 mt-3 border-t border-outline-variant/40">
+<span class="btn-charcoal px-3 py-1 font-button text-[9px] uppercase font-bold">ENTENDIDO</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Script interactivo ligero para conmutar los modales en la maqueta -->
+<script>
+    function switchModal(type) {
+      // Ocultar todos los modales
+      document.getElementById('modal-discard').classList.add('hidden');
+      document.getElementById('modal-delete').classList.add('hidden');
+      document.getElementById('modal-error').classList.add('hidden');
+
+      // Resetear estilos de tabs superiores
+      const tabs = ['discard', 'delete', 'error'];
+      tabs.forEach(t => {
+        const btn = document.getElementById('btn-tab-' + t);
+        if (btn) {
+          btn.className = 'px-3 py-1 font-button text-button uppercase transition-colors bg-inverse-surface text-primary-light hover:text-white';
+        }
+      });
+
+      // Activar el seleccionado
+      const targetModal = document.getElementById('modal-' + type);
+      const targetBtn = document.getElementById('btn-tab-' + type);
+      
+      if (targetModal) targetModal.classList.remove('hidden');
+      if (targetBtn) {
+        targetBtn.className = 'px-3 py-1 font-button text-button uppercase transition-colors bg-primary text-surface-inverse font-bold';
+      }
+    }
+  </script>
+</body></html>

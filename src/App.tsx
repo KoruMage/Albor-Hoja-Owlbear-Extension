@@ -8,7 +8,13 @@ import { bindDicePlusListeners } from "./obr/dicePlus";
 import { CharacterSheet } from "./components/CharacterSheet";
 import { DiceLog } from "./components/DiceLog";
 import { DiceRollSummary } from "./components/DiceRoller";
+import { GmDiceRoller } from "./components/GmDiceRoller";
 import { WebSheetPage } from "./components/WebSheetPage";
+import { Menu } from "./components/Menu";
+import { AlborSun } from "./components/AlborSun";
+import { DialogProvider, useDialog } from "./components/ConfirmDialog";
+import { OptionsPanel } from "./components/OptionsPanel";
+import type { Player } from "@owlbear-rodeo/sdk";
 import {
   AlborCharacter,
   AlborState,
@@ -20,17 +26,28 @@ import { downloadBytes, downloadJson, readJsonFile, slug } from "./utils/downloa
 import { fillAlborPdf } from "./utils/fillPdf";
 
 export default function App() {
-  if (isSheetView()) {
-    return <WebSheetPage />;
-  }
+  return (
+    <DialogProvider>
+      {isSheetView() ? <WebSheetPage /> : <PartyManager web={!OBR.isAvailable} />}
+    </DialogProvider>
+  );
+}
 
-  return <PartyManager web={!OBR.isAvailable} />;
+function ownerLabel(
+  ownerId: string | null,
+  players: Player[],
+  self: { id: string | null; name: string | null },
+): string {
+  if (!ownerId) return "sin asignar";
+  if (ownerId === self.id) return `${self.name || "Director"} (GM)`;
+  return players.find((p) => p.id === ownerId)?.name ?? "desconectado";
 }
 
 function PartyManager({ web }: { web: boolean }) {
   const { isGM, playerId, playerName, role } = useRole();
   const players = useParty();
   const roster = useRoster();
+  const dialog = useDialog();
   useDiceRollFeed();
 
   useEffect(() => {
@@ -41,7 +58,7 @@ function PartyManager({ web }: { web: boolean }) {
   }, []);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [tab, setTab] = useState<"sheet" | "log" | "options">("sheet");
+  const [tab, setTab] = useState<"sheet" | "gm-roll" | "log" | "options">("sheet");
   const importRef = useRef<HTMLInputElement>(null);
 
   const { characters, dicePlusEnabled, diceLog } = roster.state;
@@ -66,19 +83,34 @@ function PartyManager({ web }: { web: boolean }) {
       setDirty(false);
       return;
     }
-    setDraft(selected);
-    setDirty(false);
-  }, [selected?.id]);
+    if (!dirty) {
+      setDraft(selected);
+      return;
+    }
+    if (draft?.id !== selected.id) {
+      setDraft(selected);
+      setDirty(false);
+    }
+  }, [selected, dirty, draft?.id]);
 
   const sheet = draft && selected && draft.id === selected.id ? draft : selected;
 
-  const confirmDiscard = useCallback(() => {
+  const confirmDiscard = useCallback(async () => {
     if (!dirty) return true;
-    return window.confirm("Hay cambios sin guardar. ¿Descartarlos?");
-  }, [dirty]);
+    return dialog.confirm({
+      message: "Hay cambios sin guardar. ¿Descartarlos?",
+      confirmLabel: "Descartar",
+      danger: true,
+    });
+  }, [dirty, dialog]);
 
   if (!roster.ready || role === null) {
-    return <div className="loading">Cargando la mesa...</div>;
+    return (
+      <div className="loading" role="status">
+        <AlborSun size={96} variant="line" />
+        <p>Cargando la mesa...</p>
+      </div>
+    );
   }
 
   const handleSave = () => {
@@ -87,8 +119,8 @@ function PartyManager({ web }: { web: boolean }) {
     setDirty(false);
   };
 
-  const handleCreate = () => {
-    if (!confirmDiscard()) return;
+  const handleCreate = async () => {
+    if (!(await confirmDiscard())) return;
     const c = makeCharacter();
     if (!isGM) c.ownerId = playerId;
     roster.addCharacter(c);
@@ -97,9 +129,9 @@ function PartyManager({ web }: { web: boolean }) {
     setTab("sheet");
   };
 
-  const handleDuplicate = () => {
-    if (!confirmDiscard()) return;
+  const handleDuplicate = async () => {
     if (!selected) return;
+    if (!(await confirmDiscard())) return;
     const copy: AlborCharacter = {
       ...(sheet ?? selected),
       id: makeCharacter().id,
@@ -134,108 +166,116 @@ function PartyManager({ web }: { web: boolean }) {
   return (
     <div className={`app ${web ? "app--web" : ""}`}>
       <header className="header">
-        <div>
-          <p className="wordmark">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</p>
-          <h1>Albor</h1>
-          <p className="muted">
-            {web ? "Vista web (este navegador)" : isGM ? "Vista del Director (GM)" : "Vista de jugador"}
-            {" · "}
-            {playerName}
-          </p>
-        </div>
-        <div className="header__actions">
-          <button type="button" onClick={handleCreate}>
-            Nuevo
-          </button>
-          <button type="button" disabled={!selected} onClick={handleDuplicate}>
-            Duplicar
-          </button>
-          {(isGM || web) && (
-            <button
-              type="button"
-              className="btn-danger"
-              disabled={!selected}
-              onClick={() => {
-                if (!selected) return;
-                if (dirty && !confirmDiscard()) return;
-                if (!window.confirm(`¿Borrar a ${selected.nombre}?`)) return;
-                roster.removeCharacter(selected.id);
-              }}
-            >
-              Eliminar
+        <p className="wordmark">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</p>
+        <div className="header__row">
+          <div className="header__brand">
+            <AlborSun size={40} />
+            <div>
+              <h1>Albor</h1>
+              <p className="muted header__subtitle">
+                {web ? "Vista web (este navegador)" : isGM ? "Vista del Director (GM)" : "Vista de jugador"}
+                {" · "}
+                {playerName}
+              </p>
+            </div>
+          </div>
+          <div className="header__actions">
+            <button type="button" onClick={() => void handleCreate()}>
+              Nuevo
             </button>
-          )}
-          <button
-            type="button"
-            disabled={!selected}
-            onClick={() => sheet && downloadJson(`${slug(sheet.nombre)}.json`, sheet)}
-          >
-            Exportar JSON
-          </button>
-          <button
-            type="button"
-            disabled={!selected}
-            onClick={() => {
-              if (!sheet) return;
-              void fillAlborPdf(sheet)
-                .then((bytes) =>
-                  downloadBytes(`${slug(sheet.nombre)}.pdf`, bytes, "application/pdf"),
-                )
-                .catch((err: unknown) => {
-                  window.alert(
-                    err instanceof Error ? err.message : "No se pudo exportar el PDF.",
-                  );
-                });
-            }}
-          >
-            Exportar PDF
-          </button>
-          <button type="button" onClick={() => importRef.current?.click()}>
-            Importar JSON
-          </button>
-          <input
-            ref={importRef}
-            type="file"
-            accept="application/json"
-            hidden
-            onChange={async (e) => {
-              const file = e.target.files?.[0];
-              e.target.value = "";
-              if (!file) return;
-              try {
-                const data = await readJsonFile<Partial<AlborCharacter> | Partial<AlborState>>(file);
-                if (data && "characters" in data && Array.isArray(data.characters)) {
-                  if (!confirmDiscard()) return;
-                  if (isGM || web) {
-                    roster.replaceState(data as AlborState);
+            <button type="button" disabled={!selected} onClick={() => void handleDuplicate()}>
+              Duplicar
+            </button>
+            <Menu
+              label="Archivo"
+              items={[
+                {
+                  label: "Exportar JSON",
+                  disabled: !selected,
+                  onSelect: () => sheet && downloadJson(`${slug(sheet.nombre)}.json`, sheet),
+                },
+                {
+                  label: "Exportar PDF",
+                  disabled: !selected,
+                  onSelect: () => {
+                    if (!sheet) return;
+                    void fillAlborPdf(sheet)
+                      .then((bytes) =>
+                        downloadBytes(`${slug(sheet.nombre)}.pdf`, bytes, "application/pdf"),
+                      )
+                      .catch((err: unknown) =>
+                        dialog.alert(
+                          err instanceof Error ? err.message : "No se pudo exportar el PDF.",
+                        ),
+                      );
+                  },
+                },
+                { label: "Importar JSON", onSelect: () => importRef.current?.click() },
+              ]}
+            />
+            <input
+              ref={importRef}
+              type="file"
+              accept="application/json"
+              hidden
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                e.target.value = "";
+                if (!file) return;
+                try {
+                  const data = await readJsonFile<Partial<AlborCharacter> | Partial<AlborState>>(file);
+                  if (data && "characters" in data && Array.isArray(data.characters)) {
+                    if (!(await confirmDiscard())) return;
+                    if (isGM || web) {
+                      roster.replaceState(data as AlborState);
+                    }
+                    return;
                   }
-                  return;
+                  if (!(await confirmDiscard())) return;
+                  const c = normalizeCharacter(data as Partial<AlborCharacter>);
+                  c.id = makeCharacter().id;
+                  if (!isGM) c.ownerId = playerId;
+                  roster.addCharacter(c);
+                  setDraft(c);
+                  setSelectedId(c.id);
+                } catch {
+                  await dialog.alert("No se pudo importar ese archivo.");
                 }
-                if (!confirmDiscard()) return;
-                const c = normalizeCharacter(data as Partial<AlborCharacter>);
-                c.id = makeCharacter().id;
-                if (!isGM) c.ownerId = playerId;
-                roster.addCharacter(c);
-                setDraft(c);
-                setSelectedId(c.id);
-              } catch {
-                window.alert("No se pudo importar ese archivo.");
-              }
-            }}
-          />
-          {selected && (
-            <>
-              <button
-                type="button"
-                onClick={() => void openSheetInBrowser(sheet ?? selected)}
-              >
-                Ver en web
-              </button>
-              <button type="button" onClick={() => void copySheetUrl(sheet ?? selected)}>
-                Copiar enlace
-              </button>
-            </>
-          )}
+              }}
+            />
+            {selected && (
+              <Menu
+                label="Compartir"
+                align="end"
+                items={[
+                  { label: "Ver en web", onSelect: () => void openSheetInBrowser(sheet ?? selected) },
+                  { label: "Copiar enlace", onSelect: () => void copySheetUrl(sheet ?? selected) },
+                ]}
+              />
+            )}
+            {(isGM || web) && (
+              <>
+                <span className="header__sep" aria-hidden="true" />
+                <button
+                  type="button"
+                  className="btn-danger"
+                  disabled={!selected}
+                  onClick={async () => {
+                    if (!selected) return;
+                    if (!(await confirmDiscard())) return;
+                    const ok = await dialog.confirm({
+                      message: `¿Borrar a ${selected.nombre}?`,
+                      confirmLabel: "Eliminar",
+                      danger: true,
+                    });
+                    if (ok) roster.removeCharacter(selected.id);
+                  }}
+                >
+                  Eliminar
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
@@ -243,6 +283,15 @@ function PartyManager({ web }: { web: boolean }) {
         <button type="button" className={tab === "sheet" ? "is-active" : ""} onClick={() => setTab("sheet")}>
           Ficha
         </button>
+        {isGM && (
+          <button
+            type="button"
+            className={tab === "gm-roll" ? "is-active" : ""}
+            onClick={() => setTab("gm-roll")}
+          >
+            Tirador GM
+          </button>
+        )}
         <button type="button" className={tab === "log" ? "is-active" : ""} onClick={() => setTab("log")}>
           Tiradas
         </button>
@@ -251,26 +300,49 @@ function PartyManager({ web }: { web: boolean }) {
         </button>
       </nav>
 
-      {visible.length === 0 ? (
-        <p className="muted">
-          {isGM || web
-            ? "Todavía no hay personajes. Creá uno o importá un JSON."
-            : "El GM todavía no te asignó un personaje."}
-        </p>
-      ) : (
+      {tab === "sheet" &&
+        visible.length === 0 &&
+        (isGM || web ? (
+          <div className="empty-state">
+            <AlborSun size={96} variant="line" />
+            <p>Todavía no hay personajes. Creá uno o importá un JSON.</p>
+            <div className="empty-state__actions">
+              <button type="button" className="btn-primary" onClick={() => void handleCreate()}>
+                Nuevo
+              </button>
+              <button type="button" onClick={() => importRef.current?.click()}>
+                Importar JSON
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="empty-state">
+            <AlborSun size={96} variant="line" />
+            <p>El GM todavía no te asignó un personaje.</p>
+          </div>
+        ))}
+
+      {tab !== "gm-roll" && visible.length > 0 && (
         <div className="picker">
           {visible.map((c) => (
             <button
               key={c.id}
               type="button"
               className={c.id === selectedId ? "is-active" : ""}
-              onClick={() => {
+              onClick={async () => {
                 if (c.id === selectedId) return;
-                if (!confirmDiscard()) return;
+                if (!(await confirmDiscard())) return;
                 setSelectedId(c.id);
               }}
             >
-              {c.id === selectedId && sheet ? sheet.nombre || "Sin nombre" : c.nombre || "Sin nombre"}
+              <span className="picker__name">
+                {c.id === selectedId && sheet ? sheet.nombre || "Sin nombre" : c.nombre || "Sin nombre"}
+              </span>
+              {isGM && !web && (
+                <small className="picker__owner">
+                  {ownerLabel(c.ownerId, players, { id: playerId, name: playerName })}
+                </small>
+              )}
             </button>
           ))}
         </div>
@@ -317,10 +389,23 @@ function PartyManager({ web }: { web: boolean }) {
               setDraft(next);
               setDirty(true);
             }}
+            onAssign={(ownerId) => {
+              if (!selected) return;
+              setDraft((prev) => (prev ? { ...prev, ownerId } : prev));
+              void roster.assignOwner(selected.id, ownerId);
+            }}
             onSave={handleSave}
             onRolled={handleDiceRoll}
           />
         </>
+      )}
+
+      {tab === "gm-roll" && isGM && (
+        <GmDiceRoller
+          dicePlusEnabled={dicePlusEnabled && !web}
+          directorName={playerName || "Director"}
+          onRolled={handleDiceRoll}
+        />
       )}
 
       {tab === "log" && (
@@ -332,40 +417,15 @@ function PartyManager({ web }: { web: boolean }) {
       )}
 
       {tab === "options" && (
-        <section className="panel">
-          <h3>Opciones</h3>
-          {(isGM || web) && (
-            <label className="check">
-              <input
-                type="checkbox"
-                checked={dicePlusEnabled}
-                disabled={web}
-                onChange={(e) => roster.setDicePlusEnabled(e.target.checked)}
-              />
-              Usar Dice+ (dados 3D en Owlbear). Si no está instalada, se tira en local.
-            </label>
-          )}
-          {isGM && !web && (
-            <label className="check">
-              <input
-                type="checkbox"
-                checked={roster.syncWithLocal}
-                onChange={(e) => void roster.setSyncWithLocal(e.target.checked)}
-              />
-              Sincronizar la sala con las fichas locales de este navegador
-            </label>
-          )}
-          <p className="hint">
-            Entorno: {web ? "web / localStorage" : "Owlbear Rodeo"} · metadata{" "}
-            <code>com.albor/state</code>
-          </p>
-          <button
-            type="button"
-            onClick={() => downloadJson("albor-mesa.json", roster.state)}
-          >
-            Exportar mesa
-          </button>
-        </section>
+        <OptionsPanel
+          isGM={isGM}
+          web={web}
+          dicePlusEnabled={dicePlusEnabled}
+          onDicePlusChange={(enabled) => roster.setDicePlusEnabled(enabled)}
+          syncWithLocal={roster.syncWithLocal}
+          onSyncWithLocalChange={(enabled) => void roster.setSyncWithLocal(enabled)}
+          onExport={() => downloadJson("albor-mesa.json", roster.state)}
+        />
       )}
     </div>
   );
