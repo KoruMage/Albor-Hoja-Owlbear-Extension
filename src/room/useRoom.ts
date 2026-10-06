@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import OBR from "@owlbear-rodeo/sdk";
 import type { AlborCharacter, DiceRollLogEntry } from "../types";
 import { notifyDiceRoll } from "../obr/useDiceRollFeed";
+import { appStorage, onAppStorageChange } from "../web/appStorage";
 import {
   ROOM_POINTER_KEY,
   ROOM_SESSION_KEY,
@@ -17,7 +18,7 @@ export type RoomStatus = "idle" | "connecting" | "open" | "error";
 
 function readSession(): RoomSession | null {
   try {
-    const raw = localStorage.getItem(ROOM_SESSION_KEY);
+    const raw = appStorage().getItem(ROOM_SESSION_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as Partial<RoomSession>;
     if (typeof parsed.code !== "string" || !parsed.code) return null;
@@ -33,8 +34,8 @@ function readSession(): RoomSession | null {
 
 function writeSession(session: RoomSession | null): void {
   try {
-    if (!session) localStorage.removeItem(ROOM_SESSION_KEY);
-    else localStorage.setItem(ROOM_SESSION_KEY, JSON.stringify(session));
+    if (!session) appStorage().removeItem(ROOM_SESSION_KEY);
+    else appStorage().setItem(ROOM_SESSION_KEY, JSON.stringify(session));
   } catch {
     // private mode
   }
@@ -70,6 +71,16 @@ export function useRoom(handlers: RoomHandlers) {
   const wsRef = useRef<WebSocket | null>(null);
   const sessionRef = useRef<RoomSession | null>(session);
   sessionRef.current = session;
+
+  useEffect(() => {
+    return onAppStorageChange(() => {
+      const next = readSession();
+      const current = sessionRef.current;
+      if (JSON.stringify(current) === JSON.stringify(next)) return;
+      sessionRef.current = next;
+      setSession(next);
+    });
+  }, []);
   const retryRef = useRef<number | null>(null);
   const attemptsRef = useRef(0);
   const generationRef = useRef(0);

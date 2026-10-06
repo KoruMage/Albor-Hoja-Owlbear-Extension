@@ -8,6 +8,7 @@ import {
   makeDiceRollLogEntry,
   normalizeCharacter,
 } from "../types";
+import { appStorage, onAppStorageChange } from "../web/appStorage";
 import { WEB_STATE_KEY } from "../web/sheetLink";
 
 function asList<T>(value: T[] | undefined): T[] {
@@ -22,23 +23,13 @@ function parseState(raw: Partial<AlborState> | undefined): AlborState {
   };
 }
 
-function readLocalState(): AlborState {
-  try {
-    const raw = localStorage.getItem(WEB_STATE_KEY);
-    if (!raw) return EMPTY_STATE;
-    return parseState(JSON.parse(raw) as Partial<AlborState>);
-  } catch {
-    return EMPTY_STATE;
-  }
-}
-
-function writeLocalState(state: AlborState): void {
+function writeLocalState(state: AlborState): string | null {
   try {
     const json = JSON.stringify(state);
-    if (localStorage.getItem(WEB_STATE_KEY) === json) return;
-    localStorage.setItem(WEB_STATE_KEY, json);
+    if (appStorage().getItem(WEB_STATE_KEY) !== json) appStorage().setItem(WEB_STATE_KEY, json);
+    return json;
   } catch {
-    // quota / private mode
+    return null;
   }
 }
 
@@ -52,35 +43,54 @@ export function useRoster() {
   const [state, setState] = useState<AlborState>(EMPTY_STATE);
   const [ready, setReady] = useState(false);
   const stateRef = useRef<AlborState>(EMPTY_STATE);
+  const rawRef = useRef<string | null>(null);
 
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
 
   useEffect(() => {
-    const initial = readLocalState();
-    stateRef.current = initial;
-    setState(initial);
+    const applyRaw = (raw: string | null) => {
+      if (raw === rawRef.current) return;
+      rawRef.current = raw;
+      let next = EMPTY_STATE;
+      if (raw) {
+        try {
+          next = parseState(JSON.parse(raw) as Partial<AlborState>);
+        } catch {
+          next = EMPTY_STATE;
+        }
+      }
+      stateRef.current = next;
+      setState(next);
+    };
+    const reload = () => {
+      try {
+        applyRaw(appStorage().getItem(WEB_STATE_KEY));
+      } catch {
+        applyRaw(null);
+      }
+    };
+    reload();
     setReady(true);
 
     const onStorage = (event: StorageEvent) => {
-      if (event.key !== WEB_STATE_KEY || !event.newValue) return;
-      try {
-        const parsed = parseState(JSON.parse(event.newValue) as Partial<AlborState>);
-        stateRef.current = parsed;
-        setState(parsed);
-      } catch {
-        // ignore
-      }
+      if (event.key !== WEB_STATE_KEY) return;
+      applyRaw(event.newValue);
     };
     window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    const unsubscribe = onAppStorageChange(reload);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      unsubscribe();
+    };
   }, []);
 
   const commit = useCallback((next: AlborState) => {
     stateRef.current = next;
     setState(next);
-    writeLocalState(next);
+    const written = writeLocalState(next);
+    if (written !== null) rawRef.current = written;
   }, []);
 
   const addCharacter = useCallback(

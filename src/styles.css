@@ -107,6 +107,25 @@ code {
   border-image: var(--metal) 1;
 }
 
+.storage-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--gold);
+  background: var(--fill);
+}
+
+.storage-banner p {
+  margin: 0;
+  font-family: Cinzel, serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .header .wordmark {
   margin: 0 0 4px;
   letter-spacing: 0.32em;

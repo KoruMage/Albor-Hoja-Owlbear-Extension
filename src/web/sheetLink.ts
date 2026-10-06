@@ -1,4 +1,5 @@
 import { AlborCharacter, normalizeCharacter } from "../types";
+import { appStorage } from "./appStorage";
 
 export const WEB_STATE_KEY = "com.albor/web-state";
 export const WEB_SHEET_PREFIX = "com.albor/web-sheet:";
@@ -41,7 +42,7 @@ export function decodeSheetPayload(payload: string): AlborCharacter | null {
 
 export function cacheSheetLocally(character: AlborCharacter): void {
   try {
-    localStorage.setItem(
+    appStorage().setItem(
       `${WEB_SHEET_PREFIX}${character.id}`,
       JSON.stringify({ ...character, ownerId: null }),
     );
@@ -52,7 +53,7 @@ export function cacheSheetLocally(character: AlborCharacter): void {
 
 export function readCachedSheet(id: string): AlborCharacter | null {
   try {
-    const raw = localStorage.getItem(`${WEB_SHEET_PREFIX}${id}`);
+    const raw = appStorage().getItem(`${WEB_SHEET_PREFIX}${id}`);
     if (!raw) return null;
     return normalizeCharacter(JSON.parse(raw) as Partial<AlborCharacter>);
   } catch {
@@ -80,19 +81,12 @@ export function buildSheetUrl(character: AlborCharacter): string {
   return url.toString();
 }
 
-export async function openSheetInBrowser(
-  character: AlborCharacter,
-): Promise<"opened" | "copied" | "failed"> {
-  cacheSheetLocally(character);
-  const url = buildSheetUrl(character);
-  const popup = window.open(url, "_blank", "noopener");
-  if (popup) return "opened";
-  try {
-    await navigator.clipboard.writeText(url);
-    return "copied";
-  } catch {
-    return "failed";
-  }
+export function appPageUrl(): string {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("view");
+  url.searchParams.delete("id");
+  url.hash = "";
+  return url.toString();
 }
 
 export async function copySheetUrl(character: AlborCharacter): Promise<boolean> {

@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { readTheme, writeTheme, type ThemeName } from "../theme";
+import { onAppStorageChange } from "../web/appStorage";
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<ThemeName>(readTheme);
   const dark = theme === "dark";
+
+  useEffect(() => {
+    return onAppStorageChange(() => setTheme(readTheme()));
+  }, []);
 
   return (
     <button

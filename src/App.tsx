@@ -23,7 +23,9 @@ import {
   makeDiceRollLogEntry,
   normalizeCharacter,
 } from "./types";
-import { isSheetView, openSheetInBrowser, copySheetUrl } from "./web/sheetLink";
+import { isSheetView, copySheetUrl } from "./web/sheetLink";
+import { adoptSharedStorage, onAppStorageChange, storageIsEmbedded } from "./web/appStorage";
+import { openBridgedApp, publishStorageBridge, startStorageBridge } from "./web/storageBridge";
 import { downloadBytes, downloadJson, readJsonFile, slug } from "./utils/download";
 import { fillAlborPdf } from "./utils/fillPdf";
 import { useRoom } from "./room/useRoom";
@@ -33,24 +35,60 @@ import { applyTheme, readTheme, THEME_KEY } from "./theme";
 type Tab = "mesa" | "sheet" | "gm-roll" | "log" | "options";
 
 export default function App() {
+  const [storageShared, setStorageShared] = useState(() => !storageIsEmbedded());
+
   useEffect(() => {
-    applyTheme(readTheme());
+    const syncTheme = () => applyTheme(readTheme());
+    startStorageBridge();
+    syncTheme();
+    void adoptSharedStorage().then((ok) => {
+      setStorageShared(ok);
+      syncTheme();
+    });
     const onStorage = (event: StorageEvent) => {
-      if (event.key !== THEME_KEY) return;
-      applyTheme(event.newValue === "dark" ? "dark" : "light");
+      if (event.key !== THEME_KEY && event.key !== null) return;
+      syncTheme();
     };
     window.addEventListener("storage", onStorage);
-    return () => window.removeEventListener("storage", onStorage);
+    const unsubscribe = onAppStorageChange(() => {
+      syncTheme();
+      publishStorageBridge();
+    });
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      unsubscribe();
+    };
   }, []);
 
   return (
     <DialogProvider>
-      {isSheetView() ? <WebSheetPage /> : <PartyManager web={!OBR.isAvailable} />}
+      {isSheetView() ? (
+        <WebSheetPage />
+      ) : (
+        <PartyManager
+          web={!OBR.isAvailable}
+          storageShared={storageShared}
+          onShareStorage={() => {
+            void adoptSharedStorage().then((ok) => {
+              setStorageShared(ok);
+              if (!ok) openBridgedApp();
+            });
+          }}
+        />
+      )}
     </DialogProvider>
   );
 }
 
-function PartyManager({ web }: { web: boolean }) {
+function PartyManager({
+  web,
+  storageShared,
+  onShareStorage,
+}: {
+  web: boolean;
+  storageShared: boolean;
+  onShareStorage: () => void;
+}) {
   const obr = useRole();
   const webProfile = useWebProfile();
   const isGM = web ? webProfile.role === "GM" : obr.isGM;
@@ -115,13 +153,16 @@ function PartyManager({ web }: { web: boolean }) {
       .filter((bundle) => bundle.playerId !== playerId)
       .flatMap((bundle) => {
         const member = room.members.find((item) => item.playerId === bundle.playerId);
-        return bundle.characters.map((character) => ({
-          key: `remote:${bundle.playerId}:${character.id}`,
-          character,
-          playerName: bundle.name || member?.name || "Jugador",
-          connected: member?.connected ?? false,
-          mine: false,
-        }));
+        const localIds = new Set(characters.map((character) => character.id));
+        return bundle.characters
+          .filter((character) => !localIds.has(character.id))
+          .map((character) => ({
+            key: `remote:${bundle.playerId}:${character.id}`,
+            character,
+            playerName: bundle.name || member?.name || "Jugador",
+            connected: member?.connected ?? false,
+            mine: false,
+          }));
       });
     return [...local, ...remote];
   }, [characters, isGM, playerId, playerName, room.members, room.remoteSheets]);
@@ -244,6 +285,14 @@ function PartyManager({ web }: { web: boolean }) {
 
   return (
     <div className={`app ${web ? "app--web" : ""}`}>
+      {!storageShared && (
+        <div className="storage-banner">
+          <p>Owlbear y la página están guardando fichas distintas.</p>
+          <button type="button" onClick={onShareStorage}>
+            Usar las mismas
+          </button>
+        </div>
+      )}
       <header className="header">
         <p className="wordmark">~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~</p>
         <div className="header__row">
@@ -352,7 +401,7 @@ function PartyManager({ web }: { web: boolean }) {
                 label="Compartir"
                 align="end"
                 items={[
-                  { label: "Ver en web", onSelect: () => void openSheetInBrowser(sheet) },
+                  { label: "Ver en web", onSelect: () => void openBridgedApp() },
                   { label: "Copiar enlace", onSelect: () => void copySheetUrl(sheet) },
                 ]}
               />
