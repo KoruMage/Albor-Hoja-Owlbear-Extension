@@ -89,6 +89,14 @@ export class Room extends DurableObject<Env> {
           created_at INTEGER NOT NULL
         )
       `);
+      this.ctx.storage.sql.exec(`
+        CREATE TABLE IF NOT EXISTS claims (
+          character_id TEXT PRIMARY KEY,
+          target_player_id TEXT NOT NULL,
+          json TEXT NOT NULL,
+          pending INTEGER NOT NULL DEFAULT 1
+        )
+      `);
     });
   }
 
@@ -143,19 +151,50 @@ export class Room extends DurableObject<Env> {
     }
 
     if (message.type === "sheets") {
-      const characters = parseCharacters(message.characters);
-      const json = JSON.stringify(characters);
-      this.ctx.storage.sql.exec(
-        `INSERT INTO sheets (player_id, name, json, updated_at) VALUES (?, ?, ?, ?)
-         ON CONFLICT(player_id) DO UPDATE SET name = excluded.name, json = excluded.json, updated_at = excluded.updated_at`,
-        sock.playerId,
-        sock.name,
-        json,
-        Date.now(),
+      this.acceptSheets(sock, parseCharacters(message.characters));
+      return;
+    }
+
+    if (message.type === "assign") {
+      if (sock.role !== "GM") return;
+      const target = this.playerMember(asText(message.targetPlayerId));
+      const character = this.parseOne(message.character);
+      if (!target || !character) {
+        this.send(ws, { type: "error", message: "Elegí un jugador de la sala." });
+        return;
+      }
+      character.ownerId = target.playerId;
+      this.removeStored(sock.playerId, character.id);
+      this.upsertStored(target.playerId, target.name, character);
+      this.writeClaim(character, target.playerId);
+      this.broadcastSheets(sock.playerId, sock.name, this.sheetsOf(sock.playerId));
+      this.broadcastSheets(target.playerId, target.name, this.sheetsOf(target.playerId));
+      this.broadcast(
+        { type: "sheetUpsert", character },
+        (other) => other.playerId === target.playerId,
       );
       this.broadcast(
-        { type: "sheets", playerId: sock.playerId, name: sock.name, characters },
-        (other) => other.role === "GM" && other.playerId !== sock.playerId,
+        { type: "assigned", characterId: character.id, targetPlayerId: target.playerId },
+        (other) => other.role === "GM",
+      );
+      return;
+    }
+
+    if (message.type === "editSheet") {
+      if (sock.role !== "GM") return;
+      const target = this.playerMember(asText(message.targetPlayerId));
+      const character = this.parseOne(message.character);
+      if (!target || !character) {
+        this.send(ws, { type: "error", message: "No se pudo guardar esa ficha." });
+        return;
+      }
+      character.ownerId = target.playerId;
+      this.upsertStored(target.playerId, target.name, character);
+      this.writeClaim(character, target.playerId);
+      this.broadcastSheets(target.playerId, target.name, this.sheetsOf(target.playerId));
+      this.broadcast(
+        { type: "sheetUpsert", character },
+        (other) => other.playerId === target.playerId,
       );
       return;
     }
@@ -250,7 +289,169 @@ export class Room extends DurableObject<Env> {
       diceLog: this.readDiceLog(),
     });
     if (role === "GM") this.send(ws, { type: "roster", sheets: this.readSheets() });
+    if (role === "PLAYER") {
+      for (const character of this.pendingFor(playerId)) {
+        this.send(ws, { type: "sheetUpsert", character });
+      }
+    }
     this.broadcastPresence();
+  }
+
+  private parseOne(raw: unknown): AlborCharacter | null {
+    if (!raw || typeof raw !== "object") return null;
+    const character = normalizeCharacter(raw as Partial<AlborCharacter>);
+    if (!character.id) return null;
+    return character;
+  }
+
+  private sameSheet(a: AlborCharacter, b: AlborCharacter): boolean {
+    return JSON.stringify(normalizeCharacter(a)) === JSON.stringify(normalizeCharacter(b));
+  }
+
+  private playerMember(playerId: string): { playerId: string; name: string } | null {
+    if (!playerId) return null;
+    const row = this.ctx.storage.sql
+      .exec<{ player_id: string; name: string; role: string }>(
+        "SELECT player_id, name, role FROM members WHERE player_id = ?",
+        playerId,
+      )
+      .toArray()[0];
+    if (!row || row.role === "GM") return null;
+    return { playerId: row.player_id, name: row.name || "Jugador" };
+  }
+
+  private claimedIds(): Set<string> {
+    const rows = this.ctx.storage.sql
+      .exec<{ character_id: string }>("SELECT character_id FROM claims")
+      .toArray();
+    return new Set(rows.map((row) => row.character_id));
+  }
+
+  private pendingFor(playerId: string): AlborCharacter[] {
+    const rows = this.ctx.storage.sql
+      .exec<{ json: string }>(
+        "SELECT json FROM claims WHERE target_player_id = ? AND pending = 1",
+        playerId,
+      )
+      .toArray();
+    const characters: AlborCharacter[] = [];
+    for (const row of rows) {
+      try {
+        const character = this.parseOne(JSON.parse(row.json));
+        if (character) characters.push(character);
+      } catch {
+        // fila dañada
+      }
+    }
+    return characters;
+  }
+
+  private writeClaim(character: AlborCharacter, targetPlayerId: string): void {
+    const stored = normalizeCharacter(character);
+    this.ctx.storage.sql.exec(
+      `INSERT INTO claims (character_id, target_player_id, json, pending) VALUES (?, ?, ?, 1)
+       ON CONFLICT(character_id) DO UPDATE SET
+         target_player_id = excluded.target_player_id,
+         json = excluded.json,
+         pending = 1`,
+      stored.id,
+      targetPlayerId,
+      JSON.stringify(stored),
+    );
+  }
+
+  private sheetsOf(playerId: string): AlborCharacter[] {
+    const row = this.ctx.storage.sql
+      .exec<{ json: string }>("SELECT json FROM sheets WHERE player_id = ?", playerId)
+      .toArray()[0];
+    if (!row) return [];
+    try {
+      return parseCharacters(JSON.parse(row.json));
+    } catch {
+      return [];
+    }
+  }
+
+  private writeSheets(playerId: string, name: string, characters: AlborCharacter[]): void {
+    const kept = characters.slice(-MAX_SHEETS);
+    this.ctx.storage.sql.exec(
+      `INSERT INTO sheets (player_id, name, json, updated_at) VALUES (?, ?, ?, ?)
+       ON CONFLICT(player_id) DO UPDATE SET name = excluded.name, json = excluded.json, updated_at = excluded.updated_at`,
+      playerId,
+      name,
+      JSON.stringify(kept),
+      Date.now(),
+    );
+  }
+
+  private upsertStored(playerId: string, name: string, character: AlborCharacter): void {
+    const rest = this.sheetsOf(playerId).filter((item) => item.id !== character.id);
+    this.writeSheets(playerId, name, [...rest, character]);
+  }
+
+  private removeStored(playerId: string, characterId: string): void {
+    const row = this.ctx.storage.sql
+      .exec<{ name: string }>("SELECT name FROM sheets WHERE player_id = ?", playerId)
+      .toArray()[0];
+    if (!row) return;
+    this.writeSheets(
+      playerId,
+      row.name,
+      this.sheetsOf(playerId).filter((item) => item.id !== characterId),
+    );
+  }
+
+  private acceptSheets(sock: Sock, published: AlborCharacter[]): void {
+    let characters = published;
+    const resent: AlborCharacter[] = [];
+    if (sock.role === "GM") {
+      const claimed = this.claimedIds();
+      characters = characters.filter((character) => !claimed.has(character.id));
+    } else {
+      const rows = this.ctx.storage.sql
+        .exec<{ json: string; pending: number }>(
+          "SELECT json, pending FROM claims WHERE target_player_id = ?",
+          sock.playerId,
+        )
+        .toArray();
+      for (const row of rows) {
+        if (Number(row.pending) === 0) continue;
+        let claim: AlborCharacter | null = null;
+        try {
+          claim = this.parseOne(JSON.parse(row.json));
+        } catch {
+          continue;
+        }
+        if (!claim) continue;
+        const incoming = characters.find((character) => character.id === claim.id);
+        if (incoming && this.sameSheet(incoming, claim)) {
+          this.ctx.storage.sql.exec(
+            "UPDATE claims SET pending = 0, json = ? WHERE character_id = ?",
+            JSON.stringify(normalizeCharacter(claim)),
+            claim.id,
+          );
+          continue;
+        }
+        characters = characters.filter((character) => character.id !== claim.id);
+        characters.push(claim);
+        resent.push(claim);
+      }
+    }
+    this.writeSheets(sock.playerId, sock.name, characters);
+    this.broadcastSheets(sock.playerId, sock.name, this.sheetsOf(sock.playerId));
+    for (const character of resent) {
+      this.broadcast(
+        { type: "sheetUpsert", character },
+        (other) => other.playerId === sock.playerId,
+      );
+    }
+  }
+
+  private broadcastSheets(playerId: string, name: string, characters: AlborCharacter[]): void {
+    this.broadcast(
+      { type: "sheets", playerId, name, characters },
+      (other) => other.role === "GM" && other.playerId !== playerId,
+    );
   }
 
   private readDiceLog(): DiceRollLogEntry[] {

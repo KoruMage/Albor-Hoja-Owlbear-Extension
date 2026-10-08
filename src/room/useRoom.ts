@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import OBR from "@owlbear-rodeo/sdk";
-import type { AlborCharacter, DiceRollLogEntry } from "../types";
-import { notifyDiceRoll } from "../obr/useDiceRollFeed";
+import type { AlborCharacter, DiceRollBroadcast, DiceRollLogEntry } from "../types";
+import { broadcastDiceRoll, notifyDiceRoll } from "../obr/useDiceRollFeed";
 import { appStorage, onAppStorageChange } from "../web/appStorage";
 import {
   ROOM_POINTER_KEY,
@@ -15,6 +15,17 @@ import {
 } from "./protocol";
 
 export type RoomStatus = "idle" | "connecting" | "open" | "error";
+
+function dicePayload(entry: DiceRollLogEntry): DiceRollBroadcast {
+  return {
+    id: entry.id,
+    characterName: entry.characterName,
+    summary: entry.summary,
+    total: entry.total,
+    critical: entry.critical,
+    fumble: entry.fumble,
+  };
+}
 
 function readSession(): RoomSession | null {
   try {
@@ -56,6 +67,8 @@ interface RoomHandlers {
   onDice: (entry: DiceRollLogEntry) => void;
   onDicePlus: (enabled: boolean) => void;
   onDiceCleared: () => void;
+  onSheetUpsert: (character: AlborCharacter) => void;
+  onAssigned: (characterId: string, targetPlayerId: string) => void;
 }
 
 export function useRoom(handlers: RoomHandlers) {
@@ -113,9 +126,21 @@ export function useRoom(handlers: RoomHandlers) {
       });
       return;
     }
+    if (message.type === "sheetUpsert") {
+      handlersRef.current.onSheetUpsert(message.character);
+      return;
+    }
+    if (message.type === "assigned") {
+      handlersRef.current.onAssigned(message.characterId, message.targetPlayerId);
+      return;
+    }
     if (message.type === "dice") {
       handlersRef.current.onDice(message.entry);
-      if (message.playerId !== handlersRef.current.playerId) notifyDiceRoll(message.entry);
+      if (message.playerId !== handlersRef.current.playerId && OBR.isAvailable) {
+        const payload = dicePayload(message.entry);
+        notifyDiceRoll(payload);
+        if (handlersRef.current.isGM) broadcastDiceRoll(payload);
+      }
       return;
     }
     if (message.type === "dicePlus") {
@@ -237,6 +262,32 @@ export function useRoom(handlers: RoomHandlers) {
     ws.send(JSON.stringify({ type: "sheets", characters }));
   }, []);
 
+  const sendAssign = useCallback((character: AlborCharacter, targetPlayerId: string) => {
+    const ws = wsRef.current;
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    ws.send(JSON.stringify({ type: "assign", character, targetPlayerId }));
+    return true;
+  }, []);
+
+  const sendEditSheet = useCallback((targetPlayerId: string, character: AlborCharacter) => {
+    const ws = wsRef.current;
+    if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+    ws.send(JSON.stringify({ type: "editSheet", targetPlayerId, character }));
+    setRemoteSheets((prev) =>
+      prev.map((bundle) => {
+        if (bundle.playerId !== targetPlayerId) return bundle;
+        const exists = bundle.characters.some((item) => item.id === character.id);
+        return {
+          ...bundle,
+          characters: exists
+            ? bundle.characters.map((item) => (item.id === character.id ? character : item))
+            : [...bundle.characters, character],
+        };
+      }),
+    );
+    return true;
+  }, []);
+
   const sendDice = useCallback((entry: DiceRollLogEntry) => {
     const ws = wsRef.current;
     const playerId = handlersRef.current.playerId;
@@ -318,6 +369,8 @@ export function useRoom(handlers: RoomHandlers) {
     remoteSheets,
     advertisedCode,
     publishSheets,
+    sendAssign,
+    sendEditSheet,
     sendDice,
     sendDicePlus,
     sendClearDice,

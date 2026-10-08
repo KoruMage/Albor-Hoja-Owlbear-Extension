@@ -113,6 +113,19 @@ export function useRoster() {
     [commit],
   );
 
+  const upsertCharacter = useCallback(
+    (character: AlborCharacter) => {
+      const exists = stateRef.current.characters.some((item) => item.id === character.id);
+      return commit({
+        ...stateRef.current,
+        characters: exists
+          ? stateRef.current.characters.map((item) => (item.id === character.id ? character : item))
+          : [...stateRef.current.characters, character],
+      });
+    },
+    [commit],
+  );
+
   const removeCharacter = useCallback(
     (id: string) =>
       commit({
@@ -159,6 +172,7 @@ export function useRoster() {
     ready,
     addCharacter,
     updateCharacter,
+    upsertCharacter,
     removeCharacter,
     setDicePlusEnabled,
     addDiceRoll,

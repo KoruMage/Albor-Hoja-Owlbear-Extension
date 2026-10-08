@@ -7,6 +7,7 @@ export interface MesaCard {
   playerName: string;
   connected: boolean;
   mine: boolean;
+  ownerPlayerId: string;
 }
 
 function statLine(character: AlborCharacter): string {
@@ -74,7 +75,7 @@ export function MesaView({
                   Heridas {card.character.heridas.actual}/{card.character.heridas.max}
                 </p>
                 <button type="button" onClick={() => onOpen(card.key)}>
-                  {card.mine ? "Editar" : "Ver"}
+                  Editar
                 </button>
               </article>
             );

@@ -79,6 +79,7 @@ export interface AlborCharacter {
 }
 
 export interface DiceRollBroadcast {
+  id?: string;
   characterName: string;
   summary: string;
   total: number;

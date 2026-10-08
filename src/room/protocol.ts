@@ -34,6 +34,8 @@ export type ClientMessage =
       gmToken?: string;
     }
   | { type: "sheets"; characters: AlborCharacter[] }
+  | { type: "assign"; character: AlborCharacter; targetPlayerId: string }
+  | { type: "editSheet"; targetPlayerId: string; character: AlborCharacter }
   | { type: "dice"; playerId: string; entry: DiceRollLogEntry }
   | { type: "dicePlus"; enabled: boolean }
   | { type: "clearDice" };
@@ -43,6 +45,8 @@ export type ServerMessage =
   | { type: "presence"; members: RoomMember[] }
   | { type: "roster"; sheets: RemoteSheets[] }
   | { type: "sheets"; playerId: string; name: string; characters: AlborCharacter[] }
+  | { type: "sheetUpsert"; character: AlborCharacter }
+  | { type: "assigned"; characterId: string; targetPlayerId: string }
   | { type: "dice"; playerId: string; entry: DiceRollLogEntry }
   | { type: "dicePlus"; enabled: boolean }
   | { type: "diceCleared" }

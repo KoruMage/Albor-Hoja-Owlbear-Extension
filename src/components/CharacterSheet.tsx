@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import type { Player } from "@owlbear-rodeo/sdk";
 import {
   AlborCharacter,
   Arma,
@@ -20,6 +19,12 @@ import { ResourceBox, SingleResource } from "./sheet/ResourceBox";
 
 const WORDMARK = "~ ~ ~ albor ~ ~ juego ~ de ~ rol ~ ~ ~";
 
+export interface SheetAssignee {
+  id: string;
+  name: string;
+  role?: "GM" | "PLAYER";
+}
+
 export function CharacterSheet({
   character,
   readOnly,
@@ -35,7 +40,7 @@ export function CharacterSheet({
   character: AlborCharacter;
   readOnly?: boolean;
   isGM?: boolean;
-  players?: Player[];
+  players?: SheetAssignee[];
   dicePlusEnabled: boolean;
   dirty?: boolean;
   onChange?: (next: AlborCharacter) => void;
@@ -232,7 +237,11 @@ export function CharacterSheet({
                 <TextField value={ownerLabel} readOnly onChange={() => undefined} />
               ) : (
                 <select
-                  value={character.ownerId ?? ""}
+                  value={
+                    character.ownerId && players.some((p) => p.id === character.ownerId)
+                      ? character.ownerId
+                      : ""
+                  }
                   onChange={(e) => {
                     const ownerId = e.target.value || null;
                     if (onAssign) onAssign(ownerId);
@@ -246,9 +255,11 @@ export function CharacterSheet({
                       {p.role === "GM" ? " (GM)" : ""}
                     </option>
                   ))}
-                  {character.ownerId && !players.some((p) => p.id === character.ownerId) && (
-                    <option value={character.ownerId}>Asignado (desconectado)</option>
-                  )}
+                  {!onAssign &&
+                    character.ownerId &&
+                    !players.some((p) => p.id === character.ownerId) && (
+                      <option value={character.ownerId}>Asignado (desconectado)</option>
+                    )}
                 </select>
               )}
             </label>

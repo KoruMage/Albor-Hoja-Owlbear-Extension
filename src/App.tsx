@@ -99,6 +99,9 @@ function PartyManager({
   const roster = useRoster();
   const dialog = useDialog();
   useDiceRollFeed();
+  const holdRef = useRef<{ id: string | null; dirty: boolean }>({ id: null, dirty: false });
+  const [selectedKey, setSelectedKey] = useState<string | null>(null);
+  const [dirty, setDirty] = useState(false);
 
   const room = useRoom({
     playerId,
@@ -108,6 +111,17 @@ function PartyManager({
     onDice: (entry) => roster.addDiceRoll(entry),
     onDicePlus: (enabled) => roster.setDicePlusEnabled(enabled),
     onDiceCleared: () => roster.clearDiceLog(),
+    onSheetUpsert: (character) => {
+      if (holdRef.current.dirty && holdRef.current.id === character.id) return;
+      roster.upsertCharacter(character);
+    },
+    onAssigned: (characterId, targetPlayerId) => {
+      roster.removeCharacter(characterId);
+      setSelectedKey((current) =>
+        current === `local:${characterId}` ? `remote:${targetPlayerId}:${characterId}` : current,
+      );
+      setDirty(false);
+    },
   });
 
   useEffect(() => {
@@ -122,7 +136,6 @@ function PartyManager({
     });
   }, []);
 
-  const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("sheet");
   const tabReady = useRef(false);
   const importRef = useRef<HTMLInputElement>(null);
@@ -147,6 +160,7 @@ function PartyManager({
       playerName: mineName,
       connected: true,
       mine: true,
+      ownerPlayerId: playerId ?? "",
     }));
     if (!isGM) return local;
     const remote = room.remoteSheets
@@ -162,6 +176,7 @@ function PartyManager({
             playerName: bundle.name || member?.name || "Jugador",
             connected: member?.connected ?? false,
             mine: false,
+            ownerPlayerId: bundle.playerId,
           }));
       });
     return [...local, ...remote];
@@ -178,11 +193,12 @@ function PartyManager({
   }, [cards, isGM, selectedKey]);
 
   const selected = cards.find((card) => card.key === selectedKey) ?? null;
+  const canEdit = Boolean(selected && (selected.mine || isGM));
   const [draft, setDraft] = useState<AlborCharacter | null>(null);
-  const [dirty, setDirty] = useState(false);
+  holdRef.current = { id: selected?.character.id ?? null, dirty };
 
   useEffect(() => {
-    if (!selected || !selected.mine) {
+    if (!selected || !canEdit) {
       setDraft(null);
       setDirty(false);
       return;
@@ -195,10 +211,10 @@ function PartyManager({
       setDraft(selected.character);
       setDirty(false);
     }
-  }, [selected, dirty, draft?.id]);
+  }, [selected, canEdit, dirty, draft?.id]);
 
   const sheet =
-    selected && selected.mine && draft && draft.id === selected.character.id
+    selected && canEdit && draft && draft.id === selected.character.id
       ? draft
       : selected?.character ?? null;
 
@@ -231,9 +247,24 @@ function PartyManager({
   };
 
   const handleSave = () => {
-    if (!sheet || !selected?.mine) return;
-    roster.updateCharacter(sheet.id, sheet);
+    if (!sheet || !selected || !canEdit) return;
+    if (selected.mine) roster.updateCharacter(sheet.id, sheet);
+    else if (!room.sendEditSheet(selected.ownerPlayerId, sheet)) return;
     setDirty(false);
+  };
+
+  const handleAssign = async (ownerId: string | null) => {
+    if (!selected?.mine || !sheet || !ownerId || room.status !== "open") return;
+    const player = room.members.find((member) => member.playerId === ownerId);
+    const ok = await dialog.confirm({
+      message: `¿Asignar a ${sheet.nombre || "este personaje"} a ${player?.name ?? "ese jugador"}?`,
+      detail: "Pasa a la hoja de ese jugador.",
+      confirmLabel: "Asignar",
+    });
+    if (!ok) return;
+    if (!room.sendAssign({ ...sheet, ownerId }, ownerId)) {
+      await dialog.alert("No hay conexión con la sala.");
+    }
   };
 
   const handleCreate = async () => {
@@ -530,23 +561,42 @@ function PartyManager({
           )}
           {!selected.mine && (
             <p className="read-banner">
-              {selected.playerName} · {selected.connected ? "solo lectura" : "desconectado · solo lectura"}
+              {selected.playerName}
+              {" · "}
+              {selected.connected ? "editando su ficha" : "desconectado · editando su ficha"}
             </p>
           )}
           <CharacterSheet
             character={sheet}
-            readOnly={!selected.mine}
+            readOnly={!canEdit}
+            isGM={isGM}
+            players={
+              isGM && selected.mine && room.status === "open"
+                ? room.members
+                    .filter((member) => member.role === "PLAYER" && member.playerId !== playerId)
+                    .map((member) => ({
+                      id: member.playerId,
+                      name: member.connected ? member.name : `${member.name} (desconectado)`,
+                      role: member.role,
+                    }))
+                : undefined
+            }
             dicePlusEnabled={dicePlusEnabled && !web}
             dirty={dirty}
             onChange={
-              selected.mine
+              canEdit
                 ? (next) => {
                     setDraft(next);
                     setDirty(true);
                   }
                 : undefined
             }
-            onSave={selected.mine ? handleSave : undefined}
+            onAssign={
+              isGM && selected.mine && room.status === "open"
+                ? (ownerId) => void handleAssign(ownerId)
+                : undefined
+            }
+            onSave={canEdit ? handleSave : undefined}
             onRolled={selected.mine ? handleDiceRoll : undefined}
           />
         </>

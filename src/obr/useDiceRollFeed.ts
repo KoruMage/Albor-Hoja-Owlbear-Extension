@@ -2,6 +2,24 @@ import { useEffect } from "react";
 import OBR from "@owlbear-rodeo/sdk";
 import { DICE_ROLL_CHANNEL, DiceRollBroadcast } from "../types";
 
+const seenToasts = new Set<string>();
+
+function claimToast(payload: DiceRollBroadcast): boolean {
+  if (!payload.id) return true;
+  if (seenToasts.has(payload.id)) return false;
+  seenToasts.add(payload.id);
+  if (seenToasts.size > 200) {
+    const oldest = seenToasts.values().next().value;
+    if (oldest) seenToasts.delete(oldest);
+  }
+  return true;
+}
+
+function showDiceToast(payload: DiceRollBroadcast) {
+  const kind = payload.critical ? "SUCCESS" : payload.fumble ? "WARNING" : "DEFAULT";
+  OBR.notification.show(`🎲 ${payload.characterName}: ${payload.summary}`, kind);
+}
+
 export function broadcastDiceRoll(payload: DiceRollBroadcast) {
   if (!OBR.isAvailable) return;
   OBR.broadcast.sendMessage(DICE_ROLL_CHANNEL, payload, {
@@ -10,10 +28,9 @@ export function broadcastDiceRoll(payload: DiceRollBroadcast) {
 }
 
 export function notifyDiceRoll(payload: DiceRollBroadcast) {
-  if (!OBR.isAvailable) return;
-  const kind = payload.critical ? "SUCCESS" : payload.fumble ? "WARNING" : "DEFAULT";
+  if (!OBR.isAvailable || !claimToast(payload)) return;
   OBR.onReady(() => {
-    OBR.notification.show(`🎲 ${payload.characterName}: ${payload.summary}`, kind);
+    showDiceToast(payload);
   });
 }
 
@@ -26,13 +43,8 @@ export function useDiceRollFeed() {
     OBR.onReady(() => {
       unsubscribe = OBR.broadcast.onMessage(DICE_ROLL_CHANNEL, (event) => {
         const payload = event.data as DiceRollBroadcast | undefined;
-        if (!payload) return;
-        const kind = payload.critical
-          ? "SUCCESS"
-          : payload.fumble
-            ? "WARNING"
-            : "DEFAULT";
-        OBR.notification.show(`🎲 ${payload.characterName}: ${payload.summary}`, kind);
+        if (!payload || !claimToast(payload)) return;
+        showDiceToast(payload);
       });
     });
 
